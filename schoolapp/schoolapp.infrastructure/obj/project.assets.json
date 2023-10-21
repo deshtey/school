@@ -4201,7 +4201,6 @@
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\Application\\Application.csproj",
       "CsvHelper >= 30.0.1",
       "Microsoft.AspNetCore.ApiAuthorization.IdentityServer >= 7.0.7",
       "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore >= 7.0.7",
@@ -4236,11 +4235,7 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {
-            "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\Application\\Application.csproj": {
-              "projectPath": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\Application\\Application.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
@@ -4297,16 +4292,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1104",
-      "level": "Error",
-      "message": "Unable to find project 'C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\Application\\Application.csproj'. Check that the project reference is valid and that the project file exists.",
-      "libraryId": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\Application\\Application.csproj",
-      "targetGraphs": [
-        "net7.0"
-      ]
-    }
-  ]
+  }
 }
