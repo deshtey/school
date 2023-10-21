@@ -8,7 +8,7 @@
       "version": "1.0.0",
       "restore": {
         "projectUniqueName": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\schoolapp.domain\\schoolapp.domain.csproj",
-        "projectName": "pointofsale.Domain",
+        "projectName": "schoolapp.Domain",
         "projectPath": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\schoolapp.domain\\schoolapp.domain.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\schoolapp.domain\\obj\\",

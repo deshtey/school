@@ -326,7 +326,7 @@
           }
         }
       },
-      "pointofsale.Domain/1.0.0": {
+      "schoolapp.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
@@ -334,10 +334,10 @@
           "Microsoft.AspNetCore.Http.Features": "5.0.17"
         },
         "compile": {
-          "bin/placeholder/pointofsale.Domain.dll": {}
+          "bin/placeholder/schoolapp.Domain.dll": {}
         },
         "runtime": {
-          "bin/placeholder/pointofsale.Domain.dll": {}
+          "bin/placeholder/schoolapp.Domain.dll": {}
         }
       }
     }
@@ -866,7 +866,7 @@
         "version.txt"
       ]
     },
-    "pointofsale.Domain/1.0.0": {
+    "schoolapp.Domain/1.0.0": {
       "type": "project",
       "path": "../schoolapp.domain/schoolapp.domain.csproj",
       "msbuildProject": "../schoolapp.domain/schoolapp.domain.csproj"
@@ -877,7 +877,7 @@
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 11.0.0",
       "FluentValidation.DependencyInjectionExtensions >= 11.5.2",
       "Microsoft.EntityFrameworkCore >= 7.0.7",
-      "pointofsale.Domain >= 1.0.0"
+      "schoolapp.Domain >= 1.0.0"
     ]
   },
   "packageFolders": {
