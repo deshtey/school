@@ -3,18 +3,19 @@ using schoolapp.Application.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using schoolapp.Application.Identity;
 
 namespace schoolapp.Infrastructure.Identity;
 
 public class IdentityService : IIdentityService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
+    private readonly UserManager<SchoolUser> _userManager;
+    private readonly IUserClaimsPrincipalFactory<SchoolUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
 
     public IdentityService(
-        UserManager<ApplicationUser> userManager,
-        IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
+        UserManager<SchoolUser> userManager,
+        IUserClaimsPrincipalFactory<SchoolUser> userClaimsPrincipalFactory,
         IAuthorizationService authorizationService)
     {
         _userManager = userManager;
@@ -29,18 +30,18 @@ public class IdentityService : IIdentityService
         return user.UserName;
     }
 
-    public async Task<(Result<ApplicationUser> Result, string UserId)> CreateUserAsync(string userName, string password)
-    {
-        var user = new ApplicationUser
-        {
-            UserName = userName,
-            Email = userName,
-        };
+    //public async Task<(Result<SchoolUser> Result, string UserId)> CreateUserAsync(string userName, string password)
+    //{
+    //    var user = new SchoolUser
+    //    {
+    //        UserName = userName,
+    //        Email = userName,
+    //    };
 
-        var result = await _userManager.CreateAsync(user, password);
+    //    var result = await _userManager.CreateAsync(user, password);
 
-        return (result.ToApplicationResult(), user.Id);
-    }
+    //    return (result.ToApplicationResult(), user.Id);
+    //}
 
     public async Task<bool> IsInRoleAsync(string userId, string role)
     {

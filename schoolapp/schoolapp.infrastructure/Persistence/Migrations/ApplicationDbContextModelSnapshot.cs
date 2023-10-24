@@ -99,7 +99,7 @@ namespace schoolapp.Infrastructure.Persistence.Migrations
                     b.ToTable("TodoLists");
                 });
 
-            modelBuilder.Entity("schoolapp.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("schoolapp.Infrastructure.Identity.SchoolUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -487,7 +487,7 @@ namespace schoolapp.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("schoolapp.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("schoolapp.Infrastructure.Identity.SchoolUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -496,7 +496,7 @@ namespace schoolapp.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("schoolapp.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("schoolapp.Infrastructure.Identity.SchoolUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -511,7 +511,7 @@ namespace schoolapp.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("schoolapp.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("schoolapp.Infrastructure.Identity.SchoolUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -520,7 +520,7 @@ namespace schoolapp.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("schoolapp.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("schoolapp.Infrastructure.Identity.SchoolUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

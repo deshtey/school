@@ -8,6 +8,8 @@ namespace schoolapp.Domain.Entities.ClassGrades
         public DateTime Year { get; set; }
         public int GradeId { get; set; }
         public int TeacherId { get; set; }
+        public int SchoolId { get; set; }
+        public virtual School School { get; set; }
         public IEnumerable<Student> Students { get; set; }=new List<Student>();
     }
 }

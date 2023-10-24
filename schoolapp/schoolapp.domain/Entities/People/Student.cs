@@ -7,7 +7,8 @@ namespace schoolapp.Domain.Entities.People
         public string RegNumber { get; set; }
         public bool Status { get; set; }
         public DateTime JoinDate { get; set; }
-
+        public int SchoolId { get; set; }
+        public virtual School School { get; set; }
 
     }
 }

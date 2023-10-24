@@ -2,6 +2,7 @@
 
 namespace schoolapp.Infrastructure.Identity;
 
-public class ApplicationUser : IdentityUser
+public class SchoolUser : IdentityUser
 {
+    public string UserName { get; set; }
 }

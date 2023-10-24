@@ -3,3 +3,8 @@ C:\Users\User\Desktop\Dev\New folder\pointofsale\src\Infrastructure\obj\Debug\ne
 C:\Users\User\Desktop\Dev\New folder\pointofsale\src\Infrastructure\obj\Debug\net7.0\Infrastructure.AssemblyInfoInputs.cache
 C:\Users\User\Desktop\Dev\New folder\pointofsale\src\Infrastructure\obj\Debug\net7.0\Infrastructure.AssemblyInfo.cs
 C:\Users\User\Desktop\Dev\New folder\pointofsale\src\Infrastructure\obj\Debug\net7.0\Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.infrastructure\obj\Debug\net7.0\Infrastructure.csproj.AssemblyReference.cache
+C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.infrastructure\obj\Debug\net7.0\Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.infrastructure\obj\Debug\net7.0\Infrastructure.AssemblyInfoInputs.cache
+C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.infrastructure\obj\Debug\net7.0\Infrastructure.AssemblyInfo.cs
+C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.infrastructure\obj\Debug\net7.0\Infrastructure.csproj.CoreCompileInputs.cache

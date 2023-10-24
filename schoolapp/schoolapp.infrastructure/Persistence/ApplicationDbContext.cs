@@ -12,7 +12,7 @@ using schoolapp.Models;
 
 namespace schoolapp.Infrastructure.Persistence;
 
-public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
+public class ApplicationDbContext : ApiAuthorizationDbContext<SchoolUser>
 {
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 

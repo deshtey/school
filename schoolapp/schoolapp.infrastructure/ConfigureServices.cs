@@ -1,5 +1,4 @@
 ﻿using schoolapp.Application.Common.Interfaces;
-using schoolapp.Infrastructure.Files;
 using schoolapp.Infrastructure.Identity;
 using schoolapp.Infrastructure.Persistence;
 using schoolapp.Infrastructure.Persistence.Interceptors;
@@ -34,12 +33,12 @@ public static class ConfigureServices
         services.AddScoped<ApplicationDbContextInitialiser>();
 
         services
-            .AddDefaultIdentity<ApplicationUser>()
+            .AddDefaultIdentity<SchoolUser>()
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         services.AddIdentityServer()
-            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            .AddApiAuthorization<SchoolUser, ApplicationDbContext>();
 
         services.AddTransient<IDateTime, DateTimeService>();
         services.AddTransient<IIdentityService, IdentityService>();

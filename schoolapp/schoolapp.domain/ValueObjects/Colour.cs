@@ -1,6 +1,6 @@
 ﻿namespace schoolapp.Domain.ValueObjects;
 
-public class Colour : ValueObject
+public class Colour 
 {
     static Colour()
     {
@@ -75,8 +75,8 @@ public class Colour : ValueObject
         }
     }
 
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Code;
-    }
+    //protected override IEnumerable<object> GetEqualityComponents()
+    //{
+    //    yield return Code;
+    //}
 }

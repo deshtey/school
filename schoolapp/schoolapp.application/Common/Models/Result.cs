@@ -1,21 +1,24 @@
-﻿public class Result<T>
+﻿namespace schoolapp.Application.Common.Models
 {
-    public bool IsSuccess { get; }
-    public T Value { get; }
-    public IEnumerable<string> Errors { get; }
-
-    protected Result(bool isSuccess, T value, IEnumerable<string> errors)
+    public class Result<T>
     {
-        IsSuccess = isSuccess;
-        Value = value;
-        Errors = errors;
+        public bool IsSuccess { get; }
+        public T Value { get; }
+        public IEnumerable<string> Errors { get; }
+
+        protected Result(bool isSuccess, T value, IEnumerable<string> errors)
+        {
+            IsSuccess = isSuccess;
+            Value = value;
+            Errors = errors;
+        }
+
+        public static Result<T> Success(T value) =>
+            new(true, value, Enumerable.Empty<string>());
+
+        public static Result<T> Failure(IEnumerable<string> errors) =>
+            new Result<T>(false, default, errors);
     }
-
-    public static Result<T> Success(T value) =>
-        new Result<T>(true, value, Enumerable.Empty<string>());
-
-    public static Result<T> Failure(IEnumerable<string> errors) =>
-        new Result<T>(false, default, errors);
 }
 //namespace CleanArchitecture.Application.Common.Models;
 
