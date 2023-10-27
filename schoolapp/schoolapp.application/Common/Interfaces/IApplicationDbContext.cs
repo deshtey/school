@@ -4,7 +4,7 @@ using schoolapp.Domain.Entities.People;
 
 namespace schoolapp.Application.Common.Interfaces;
 
-public interface IApplicationDbContext
+public interface ISchoolDbContext
 {
     DbSet<School> Schools { get; }
 

@@ -18,27 +18,27 @@ public static class ConfigureServices
 
         if (configuration.GetValue<bool>("UseInMemoryDatabase"))
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<SchoolDbContext>(options =>
                 options.UseInMemoryDatabase("schoolappDb"));
         }
         else
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<SchoolDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                    builder => builder.MigrationsAssembly(typeof(SchoolDbContext).Assembly.FullName)));
         }
 
-        //services.AddScoped(provider => provider.GetRequiredService<ApplicationDbContext>());
+        //services.AddScoped(provider => provider.GetRequiredService<SchoolDbContext>());
 
-        services.AddScoped<ApplicationDbContextInitialiser>();
+        services.AddScoped<SchoolDbContextInitialiser>();
 
         services
             .AddDefaultIdentity<SchoolUser>()
             .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddEntityFrameworkStores<SchoolDbContext>();
 
         services.AddIdentityServer()
-            .AddApiAuthorization<SchoolUser, ApplicationDbContext>();
+            .AddApiAuthorization<SchoolUser, SchoolDbContext>();
 
         services.AddTransient<IDateTime, DateTimeService>();
         services.AddTransient<IIdentityService, IdentityService>();

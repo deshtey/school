@@ -5,44 +5,44 @@ using schoolapp.Infrastructure.Services;
 
 namespace schoolapp.Services
 {
-    public class CartService : ICartService
+    public class SchoolService : ISchoolService
     {
-        private readonly ApplicationDbContext _context;
-        public CartService(ApplicationDbContext context)
+        private readonly SchoolDbContext _context;
+        public SchoolService(SchoolDbContext context)
         {
             _context = context;
         }
-        public async Task<IEnumerable<Cart>?> GetCart()
+        public async Task<IEnumerable<School>?> GetSchools()
         {
-            if (_context.Carts == null)
+            if (_context.Schools == null)
             {
                 return null;
             }
-            return await _context.Carts.ToListAsync();
+            return await _context.Schools.ToListAsync();
         }
 
-        public async Task<Cart?> GetCart(int id)
+        public async Task<School?> GetSchool(int id)
         {
-            if (_context.Carts == null)
+            if (_context.Schools == null)
             {
                 return null;
             }
-            var cart = await _context.Carts.FindAsync(id);
+            var School = await _context.Schools.FindAsync(id);
 
-            if (cart == null)
+            if (School == null)
             {
                 return null;
             }
-            return cart;
+            return School;
         }
   
-        public async Task<Cart?> PutCart(int id, Cart cart)
+        public async Task<School?> PutSchool(int id, School School)
         {
-            if (id != cart.Id)
+            if (id != School.SchoolId)
             {
                 return null;
             }
-            _context.Entry(cart).State = EntityState.Modified;
+            _context.Entry(School).State = EntityState.Modified;
 
             try
             {
@@ -50,7 +50,7 @@ namespace schoolapp.Services
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CartExists(id))
+                if (!SchoolExists(id))
                 {
                     return null;
                 }
@@ -62,38 +62,38 @@ namespace schoolapp.Services
             return null;
         }
 
-        public async Task<bool?> PostCart(Cart cart)
+        public async Task<bool?> PostSchool(School School)
         {
-            if (_context.Carts == null)
+            if (_context.Schools == null)
             {
                 return null;
             }
-            _context.Carts.Add(cart);
+            _context.Schools.Add(School);
             await _context.SaveChangesAsync();
 
             return true;
         }
 
-        public async Task<bool> DeleteCart(int id)
+        public async Task<bool> DeleteSchool(int id)
         {
-            if (_context.Carts == null)
+            if (_context.Schools == null)
             {
                 return true;
             }
-            var cart = await _context.Carts.FindAsync(id);
-            if (cart == null)
+            var School = await _context.Schools.FindAsync(id);
+            if (School == null)
             {
                 return true;
             }
 
-            _context.Carts.Remove(cart);
+            _context.Schools.Remove(School);
             await _context.SaveChangesAsync();
 
             return true;
         }
-        private bool CartExists(int id)
+        private bool SchoolExists(int id)
         {
-            return (_context.Carts?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Schools?.Any(e => e.SchoolId == id)).GetValueOrDefault();
         }
     }
 }
