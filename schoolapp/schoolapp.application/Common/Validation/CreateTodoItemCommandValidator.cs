@@ -7,7 +7,7 @@ public class ProductValidator : AbstractValidator<School>
 {
     public ProductValidator()
     {
-        RuleFor(p=>p.SchoolName)
+        RuleFor(p => p.SchoolName)
             .MaximumLength(200)
             .NotEmpty();
     }
