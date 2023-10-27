@@ -1,8 +1,5 @@
 ﻿using System.Reflection;
-using schoolapp.Application.Common.Behaviours;
-using schoolapp.Application.Common.Exceptions;
 using FluentValidation;
-using MediatR;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

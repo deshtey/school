@@ -37,8 +37,8 @@ public static class ConfigureServices
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<SchoolDbContext>();
 
-        services.AddIdentityServer()
-            .AddApiAuthorization<SchoolUser, SchoolDbContext>();
+        //services.AddIdentityServer()
+        //    .AddApiAuthorization<SchoolUser, SchoolDbContext>();
 
         services.AddTransient<IDateTime, DateTimeService>();
         services.AddTransient<IIdentityService, IdentityService>();

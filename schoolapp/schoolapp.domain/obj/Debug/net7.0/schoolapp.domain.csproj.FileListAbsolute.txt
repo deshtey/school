@@ -1,11 +1,11 @@
+C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\bin\Debug\net7.0\schoolapp.Domain.deps.json
+C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\bin\Debug\net7.0\schoolapp.Domain.dll
+C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\bin\Debug\net7.0\schoolapp.Domain.pdb
 C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\obj\Debug\net7.0\schoolapp.domain.csproj.AssemblyReference.cache
 C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\obj\Debug\net7.0\schoolapp.domain.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\obj\Debug\net7.0\schoolapp.domain.AssemblyInfoInputs.cache
 C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\obj\Debug\net7.0\schoolapp.domain.AssemblyInfo.cs
 C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\obj\Debug\net7.0\schoolapp.domain.csproj.CoreCompileInputs.cache
-C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\bin\Debug\net7.0\schoolapp.Domain.deps.json
-C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\bin\Debug\net7.0\schoolapp.Domain.dll
-C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\bin\Debug\net7.0\schoolapp.Domain.pdb
 C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\obj\Debug\net7.0\schoolapp.Domain.dll
 C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\obj\Debug\net7.0\refint\schoolapp.Domain.dll
 C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.domain\obj\Debug\net7.0\schoolapp.Domain.pdb

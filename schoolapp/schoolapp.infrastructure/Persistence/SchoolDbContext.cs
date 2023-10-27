@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
+using schoolapp.Application.Common.Interfaces;
 using schoolapp.Domain.Entities;
 using schoolapp.Infrastructure.Identity;
 using schoolapp.Infrastructure.Persistence.Interceptors;
 using Duende.IdentityServer.EntityFramework.Options;
+using MediatR;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -22,13 +24,9 @@ public class SchoolDbContext : ApiAuthorizationDbContext<SchoolUser>
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
     }
 
-    public DbSet<School> Schools => Set<School>();
+    public DbSet<School> Schools { get; set; }
 
-    //public DbSet<TodoItem> TodoItems => Set<TodoItem>();
-    //public DbSet<Category> Categories => Set<Category>();
-    //public DbSet<Cart> Carts => Set<Cart>();
-    //public DbSet<CartItem> CartItems => Set<CartItem>();
-    //public DbSet<Product> Products { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

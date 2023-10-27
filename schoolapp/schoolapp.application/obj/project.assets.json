@@ -886,9 +886,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\schoolapp.application\\Application.csproj",
+      "projectUniqueName": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\schoolapp.application\\schoolapp.application.csproj",
       "projectName": "schoolapp.Application",
-      "projectPath": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\schoolapp.application\\Application.csproj",
+      "projectPath": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\schoolapp.application\\schoolapp.application.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\schoolapp.application\\obj\\",
       "projectStyle": "PackageReference",

@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "schoolapp.webapi", "schoolapp.webapi\schoolapp.webapi.csproj", "{63D7A286-77F5-4EBF-A1FA-EEB2D481906D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "schoolapp.webapi", "schoolapp.webapi\schoolapp.webapi.csproj", "{63D7A286-77F5-4EBF-A1FA-EEB2D481906D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "schoolapp.application\Application.csproj", "{C71FD2D8-480D-496E-8937-FAFD8997E821}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "schoolapp.application", "schoolapp.application\schoolapp.application.csproj", "{C71FD2D8-480D-496E-8937-FAFD8997E821}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "schoolapp.domain", "schoolapp.domain\schoolapp.domain.csproj", "{95D2C147-F9C9-4722-8628-1EB704C12777}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "schoolapp.infrastructure\Infrastructure.csproj", "{D33C63AF-A109-49B2-87D8-22A12B8F2F5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "schoolapp.infrastructure", "schoolapp.infrastructure\schoolapp.infrastructure.csproj", "{D33C63AF-A109-49B2-87D8-22A12B8F2F5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
