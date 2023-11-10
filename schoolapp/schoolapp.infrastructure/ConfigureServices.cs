@@ -16,21 +16,20 @@ public static class ConfigureServices
     {
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
-        if (configuration.GetValue<bool>("UseInMemoryDatabase"))
-        {
-            services.AddDbContext<SchoolDbContext>(options =>
-                options.UseInMemoryDatabase("schoolappDb"));
-        }
-        else
-        {
-            services.AddDbContext<SchoolDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    builder => builder.MigrationsAssembly(typeof(SchoolDbContext).Assembly.FullName)));
-        }
+        //if (configuration.GetValue<bool>("UseInMemoryDatabase"))
+        //{
+        //    services.AddDbContext<SchoolDbContext>(options =>
+        //        options.UseInMemoryDatabase("schoolappDb"));
+        //}
+        //else
+        //{
+        //    services.AddDbContext<SchoolDbContext>(options =>
+        //        options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        //}
 
-        //services.AddScoped(provider => provider.GetRequiredService<SchoolDbContext>());
+        services.AddScoped(provider => provider.GetRequiredService<SchoolDbContext>());
 
-        services.AddScoped<SchoolDbContextInitialiser>();
+        //services.AddScoped<SchoolDbContextInitialiser>();
 
         services
             .AddDefaultIdentity<SchoolUser>()
