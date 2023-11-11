@@ -1,9 +1,8 @@
-﻿using schoolapp.Application.Common.Interfaces;
-using schoolapp.Application.Common.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using schoolapp.Application.Identity;
+using schoolapp.Application.Common.Interfaces;
+using schoolapp.Application.Common.Models;
 
 namespace schoolapp.Infrastructure.Identity;
 
@@ -30,18 +29,29 @@ public class IdentityService : IIdentityService
         return user.UserName;
     }
 
-    //public async Task<(Result<SchoolUser> Result, string UserId)> CreateUserAsync(string userName, string password)
-    //{
-    //    var user = new SchoolUser
-    //    {
-    //        UserName = userName,
-    //        Email = userName,
-    //    };
+    public async Task<(Result<bool> Result, string UserId)> CreateUserAsync(string userName, string password)
+    {
+        var user = new SchoolUser
+        {
+            UserName = userName,
+            Email = userName,
+        };
 
-    //    var result = await _userManager.CreateAsync(user, password);
+        var result = await _userManager.CreateAsync(user, password);
 
-    //    return (result.ToApplicationResult(), user.Id);
-    //}
+        if (result.Succeeded)
+        {
+            return (Result<bool>.Success(true), user.Id);
+        }
+        else
+        {
+            // If user creation failed, you might want to log the errors or handle them appropriately.
+            // This example assumes a simple Result<bool> class.
+
+            return (Result<bool>.Failure(result.Errors.Select(error => error.Description).ToList()), null);
+
+        }
+    }
 
     public async Task<bool> IsInRoleAsync(string userId, string role)
     {
@@ -66,15 +76,21 @@ public class IdentityService : IIdentityService
         return result.Succeeded;
     }
 
-    public async Task<Result<bool>> DeleteUserAsync(string userId)
+    public async Task<bool> DeleteUserAsync(string userId)
     {
         var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
 
-        var res = await _userManager.DeleteAsync(user);
-        return Result<bool>.Failure(new List<string> { "User not found." });
+        return user != null ? await DeleteUserAsync(user) : true;
     }
 
-    Task<(Result<bool> Result, string UserId)> IIdentityService.CreateUserAsync(string userName, string password)
+    public async Task<bool> DeleteUserAsync(SchoolUser user)
+    {
+        var result = await _userManager.DeleteAsync(user);
+
+        return result.Succeeded;
+    }
+
+    Task<Result<bool>> IIdentityService.DeleteUserAsync(string userId)
     {
         throw new NotImplementedException();
     }

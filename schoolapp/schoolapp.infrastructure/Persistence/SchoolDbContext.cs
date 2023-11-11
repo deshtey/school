@@ -1,50 +1,20 @@
-﻿using System.Reflection;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Domain.Entities;
 using schoolapp.Infrastructure.Identity;
-using schoolapp.Infrastructure.Persistence.Interceptors;
-using Duende.IdentityServer.EntityFramework.Options;
-using MediatR;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
-namespace schoolapp.Infrastructure.Persistence;
+namespace schoolapp.Infrastructure.Data;
 
-public class SchoolDbContext : ApiAuthorizationDbContext<SchoolUser>
+public class SchoolDbContext : IdentityDbContext<SchoolUser>,ISchoolDbContext
 {
-    public SchoolDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
+    public SchoolDbContext(DbContextOptions<SchoolDbContext> options) : base(options) { }
+
+    public DbSet<School> Schools => Set<School>();
+
+    protected override void OnModelCreating(ModelBuilder builder)
     {
+
+        base.OnModelCreating(builder);
     }
-
-    //private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-
-    //public SchoolDbContext(
-    //    DbContextOptions<SchoolDbContext> options,
-    //    IOptions<OperationalStoreOptions> operationalStoreOptions,
-    //    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) 
-    //    : base(options, operationalStoreOptions)
-    //{
-    //    _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-    //}
-
-    public DbSet<School> Schools { get; set; }
-
-
-    //protected override void OnModelCreating(ModelBuilder builder)
-    //{
-    //    builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-    //    base.OnModelCreating(builder);
-    //}
-
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
-    //}
-
-    //public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) 
-    //{ 
-    //    return await base.SaveChangesAsync(cancellationToken);
-    //}
 }

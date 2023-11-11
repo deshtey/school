@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using schoolapp.Domain.Entities;
+using schoolapp.Infrastructure.Data;
 using schoolapp.Infrastructure.Persistence;
 using schoolapp.Infrastructure.Services;
 

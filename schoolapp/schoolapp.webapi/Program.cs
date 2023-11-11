@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using schoolapp.Infrastructure.Persistence;
+using schoolapp.Application.Common.Interfaces;
+using schoolapp.Infrastructure.Data;
+using schoolapp.webapi.Services;
+using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 string conString = "Server=(localdb)\\mssqllocaldb;Database=SchoolDb;Trusted_Connection=True;MultipleActiveResultSets=true";
 builder.Services.AddDbContext<SchoolDbContext>(options =>
         options.UseSqlServer(conString));
-
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

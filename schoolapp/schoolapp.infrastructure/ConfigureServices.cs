@@ -1,54 +1,73 @@
-﻿using schoolapp.Application.Common.Interfaces;
-using schoolapp.Infrastructure.Identity;
-using schoolapp.Infrastructure.Persistence;
-using schoolapp.Infrastructure.Persistence.Interceptors;
-using schoolapp.Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿//using Microsoft.AspNetCore.Identity;
+//using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore.Diagnostics;
+//using Microsoft.Extensions.Configuration;
+//using Microsoft.Extensions.DependencyInjection;
+//using schoolapp.Application.Common.Interfaces;
+//using schoolapp.Infrastructure.Data;
+//using schoolapp.Infrastructure.Identity;
 
-namespace Microsoft.Extensions.DependencyInjection;
+//namespace schoolapp.Infrastructure;
 
-public static class ConfigureServices
-{
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+//public static class DependencyInjection
+//{
+//    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+//    {
+//        try
+//        {
+//            var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        //if (configuration.GetValue<bool>("UseInMemoryDatabase"))
-        //{
-        //    services.AddDbContext<SchoolDbContext>(options =>
-        //        options.UseInMemoryDatabase("schoolappDb"));
-        //}
-        //else
-        //{
-        //    services.AddDbContext<SchoolDbContext>(options =>
-        //        options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-        //}
+//        //Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
-        services.AddScoped(provider => provider.GetRequiredService<SchoolDbContext>());
+//        //services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
 
-        //services.AddScoped<SchoolDbContextInitialiser>();
 
-        services
-            .AddDefaultIdentity<SchoolUser>()
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<SchoolDbContext>();
+//        services.AddDbContext<SchoolDbContext>((sp, options) =>
+//        {
+//            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
 
-        //services.AddIdentityServer()
-        //    .AddApiAuthorization<SchoolUser, SchoolDbContext>();
+//#if (UseSQLite)
+//            options.UseSqlite(connectionString);
+//#else
+//            options.UseSqlServer(connectionString);
+//#endif
+//        });
 
-        services.AddTransient<IDateTime, DateTimeService>();
-        services.AddTransient<IIdentityService, IdentityService>();
-       // services.AddTransient<ICsvFileBuilder, CsvFileBuilder>();
+//        services.AddScoped<ISchoolDbContext>(provider => provider.GetRequiredService<SchoolDbContext>());
 
-        services.AddAuthentication()
-            .AddIdentityServerJwt();
+//        //services.AddScoped<ApplicationDbContextInitialiser>();
 
-        services.AddAuthorization(options =>
-            options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+//#if (UseApiOnly)
+//        services.AddAuthentication()
+//            .AddBearerToken(IdentityConstants.BearerScheme);
 
-        return services;
-    }
-}
+//        services.AddAuthorizationBuilder();
+
+//        services
+//            .AddIdentityCore<ApplicationUser>()
+//            .AddRoles<IdentityRole>()
+//            .AddEntityFrameworkStores<ApplicationDbContext>()
+//            .AddApiEndpoints();
+//#else
+//        services
+//            .AddDefaultIdentity<SchoolUser>()
+//            .AddRoles<IdentityRole>()
+//            .AddEntityFrameworkStores<SchoolDbContext>();
+//#endif
+
+//        services.AddSingleton<IDateTime>();
+//        services.AddTransient<IIdentityService, IdentityService>();
+
+//            //services.AddAuthorization(options =>
+//            //    options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+
+//        }
+//        catch (Exception ex)
+//        {
+
+//            Console.WriteLine($"Error during migration: {ex.Message}");
+//            throw;
+//        }
+//        return services;
+//    }
+//}
