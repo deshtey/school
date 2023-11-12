@@ -5,7 +5,7 @@ public abstract class Person : BaseAuditableEntity
     public int StudentId { get; set; }
     public string Name { get; set; }
     public Gender Gender { get; set; }
-    public string Address { get; set; }
+    public Address Address { get; set; }
     public DateTime DOB { get; set; }
     public bool Status { get; set; }
     public string Phone { get; set; }

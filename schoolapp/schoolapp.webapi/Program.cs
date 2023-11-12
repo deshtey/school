@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using schoolapp.Application.Common.Interfaces;
+using schoolapp.Infrastructure;
 using schoolapp.Infrastructure.Data;
 using schoolapp.webapi.Services;
 using System.Collections.Generic;
@@ -7,9 +8,10 @@ using System.Collections.Generic;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-string conString = "Server=(localdb)\\mssqllocaldb;Database=SchoolDb;Trusted_Connection=True;MultipleActiveResultSets=true";
-builder.Services.AddDbContext<SchoolDbContext>(options =>
-        options.UseSqlServer(conString));
+//string conString = "Server=(localdb)\\mssqllocaldb;Database=SchoolDb;Trusted_Connection=True;MultipleActiveResultSets=true";
+//builder.Services.AddDbContext<SchoolDbContext>(options =>
+//        options.UseSqlServer(conString));
+builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
