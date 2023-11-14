@@ -26,12 +26,13 @@ public static class DependencyInjection
             services.AddDbContext<SchoolDbContext>((sp, options) =>
             {
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                options.UseNpgsql("Host=localhost;Database=schooldb;Username=postgres;Password=Working23;");
 
-#if (UseSQLite)
-            options.UseSqlite(connectionString);
-#else
-                options.UseSqlServer(connectionString);
-#endif
+//#if (UseSQLite)
+//            options.UseSqlite(connectionString);
+//#else
+//                options.UseSqlServer(connectionString);
+//#endif
             });
 
             services.AddScoped<ISchoolDbContext>(provider => provider.GetRequiredService<SchoolDbContext>());

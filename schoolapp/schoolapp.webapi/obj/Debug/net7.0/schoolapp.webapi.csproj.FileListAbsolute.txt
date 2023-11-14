@@ -108,3 +108,5 @@ C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.webapi\obj\De
 C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.webapi\obj\Debug\net7.0\schoolapp.webapi.pdb
 C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.webapi\obj\Debug\net7.0\schoolapp.webapi.genruntimeconfig.cache
 C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.webapi\obj\Debug\net7.0\ref\schoolapp.webapi.dll
+C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.webapi\bin\Debug\net7.0\Npgsql.dll
+C:\Users\user\OneDrive\Desktop\Projects\school\schoolapp\schoolapp.webapi\bin\Debug\net7.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
