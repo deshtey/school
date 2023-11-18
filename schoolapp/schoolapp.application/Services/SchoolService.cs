@@ -1,15 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using schoolapp.Application.Common.Interfaces;
+using schoolapp.Application.Contracts;
 using schoolapp.Domain.Entities;
-using schoolapp.Infrastructure.Data;
-using schoolapp.Infrastructure.Persistence;
-using schoolapp.Infrastructure.Services;
 
-namespace schoolapp.Services
+namespace schoolapp.Application.Services
 {
     public class SchoolService : ISchoolService
     {
-        private readonly SchoolDbContext _context;
-        public SchoolService(SchoolDbContext context)
+        private readonly ISchoolDbContext _context;
+        public SchoolService(ISchoolDbContext context)
         {
             _context = context;
         }
@@ -36,18 +36,18 @@ namespace schoolapp.Services
             }
             return School;
         }
-  
-        public async Task<School?> PutSchool(int id, School School)
+
+        public async Task<School?> PutSchool(int id, School School, CancellationToken cancellationToken)
         {
             if (id != School.SchoolId)
             {
                 return null;
             }
-            _context.Entry(School).State = EntityState.Modified;
+            var school =  await _context.Schools.FindAsync(new object[] { id }, cancellationToken);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -63,19 +63,19 @@ namespace schoolapp.Services
             return null;
         }
 
-        public async Task<bool?> PostSchool(School School)
+        public async Task<bool?> PostSchool(School School, CancellationToken cancellationToken)
         {
             if (_context.Schools == null)
             {
                 return null;
             }
             _context.Schools.Add(School);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
 
             return true;
         }
 
-        public async Task<bool> DeleteSchool(int id)
+        public async Task<bool> DeleteSchool(int id, CancellationToken cancellationToken)
         {
             if (_context.Schools == null)
             {
@@ -88,7 +88,7 @@ namespace schoolapp.Services
             }
 
             _context.Schools.Remove(School);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
 
             return true;
         }
@@ -96,5 +96,7 @@ namespace schoolapp.Services
         {
             return (_context.Schools?.Any(e => e.SchoolId == id)).GetValueOrDefault();
         }
+
+
     }
 }

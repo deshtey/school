@@ -35,7 +35,7 @@ public static class DependencyInjection
 //#endif
             });
 
-            services.AddScoped<ISchoolDbContext>(provider => provider.GetRequiredService<SchoolDbContext>());
+            services.AddScoped<ISchoolDbContext, SchoolDbContext>();
 
             //services.AddScoped<ApplicationDbContextInitialiser>();
 

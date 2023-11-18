@@ -13,5 +13,6 @@ namespace schoolapp.Application.Common.Interfaces
         DbSet<School> Schools { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+   
     }
 }

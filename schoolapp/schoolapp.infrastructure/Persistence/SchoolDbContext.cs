@@ -11,7 +11,7 @@ using System.Reflection.Metadata;
 
 namespace schoolapp.Infrastructure.Data;
 
-public class SchoolDbContext : IdentityDbContext<SchoolUser>,ISchoolDbContext
+public class SchoolDbContext : IdentityDbContext<SchoolUser>, ISchoolDbContext
 {
     public SchoolDbContext(DbContextOptions<SchoolDbContext> options) : base(options) { }
 
