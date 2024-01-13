@@ -1,9 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Infrastructure;
-using schoolapp.Infrastructure.Data;
 using schoolapp.webapi.Services;
-using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +12,10 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+
+// Swagger/OpenAPI setup
 builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
@@ -28,10 +26,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Middleware Configuration
 app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
+
