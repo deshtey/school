@@ -10,11 +10,11 @@
         "projectUniqueName": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\schoolapp.domain\\schoolapp.domain.csproj",
         "projectName": "schoolapp.Domain",
         "projectPath": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\schoolapp.domain\\schoolapp.domain.csproj",
-        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\Desht\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\user\\OneDrive\\Desktop\\Projects\\school\\schoolapp\\schoolapp.domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Desht\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
