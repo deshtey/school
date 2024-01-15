@@ -15,16 +15,17 @@ public class SchoolDbContext : IdentityDbContext<SchoolUser>, ISchoolDbContext
 {
     public SchoolDbContext(DbContextOptions<SchoolDbContext> options) : base(options) { }
 
-    public DbSet<School> Schools => Set<School>();
-    public DbSet<Student> Students => Set<Student>();
-    public DbSet<Parent> Parents => Set<Parent>();
-    public DbSet<SupportStaff> Drivers => Set<SupportStaff>();
-    public DbSet<Teacher> Teachers => Set<Teacher>();
-    public DbSet<Exam> Exams => Set<Exam>();
-    public DbSet<ExamType> ExamTypes => Set<ExamType>();
-    public DbSet<ClassRoom> ClassRooms => Set<ClassRoom>();
-    public DbSet<ClassRoomStudent> ClassRoomStudents => Set<ClassRoomStudent>();
-    public DbSet<Grade> Grades => Set<Grade>();
+    public DbSet<School> Schools { get; set; }
+    public DbSet<Student> Students { get; set; }
+    public DbSet<Parent> Parents { get; set; }
+    public DbSet<SupportStaff> Drivers { get; set; }
+    public DbSet<Teacher> Teachers { get; set; }
+    public DbSet<Exam> Exams { get; set; }
+    public DbSet<ExamType> ExamTypes { get; set; }
+    public DbSet<ClassRoom> ClassRooms { get; set; }
+    public DbSet<ClassRoomStudent> ClassRoomStudents { get; set; }
+    public DbSet<Grade> Grades { get; set; }
+    public DbSet<SupportStaff> Staff { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

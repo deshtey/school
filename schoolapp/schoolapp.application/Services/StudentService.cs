@@ -8,18 +8,19 @@ namespace schoolapp.Application.Services
     {
         private readonly ISchoolDbContext _context;
 
-        public StudentService()
+        public StudentService(ISchoolDbContext context)
         {
-            
+            _context = context;
         }
         public Task<bool> DeleteStudent(int id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Student?> GetStudent(int id)
+        public async Task<Student?> GetStudent(int id, int schoolId)
         {
-            throw new NotImplementedException();
+            var student =  await _context.Students.FindAsync(id);
+            return student == null ? null : student;
         }
 
         public Task<IEnumerable<Student>?> GetStudents()
