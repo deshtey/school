@@ -4,10 +4,10 @@ namespace Driverapp.Application.Contracts
 {
     public interface IDriverService
     {
-        Task<IEnumerable<Driver>?> GetDrivers();
-        Task<Driver?> GetDriver(int id);
-        Task<Driver?> PutDriver(int id, Driver Driver, CancellationToken cancellationToken);
-        Task<bool?> PostDriver(Driver Driver, CancellationToken cancellationToken);
+        Task<IEnumerable<SupportStaff>?> GetDrivers();
+        Task<SupportStaff?> GetDriver(int id);
+        Task<SupportStaff?> PutDriver(int id, SupportStaff Driver, CancellationToken cancellationToken);
+        Task<bool?> PostDriver(SupportStaff Driver, CancellationToken cancellationToken);
         Task<bool> DeleteDriver(int id, CancellationToken cancellationToken);
     }
 }

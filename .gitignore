@@ -362,13 +362,3 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 *.cache
-*.cache
-*.cache
-/schoolapp/.vs/ProjectEvaluation/schoolapp.metadata.v7.bin
-/schoolapp/schoolapp.webapi/obj/Debug/net7.0/schoolapp.webapi.csproj.AssemblyReference.cache
-/schoolapp/schoolapp.webapi/obj/Debug/net7.0/schoolapp.webapi.csproj.CoreCompileInputs.cache
-/schoolapp/schoolapp.webapi/obj/Debug/net7.0/schoolapp.webapi.genruntimeconfig.cache
-/schoolapp/schoolapp.infrastructure/obj/Debug/net7.0/schoolapp.infrastructure.csproj.AssemblyReference.cache
-/schoolapp/schoolapp.infrastructure/obj/Debug/net7.0/schoolapp.infrastructure.csproj.CoreCompileInputs.cache
-/schoolapp/schoolapp.infrastructure/obj/Debug/net7.0/schoolapp.infrastructure.genruntimeconfig.cache
-/schoolapp/schoolapp.domain/obj/Debug/net7.0/schoolapp.domain.csproj.CoreCompileInputs.cache

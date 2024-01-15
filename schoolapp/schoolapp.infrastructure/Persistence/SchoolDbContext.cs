@@ -18,7 +18,7 @@ public class SchoolDbContext : IdentityDbContext<SchoolUser>, ISchoolDbContext
     public DbSet<School> Schools => Set<School>();
     public DbSet<Student> Students => Set<Student>();
     public DbSet<Parent> Parents => Set<Parent>();
-    public DbSet<Driver> Drivers => Set<Driver>();
+    public DbSet<SupportStaff> Drivers => Set<SupportStaff>();
     public DbSet<Teacher> Teachers => Set<Teacher>();
     public DbSet<Exam> Exams => Set<Exam>();
     public DbSet<ExamType> ExamTypes => Set<ExamType>();

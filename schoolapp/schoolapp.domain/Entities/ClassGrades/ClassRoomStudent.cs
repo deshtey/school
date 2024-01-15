@@ -7,7 +7,7 @@ namespace schoolapp.Domain.Entities.ClassGrades
     {
         [Key]
         public int ClassRoomId { get; set; }
-        public string StudentRegNumber { get; set; }
+        public string RegNumber { get; set; }
         public int SchoolId { get; set; }
         public virtual School School { get; set; }
         public virtual Student Student { get; set; }

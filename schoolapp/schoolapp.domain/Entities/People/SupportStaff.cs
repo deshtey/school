@@ -2,10 +2,10 @@
 
 namespace schoolapp.Domain.Entities.People
 {
-    public class Driver : Person
+    public class SupportStaff : Person
     {
-         public int DriverId { get; set; }
+        public int StaffId { get; set; }
         public int SchoolId { get; set; }
-        public virtual School School { get; set; }
+        public virtual required School School { get; set; }
     }
 }
