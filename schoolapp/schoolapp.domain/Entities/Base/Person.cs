@@ -2,6 +2,7 @@
 
 public abstract class Person : BaseAuditableEntity
 {
+    public int Id { get; set; }
     public string Name { get; set; }
     public Gender Gender { get; set; }
     public Address Address { get; set; }

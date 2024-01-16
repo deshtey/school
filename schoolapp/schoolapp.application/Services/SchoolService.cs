@@ -79,7 +79,7 @@ namespace schoolapp.Application.Services
         {
             if (_context.Schools == null)
             {
-                return true;
+                return false;
             }
             var School = await _context.Schools.FindAsync(id);
             if (School == null)

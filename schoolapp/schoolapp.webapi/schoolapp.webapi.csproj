@@ -20,10 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\schoolapp.domain\schoolapp.domain.csproj" />
     <ProjectReference Include="..\schoolapp.infrastructure\schoolapp.infrastructure.csproj" />
   </ItemGroup>
