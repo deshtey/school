@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Services.AddDbContext<SchoolDbContext>(options =>
 //        options.UseSqlServer(conString));
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();

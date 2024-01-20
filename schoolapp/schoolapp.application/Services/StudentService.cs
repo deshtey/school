@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using schoolapp.Application.Common.Interfaces;
-using schoolapp.Domain.Entities;
+using schoolapp.Application.Contracts;
 using schoolapp.Domain.Entities.People;
-using Studentapp.Application.Contracts;
-using System.Threading;
 
 namespace schoolapp.Application.Services
 {

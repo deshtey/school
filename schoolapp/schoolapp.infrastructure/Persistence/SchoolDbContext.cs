@@ -18,21 +18,25 @@ public class SchoolDbContext : IdentityDbContext<SchoolUser>, ISchoolDbContext
     public DbSet<School> Schools { get; set; }
     public DbSet<Student> Students { get; set; }
     public DbSet<Parent> Parents { get; set; }
-    public DbSet<SupportStaff> Drivers { get; set; }
+    public DbSet<SupportStaff> Staff { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Exam> Exams { get; set; }
     public DbSet<ExamType> ExamTypes { get; set; }
     public DbSet<ClassRoom> ClassRooms { get; set; }
     public DbSet<ClassRoomStudent> ClassRoomStudents { get; set; }
     public DbSet<Grade> Grades { get; set; }
-    public DbSet<SupportStaff> Staff { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
 
         base.OnModelCreating(builder);
         builder.Entity<School>()
-    .ToTable("schools", schema: "school");
+        .ToTable("schools", schema: "school");
+
+        builder.Entity<Student>()
+        .HasOne(s => s.StudentClass)
+        .WithOne(s => s.Student)
+        .HasForeignKey<ClassRoomStudent>(c => c.StudentId);
 
     }
 }

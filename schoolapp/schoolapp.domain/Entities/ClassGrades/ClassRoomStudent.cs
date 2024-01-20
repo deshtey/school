@@ -1,5 +1,6 @@
 ﻿using schoolapp.Domain.Entities.People;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace schoolapp.Domain.Entities.ClassGrades
 {
@@ -7,8 +8,10 @@ namespace schoolapp.Domain.Entities.ClassGrades
     {
         [Key]
         public int ClassRoomId { get; set; }
-        public string RegNumber { get; set; }
+        public int StudentId { get; set; }
+        public int GradeId { get; set; }
         public int SchoolId { get; set; }
+        public virtual Grade Grade { get; set; }
         public virtual School School { get; set; }
         public virtual Student Student { get; set; }
     }

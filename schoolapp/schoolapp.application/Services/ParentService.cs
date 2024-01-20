@@ -1,6 +1,9 @@
-﻿using Parentapp.Application.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
 using schoolapp.Application.Common.Interfaces;
+using schoolapp.Application.Contracts;
+using schoolapp.Domain.Entities;
 using schoolapp.Domain.Entities.People;
+using System.Threading;
 
 namespace schoolapp.Application.Services
 {
@@ -8,13 +11,81 @@ namespace schoolapp.Application.Services
     {
         private readonly ISchoolDbContext _context;
 
-        public ParentService()
+        public ParentService(ISchoolDbContext context)
         {
-            
+            _context = context;
         }
-        public Task<bool> DeleteParent(int id, CancellationToken cancellationToken)
+
+        public async Task<Parent?> GetParent(int id, int schoolId)
         {
-            throw new NotImplementedException();
+            var parent = await _context.Parents.FindAsync(id);
+            return parent == null ? null : parent;
+        }
+
+        public async Task<IEnumerable<Parent>?> GetParents(int schoolId)
+        {
+            var Parents = await _context.Parents.Where(s => s.SchoolId == schoolId).ToListAsync();
+            return Parents;
+        }
+
+        public async Task<bool?> PostParent(Parent Parent, CancellationToken cancellationToken)
+        {
+            if (_context.Parents == null)
+            {
+                return null;
+            }
+            _context.Parents.Add(Parent);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return true;
+        }
+
+        public async Task<Parent?> PutParent(int id, Parent Parent, CancellationToken cancellationToken)
+        {
+            if (id != Parent.Id)
+            {
+                return null;
+            }
+            var parent = await _context.Parents.FindAsync(new object[] { id }, cancellationToken);
+
+            try
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ParentExists(id))
+                {
+                    return null;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return null;
+        }
+
+        public async Task<bool> DeleteParent(int id, CancellationToken cancellationToken)
+        {
+            if (_context.Parents == null)
+            {
+                return false;
+            }
+            var Parent = await _context.Parents.FindAsync(id);
+            if (Parent == null)
+            {
+                return true;
+            }
+
+            _context.Parents.Remove(Parent);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return true;
+        }
+        private bool ParentExists(int id)
+        {
+            return (_context.Parents?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
         public Task<Parent?> GetParent(int id)
@@ -22,19 +93,20 @@ namespace schoolapp.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Parent>?> GetParents()
+        public async Task<bool> PostParents(List<Parent> parents, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
-        }
+            if (_context.Parents == null)
+            {
+                return false;
+            }
+            foreach (var parent in parents)
+            {
+                _context.Parents.Add(parent);
+            }
+           
+            await _context.SaveChangesAsync(cancellationToken);
 
-        public Task<bool?> PostParent(Parent Parent, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Parent?> PutParent(int id, Parent Parent, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }

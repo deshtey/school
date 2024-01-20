@@ -20,7 +20,6 @@ namespace schoolapp.Application.Common.Interfaces
         DbSet<SupportStaff> Staff { get; set; }
         DbSet<ClassRoom> ClassRooms { get; }
         DbSet<ClassRoomStudent> ClassRoomStudents { get; }
-        DbSet<SupportStaff> Drivers { get; }
         DbSet<Exam> Exams { get; }
         DbSet<ExamType> ExamTypes { get; }
         DbSet<Grade> Grades { get; }

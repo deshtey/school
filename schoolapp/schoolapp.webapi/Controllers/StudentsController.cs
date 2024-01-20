@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Studentapp.Application.Contracts;
-using Studentapp.Application.Contracts;
 using schoolapp.Domain.Entities.People;
+using schoolapp.Application.DTOs;
+using schoolapp.Application.Contracts;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,6 +12,7 @@ namespace Studentapp.webapi.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly IStudentService _StudentService;
+        private readonly IParentService _parentService;
         private readonly CancellationToken cancellationToken;
 
         public StudentsController(IStudentService StudentService)
@@ -34,9 +35,10 @@ namespace Studentapp.webapi.Controllers
 
         // POST api/<StudentsController>
         [HttpPost]
-        public void Post([FromBody] Student Student)
+        public void Post([FromBody] StudentDto StudentDto)
         {
-            _StudentService.PostStudent(Student, cancellationToken);
+            _StudentService.PostStudent(StudentDto.Student, cancellationToken);
+            _parentService.PostParents(StudentDto.Parents, cancellationToken);
         }
 
         // PUT api/<StudentsController>/5
