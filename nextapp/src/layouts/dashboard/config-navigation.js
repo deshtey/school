@@ -96,17 +96,32 @@ export function useNavData() {
         subheader: t('management'),
         items: [
           // USER
+          // {
+          //   title: t('user'),
+          //   path: paths.dashboard.user.root,
+          //   icon: ICONS.user,
+          //   children: [
+          //     { title: t('profile'), path: paths.dashboard.user.root },
+          //     { title: t('cards'), path: paths.dashboard.user.cards },
+          //     { title: t('list'), path: paths.dashboard.user.list },
+          //     { title: t('create'), path: paths.dashboard.user.new },
+          //     { title: t('edit'), path: paths.dashboard.user.demo.edit },
+          //     { title: t('account'), path: paths.dashboard.user.account },
+          //   ],
+          // },
+
           {
-            title: t('user'),
-            path: paths.dashboard.user.root,
+            title: t('students'),
+            path: paths.dashboard.student.root,
             icon: ICONS.user,
             children: [
-              { title: t('profile'), path: paths.dashboard.user.root },
-              { title: t('cards'), path: paths.dashboard.user.cards },
-              { title: t('list'), path: paths.dashboard.user.list },
-              { title: t('create'), path: paths.dashboard.user.new },
-              { title: t('edit'), path: paths.dashboard.user.demo.edit },
-              { title: t('account'), path: paths.dashboard.user.account },
+              { title: t('list'), path: paths.dashboard.student.list },
+              { title: t('create'), path: paths.dashboard.student.new },
+              { title: t('edit'), path: paths.dashboard.student.demo.edit },
+              { title: t('profile'), path: paths.dashboard.student.root },
+              { title: t('cards'), path: paths.dashboard.student.cards },
+
+              { title: t('account'), path: paths.dashboard.student.account },
             ],
           },
 

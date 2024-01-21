@@ -6,19 +6,19 @@ import Container from '@mui/material/Container';
 // routes
 import { paths } from 'src/routes/paths';
 // _mock
-import { _userList } from 'src/_mock';
+import { _studentList } from 'src/_mock';
 // components
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 //
-import UserNewEditForm from '../user-new-edit-form';
+import StudentNewEditForm from '../student-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function UserEditView({ id }) {
+export default function StudentEditView({ id }) {
   const settings = useSettingsContext();
 
-  const currentUser = _userList.find((user) => user.id === id);
+  const currentStudent = _studentList.find((student) => student.id === id);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -30,21 +30,21 @@ export default function UserEditView({ id }) {
             href: paths.dashboard.root,
           },
           {
-            name: 'User',
-            href: paths.dashboard.user.root,
+            name: 'Student',
+            href: paths.dashboard.student.root,
           },
-          { name: currentUser?.name },
+          { name: currentStudent?.name },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
 
-      <UserNewEditForm currentUser={currentUser} />
+      <StudentNewEditForm currentStudent={currentStudent} />
     </Container>
   );
 }
 
-UserEditView.propTypes = {
+StudentEditView.propTypes = {
   id: PropTypes.string,
 };

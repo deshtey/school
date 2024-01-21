@@ -11,7 +11,13 @@ import { paths } from 'src/routes/paths';
 // hooks
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 // _mock
-import { _userAbout, _userFeeds, _userFriends, _userGallery, _userFollowers } from 'src/_mock';
+import {
+  _studentAbout,
+  _studentFeeds,
+  _studentFriends,
+  _studentGallery,
+  _studentFollowers,
+} from 'src/_mock';
 // components
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
@@ -29,7 +35,7 @@ const TABS = [
   {
     value: 'profile',
     label: 'Profile',
-    icon: <Iconify icon="solar:user-id-bold" width={24} />,
+    icon: <Iconify icon="solar:student-id-bold" width={24} />,
   },
   {
     value: 'followers',
@@ -39,7 +45,7 @@ const TABS = [
   {
     value: 'friends',
     label: 'Friends',
-    icon: <Iconify icon="solar:users-group-rounded-bold" width={24} />,
+    icon: <Iconify icon="solar:students-group-rounded-bold" width={24} />,
   },
   {
     value: 'gallery',
@@ -50,10 +56,10 @@ const TABS = [
 
 // ----------------------------------------------------------------------
 
-export default function UserProfileView() {
+export default function StudentProfileView() {
   const settings = useSettingsContext();
 
-  const { user } = useMockedUser();
+  const { student } = useMockedUser();
 
   const [searchFriends, setSearchFriends] = useState('');
 
@@ -73,8 +79,8 @@ export default function UserProfileView() {
         heading="Profile"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'User', href: paths.dashboard.user.root },
-          { name: user?.displayName },
+          { name: 'Student', href: paths.dashboard.student.root },
+          { name: student?.displayName },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
@@ -88,10 +94,10 @@ export default function UserProfileView() {
         }}
       >
         <ProfileCover
-          role={_userAbout.role}
-          name={user?.displayName}
-          avatarUrl={user?.photoURL}
-          coverUrl={_userAbout.coverUrl}
+          role={_studentAbout.role}
+          name={student?.displayName}
+          avatarUrl={student?.photoURL}
+          coverUrl={_studentAbout.coverUrl}
         />
 
         <Tabs
@@ -118,19 +124,19 @@ export default function UserProfileView() {
         </Tabs>
       </Card>
 
-      {currentTab === 'profile' && <ProfileHome info={_userAbout} posts={_userFeeds} />}
+      {currentTab === 'profile' && <ProfileHome info={_studentAbout} posts={_studentFeeds} />}
 
-      {currentTab === 'followers' && <ProfileFollowers followers={_userFollowers} />}
+      {currentTab === 'followers' && <ProfileFollowers followers={_studentFollowers} />}
 
       {currentTab === 'friends' && (
         <ProfileFriends
-          friends={_userFriends}
+          friends={_studentFriends}
           searchFriends={searchFriends}
           onSearchFriends={handleSearchFriends}
         />
       )}
 
-      {currentTab === 'gallery' && <ProfileGallery gallery={_userGallery} />}
+      {currentTab === 'gallery' && <ProfileGallery gallery={_studentGallery} />}
     </Container>
   );
 }

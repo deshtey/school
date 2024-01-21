@@ -26,7 +26,7 @@ public static class DependencyInjection
             services.AddDbContext<SchoolDbContext>((sp, options) =>
             {
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-                options.UseNpgsql("Host=localhost;Database=schooldb;Username=postgres;Password=Working23;");
+                options.UseNpgsql("Host=localhost;Database=schooldb;Username=postgres;Password=Muthuri24;");
 
 //#if (UseSQLite)
 //            options.UseSqlite(connectionString);

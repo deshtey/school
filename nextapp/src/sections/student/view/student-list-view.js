@@ -19,7 +19,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 // _mock
-import { _userList, _roles, USER_STATUS_OPTIONS } from 'src/_mock';
+import { _studentList, _roles, USER_STATUS_OPTIONS } from 'src/_mock';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
@@ -40,9 +40,9 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 //
-import UserTableRow from '../user-table-row';
-import UserTableToolbar from '../user-table-toolbar';
-import UserTableFiltersResult from '../user-table-filters-result';
+import StudentTableRow from '../student-table-row';
+import StudentTableToolbar from '../student-table-toolbar';
+import StudentTableFiltersResult from '../student-table-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function UserListView() {
+export default function StudentListView() {
   const table = useTable();
 
   const settings = useSettingsContext();
@@ -74,7 +74,7 @@ export default function UserListView() {
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(_userList);
+  const [tableData, setTableData] = useState(_studentList);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -84,7 +84,7 @@ export default function UserListView() {
     filters,
   });
 
-  const dataInPage = dataFiltered.slice(
+  const dataInPage = dataFiltered?.slice(
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
@@ -93,7 +93,7 @@ export default function UserListView() {
 
   const canReset = !isEqual(defaultFilters, filters);
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+  const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -113,7 +113,7 @@ export default function UserListView() {
 
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, tableData]
+    [dataInPage?.length, table, tableData]
   );
 
   const handleDeleteRows = useCallback(() => {
@@ -125,11 +125,11 @@ export default function UserListView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
+  }, [dataFiltered?.length, dataInPage?.length, table, tableData]);
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.dashboard.user.edit(id));
+      router.push(paths.dashboard.student.edit(id));
     },
     [router]
   );
@@ -152,17 +152,17 @@ export default function UserListView() {
           heading="List"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'User', href: paths.dashboard.user.root },
+            { name: 'Student', href: paths.dashboard.student.root },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.dashboard.user.new}
+              href={paths.dashboard.student.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New User
+              New Student
             </Button>
           }
           sx={{
@@ -197,23 +197,23 @@ export default function UserListView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && _userList.length}
+                    {tab.value === 'all' && _studentList?.length}
                     {tab.value === 'active' &&
-                      _userList.filter((user) => user.status === 'active').length}
+                      _studentList?.filter((student) => student.status === 'active').length}
 
                     {tab.value === 'pending' &&
-                      _userList.filter((user) => user.status === 'pending').length}
+                      _studentList?.filter((student) => student.status === 'pending').length}
                     {tab.value === 'banned' &&
-                      _userList.filter((user) => user.status === 'banned').length}
+                      _studentList?.filter((student) => student.status === 'banned').length}
                     {tab.value === 'rejected' &&
-                      _userList.filter((user) => user.status === 'rejected').length}
+                      _studentList?.filter((student) => student.status === 'rejected').length}
                   </Label>
                 }
               />
             ))}
           </Tabs>
 
-          <UserTableToolbar
+          <StudentTableToolbar
             filters={filters}
             onFilters={handleFilters}
             //
@@ -221,7 +221,7 @@ export default function UserListView() {
           />
 
           {canReset && (
-            <UserTableFiltersResult
+            <StudentTableFiltersResult
               filters={filters}
               onFilters={handleFilters}
               //
@@ -236,11 +236,11 @@ export default function UserListView() {
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={tableData.length}
+              rowCount={tableData?.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  tableData.map((row) => row.id)
+                  tableData?.map((row) => row.id)
                 )
               }
               action={
@@ -258,25 +258,25 @@ export default function UserListView() {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
+                  rowCount={tableData?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      tableData.map((row) => row.id)
+                      tableData?.map((row) => row.id)
                     )
                   }
                 />
 
                 <TableBody>
                   {dataFiltered
-                    .slice(
+                    ?.slice(
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <UserTableRow
+                      <StudentTableRow
                         key={row.id}
                         row={row}
                         selected={table.selected.includes(row.id)}
@@ -288,7 +288,7 @@ export default function UserListView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData?.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -298,7 +298,7 @@ export default function UserListView() {
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered.length}
+            count={dataFiltered?.length}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
@@ -341,28 +341,28 @@ export default function UserListView() {
 function applyFilter({ inputData, comparator, filters }) {
   const { name, status, role } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
-  stabilizedThis.sort((a, b) => {
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (student) => student.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((user) => user.status === status);
+    inputData = inputData.filter((student) => student.status === status);
   }
 
   if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
+    inputData = inputData.filter((student) => role.includes(student.role));
   }
 
   return inputData;
