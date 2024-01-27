@@ -7,5 +7,7 @@
         public int StudentExamId { get; set; }
         public int SubjectId { get; set; }
         public double Score { get; set; }
+        public double OutOf { get; set; }
+        public double PercentageScore { get; set; }
     }
 }
