@@ -1,17 +1,20 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Contracts;
 using schoolapp.Domain.Entities;
+using schoolapp.Domain.Entities.People;
 
 namespace schoolapp.Application.Services
 {
     public class SchoolService : ISchoolService
     {
         private readonly ISchoolDbContext _context;
-        public SchoolService(ISchoolDbContext context)
+        private readonly ILogger<SchoolService> _logger;
+        public SchoolService(ISchoolDbContext context, ILogger<SchoolService> logger)
         {
             _context = context;
+            _logger = logger;
         }
         public async Task<IEnumerable<School>?> GetSchools()
         {
@@ -37,30 +40,33 @@ namespace schoolapp.Application.Services
             return School;
         }
 
-        public async Task<School?> PutSchool(int id, School School, CancellationToken cancellationToken)
+        public async Task<School?> PutSchool(int id, School school, CancellationToken cancellationToken)
         {
-            if (id != School.SchoolId)
+            if (school == null || id != school.SchoolId)
             {
                 return null;
             }
-            var school =  await _context.Schools.FindAsync(new object[] { id }, cancellationToken);
 
             try
             {
+                var existingSchool = await _context.Schools.FindAsync(new object[] { id }, cancellationToken);
+
+                if (existingSchool == null)
+                {
+                    return null; // School with the given ID not found.
+                }
+
+                _context.Schools.Entry(existingSchool).CurrentValues.SetValues(school);
+
                 await _context.SaveChangesAsync(cancellationToken);
+
+                return existingSchool;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!SchoolExists(id))
-                {
-                    return null;
-                }
-                else
-                {
-                    throw;
-                }
+                _logger.LogError(ex, "Error updating school");
+                return null;
             }
-            return null;
         }
 
         public async Task<bool?> PostSchool(School School, CancellationToken cancellationToken)

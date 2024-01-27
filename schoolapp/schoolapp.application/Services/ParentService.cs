@@ -2,9 +2,7 @@
 using Microsoft.Extensions.Logging;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Contracts;
-using schoolapp.Domain.Entities;
 using schoolapp.Domain.Entities.People;
-using System.Threading;
 
 namespace schoolapp.Application.Services
 {

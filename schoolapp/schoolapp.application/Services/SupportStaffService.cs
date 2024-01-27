@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Contracts;
 using schoolapp.Domain.Entities.People;
@@ -8,10 +9,11 @@ namespace schoolapp.Application.Services
     public class SupportSupportStaffervice : ISupportStaffService
     {
         private readonly ISchoolDbContext _context;
-
-        public SupportSupportStaffervice(ISchoolDbContext context)
+        private readonly ILogger<SupportSupportStaffervice> _logger;
+        public SupportSupportStaffervice(ISchoolDbContext context, ILogger<SupportSupportStaffervice> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<SupportStaff?> GetSupportStaff(int id, int schoolId)
@@ -40,28 +42,31 @@ namespace schoolapp.Application.Services
 
         public async Task<SupportStaff?> PutSupportStaff(int id, SupportStaff supportStaff, CancellationToken cancellationToken)
         {
-            if (id != supportStaff.Id)
+            if (supportStaff == null || id != supportStaff.Id)
             {
                 return null;
             }
-            var SupportStaff = await _context.Staff.FindAsync(new object[] { id }, cancellationToken);
 
             try
             {
+                var existingSupportStaff = await _context.Staff.FindAsync(new object[] { id }, cancellationToken);
+
+                if (existingSupportStaff == null)
+                {
+                    return null; // SupportStaff with the given ID not found.
+                }
+
+                _context.Staff.Entry(existingSupportStaff).CurrentValues.SetValues(supportStaff);
+
                 await _context.SaveChangesAsync(cancellationToken);
+
+                return existingSupportStaff;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!SupportStaffExists(id))
-                {
-                    return null;
-                }
-                else
-                {
-                    throw;
-                }
+                _logger.LogError(ex, "Error updating supportStaff");
+                return null;
             }
-            return null;
         }
 
         public async Task<bool> DeleteSupportStaff(int id, CancellationToken cancellationToken)
@@ -85,8 +90,7 @@ namespace schoolapp.Application.Services
         public bool SupportStaffExists(int id)
         {
             return (_context.Staff?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
-   
+        }   
 
         public async Task<bool> PostSupportStaff(List<SupportStaff> supportStaff, CancellationToken cancellationToken)
         {
