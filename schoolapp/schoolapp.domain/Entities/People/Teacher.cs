@@ -1,4 +1,5 @@
 ﻿using schoolapp.Domain.Entities.Base;
+using schoolapp.Domain.Entities.ClassGrades;
 
 namespace schoolapp.Domain.Entities.People
 {
@@ -8,6 +9,7 @@ namespace schoolapp.Domain.Entities.People
         public string RegNo { get; set; }
         public int SchoolId { get; set; }
         public virtual School School { get; set; }
+        public virtual ClassRoom ClassRoom { get; set; }
 
     }
 }
