@@ -1,6 +1,5 @@
 ﻿using schoolapp.Domain.Entities.People;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace schoolapp.Domain.Entities.ClassGrades
 {

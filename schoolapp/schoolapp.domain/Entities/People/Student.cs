@@ -6,6 +6,7 @@ namespace schoolapp.Domain.Entities.People
     public class Student : Person
     {
         public string RegNumber { get; set; }
-        public virtual ClassRoomStudent StudentClass { get; set; }
+        public int ClassroomId { get; set; }
+        public virtual ClassRoom StudentClass { get; set; }
     }
 }

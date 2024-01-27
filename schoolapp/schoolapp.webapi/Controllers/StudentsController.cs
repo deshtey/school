@@ -35,17 +35,18 @@ namespace Studentapp.webapi.Controllers
 
         // POST api/<StudentsController>
         [HttpPost]
-        public void Post([FromBody] StudentDto StudentDto)
+        public void Post([FromBody] StudentDto studentDto)
         {
-            _StudentService.PostStudent(StudentDto.Student, cancellationToken);
-            _parentService.PostParents(StudentDto.Parents, cancellationToken);
+            _StudentService.PostStudent(studentDto.Student, cancellationToken);
+            _parentService.PostParents(studentDto.Parents, cancellationToken);
         }
 
         // PUT api/<StudentsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Student Student)
+        public void Put(int id, [FromBody] StudentDto studentDto)
         {
-            _StudentService.PutStudent(id, Student, cancellationToken);
+            _StudentService.PutStudent(id, studentDto.Student, cancellationToken);
+            _parentService.PutParents(studentDto.Parents, cancellationToken);
         }
 
         // DELETE api/<StudentsController>/5

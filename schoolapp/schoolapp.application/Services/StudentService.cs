@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Contracts;
 using schoolapp.Domain.Entities.People;
@@ -8,11 +9,12 @@ namespace schoolapp.Application.Services
     public class StudentService : IStudentService
     {
         private readonly ISchoolDbContext _context;
-
-        public StudentService(ISchoolDbContext context)
+        private readonly ILogger<StudentService> _logger;
+        public StudentService(ISchoolDbContext context, ILogger<StudentService> logger)
         {
             _context = context;
-        }      
+            _logger = logger;
+        }
 
         public async Task<Student?> GetStudent(int id, int schoolId)
         {
@@ -38,30 +40,33 @@ namespace schoolapp.Application.Services
             return true;
         }
 
-        public async Task<Student?> PutStudent(int id, Student Student, CancellationToken cancellationToken)
+        public async Task<Student?> PutStudent(int id, Student student, CancellationToken cancellationToken)
         {
-            if (id != Student.Id)
+            if (student == null || id != student.Id)
             {
                 return null;
             }
-            var student = await _context.Students.FindAsync(new object[] { id }, cancellationToken);
 
             try
             {
+                var existingStudent = await _context.Students.FindAsync(new object[] { id }, cancellationToken);
+
+                if (existingStudent == null)
+                {
+                    return null; // Student with the given ID not found.
+                }
+
+                _context.Students.Entry(existingStudent).CurrentValues.SetValues(student);
+
                 await _context.SaveChangesAsync(cancellationToken);
+
+                return existingStudent;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!StudentExists(id))
-                {
-                    return null;
-                }
-                else
-                {
-                    throw;
-                }
+                _logger.LogError(ex, "Error updating student");
+                return null;
             }
-            return null;
         }
 
         public async Task<bool> DeleteStudent(int id, CancellationToken cancellationToken)
@@ -80,10 +85,6 @@ namespace schoolapp.Application.Services
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;
-        }
-        private bool StudentExists(int id)
-        {
-            return (_context.Students?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
     }

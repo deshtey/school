@@ -10,5 +10,6 @@ namespace schoolapp.Application.Contracts
         Task<bool?> PostParent(Parent Parent, CancellationToken cancellationToken);
         Task<bool> DeleteParent(int id, CancellationToken cancellationToken);
         Task <bool> PostParents(List<Parent> parents, CancellationToken cancellationToken);
+        Task<bool> PutParents(List<Parent> parents, CancellationToken cancellationToken);
     }
 }

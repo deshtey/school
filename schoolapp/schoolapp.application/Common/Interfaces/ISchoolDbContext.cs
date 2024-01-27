@@ -3,11 +3,6 @@ using schoolapp.Domain.Entities;
 using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.Exams;
 using schoolapp.Domain.Entities.People;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace schoolapp.Application.Common.Interfaces
 {
@@ -19,12 +14,10 @@ namespace schoolapp.Application.Common.Interfaces
         DbSet<Parent> Parents { get; set; }
         DbSet<SupportStaff> Staff { get; set; }
         DbSet<ClassRoom> ClassRooms { get; }
-        DbSet<ClassRoomStudent> ClassRoomStudents { get; }
+       // DbSet<ClassRoomStudent> ClassRoomStudents { get; }
         DbSet<Exam> Exams { get; }
         DbSet<ExamType> ExamTypes { get; }
         DbSet<Grade> Grades { get; }
-
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
-   
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);   
     }
 }
