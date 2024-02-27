@@ -1,6 +1,6 @@
 ﻿using schoolapp.Domain.Entities.People;
 
-namespace Teacherapp.Application.Contracts
+namespace schoolapp.Application.Contracts
 {
     public interface ITeacherService
     {
