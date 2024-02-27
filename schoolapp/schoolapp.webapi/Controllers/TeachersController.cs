@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using schoolapp.Application.Contracts;
-using schoolapp.Domain.Entities;
+using schoolapp.Domain.Entities.People;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,46 +10,46 @@ namespace schoolapp.webapi.Controllers
     [ApiController]
     public class TeachersController : ControllerBase
     {
-        private readonly ISchoolService _schoolService;
+        private readonly ITeacherService _teacherService;
         private readonly CancellationToken cancellationToken;
 
-        public TeachersController(ISchoolService schoolService)
+        public TeachersController(ITeacherService teacherService)
         {
-            _schoolService = schoolService;
+            _teacherService = teacherService;
         }
-        // GET: api/<SchoolsController
+        // GET: api/<TeachersController
         [HttpGet]
-        public async Task<IEnumerable<School>> Get()
+        public async Task<IEnumerable<Teacher>> Get()
         {
-            return await _schoolService.GetSchools();
+            return await _teacherService.GetTeachers();
         }
 
-        // GET api/<SchoolsController>/5
+        // GET api/<TeachersController>/5
         [HttpGet("{id}")]
-        public async Task<School> Get(int id)
+        public async Task<Teacher> Get(int id)
         {
-            return await _schoolService.GetSchool(id);
+            return await _teacherService.GetTeacher(id);
         }
 
-        // POST api/<SchoolsController>
+        // POST api/<TeachersController>
         [HttpPost]
-        public async Task Post([FromBody] School school)
+        public async Task Post([FromBody] Teacher school)
         {
-            await _schoolService.PostSchool(school, cancellationToken);
+            await _teacherService.PostTeacher(school, cancellationToken);
         }
 
-        // PUT api/<SchoolsController>/5
+        // PUT api/<TeachersController>/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] School school)
+        public async Task Put(int id, [FromBody] Teacher school)
         {
-            await _schoolService.PutSchool(id, school, cancellationToken);
+            await _teacherService.PutTeacher(id, school, cancellationToken);
         }
 
-        // DELETE api/<SchoolsController>/5
+        // DELETE api/<TeachersController>/5
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-            await _schoolService.DeleteSchool(id, cancellationToken);
+            await _teacherService.DeleteTeacher(id, cancellationToken);
         }
     }
 }
