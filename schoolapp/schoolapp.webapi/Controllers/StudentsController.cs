@@ -35,25 +35,25 @@ namespace Studentapp.webapi.Controllers
 
         // POST api/<StudentsController>
         [HttpPost]
-        public void Post([FromBody] StudentDto studentDto)
+        public async Task Post([FromBody] StudentDto studentDto)
         {
-            _StudentService.PostStudent(studentDto.Student, cancellationToken);
-            _parentService.PostParents(studentDto.Parents, cancellationToken);
+            await _StudentService.PostStudent(studentDto.Student, cancellationToken);
+            await _parentService.PostParents(studentDto.Parents, cancellationToken);
         }
 
         // PUT api/<StudentsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] StudentDto studentDto)
+        public async Task Put(int id, [FromBody] StudentDto studentDto)
         {
-            _StudentService.PutStudent(id, studentDto.Student, cancellationToken);
-            _parentService.PutParents(studentDto.Parents, cancellationToken);
+            await _StudentService.PutStudent(id, studentDto.Student, cancellationToken);
+            await _parentService.PutParents(studentDto.Parents, cancellationToken);
         }
 
         // DELETE api/<StudentsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            _StudentService.DeleteStudent(id, cancellationToken);
+            await _StudentService.DeleteStudent(id, cancellationToken);
         }
     }
 }

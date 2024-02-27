@@ -33,23 +33,23 @@ namespace schoolapp.webapi.Controllers
 
         // POST api/<SchoolsController>
         [HttpPost]
-        public void Post([FromBody] School school)
+        public async Task Post([FromBody] School school)
         {
-            _schoolService.PostSchool(school, cancellationToken);
+            await _schoolService.PostSchool(school, cancellationToken);
         }
 
         // PUT api/<SchoolsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] School school)
+        public async Task Put(int id, [FromBody] School school)
         {
-            _schoolService.PutSchool(id, school, cancellationToken);
+            await _schoolService.PutSchool(id, school, cancellationToken);
         }
 
         // DELETE api/<SchoolsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            _schoolService.DeleteSchool(id, cancellationToken);
+            await _schoolService.DeleteSchool(id, cancellationToken);
         }
     }
 }
