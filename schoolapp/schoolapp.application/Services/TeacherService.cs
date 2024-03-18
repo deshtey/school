@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Contracts;
-using schoolapp.Domain.Entities;
 using schoolapp.Domain.Entities.People;
 
 namespace schoolapp.Application.Services
@@ -98,11 +97,5 @@ namespace schoolapp.Application.Services
 
             return true;
         }
-        private bool TeacherExists(int id)
-        {
-            return (_context.Teachers?.Any(e => e.TeacherId == id)).GetValueOrDefault();
-        }
-
-
-    }
+     }
 }

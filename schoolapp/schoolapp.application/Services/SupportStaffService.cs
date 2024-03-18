@@ -16,13 +16,13 @@ namespace schoolapp.Application.Services
             _logger = logger;
         }
 
-        public async Task<SupportStaff?> GetSupportStaff(int id, int schoolId)
+        public async Task<SupportStaff> GetSupportStaff(int id)
         {
             var supportStaff = await _context.Staff.FindAsync(id);
-            return supportStaff ?? null;
+            return supportStaff;
         }
 
-        public async Task<IEnumerable<SupportStaff>?> GetSupportStaff(int schoolId)
+        public async Task<IEnumerable<SupportStaff>?> GetSupportStaffs(int schoolId)
         {
             var supportStaff = await _context.Staff.Where(s => s.SchoolId == schoolId).ToListAsync();
             return supportStaff;
