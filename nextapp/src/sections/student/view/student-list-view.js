@@ -129,7 +129,7 @@ export default function StudentListView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.dashboard.student.edit(id));
+      router.push(paths.dashboard.students.edit(id));
     },
     [router]
   );
@@ -152,13 +152,13 @@ export default function StudentListView() {
           heading="List"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'Student', href: paths.dashboard.student.root },
+            { name: 'Student', href: paths.dashboard.students.list },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.dashboard.student.new}
+              href={paths.dashboard.students.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >

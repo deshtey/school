@@ -26,7 +26,7 @@ export default function StudentCreateView() {
           },
           {
             name: 'Student',
-            href: paths.dashboard.student.root,
+            href: paths.dashboard.students.list,
           },
           { name: 'New student' },
         ]}

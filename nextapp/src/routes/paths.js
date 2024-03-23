@@ -29,19 +29,19 @@ export const paths = {
     },
     schools: {
       list: `${ROOTS.DASHBOARD}/schools`,
-      create: `${ROOTS.DASHBOARD}/schools/new`,
+      new: `${ROOTS.DASHBOARD}/schools/new`,
     },
     students: {
       list: `${ROOTS.DASHBOARD}/students`,
-      create: `${ROOTS.DASHBOARD}/students/new`,
+      new: `${ROOTS.DASHBOARD}/students/new`,
     },
     teachers: {
       list: `${ROOTS.DASHBOARD}/teachers`,
-      create: `${ROOTS.DASHBOARD}/teachers/new`,
+      new: `${ROOTS.DASHBOARD}/teachers/new`,
     },
     staff: {
       list: `${ROOTS.DASHBOARD}/staff`,
-      create: `${ROOTS.DASHBOARD}/staff/new`,
+      new: `${ROOTS.DASHBOARD}/staff/new`,
     },
   },
 };

@@ -82,7 +82,7 @@ export function useNavData() {
             icon: ICONS.user,
             children: [
               { title: 'list', path: paths.dashboard.schools.list },
-              { title: 'create', path: paths.dashboard.schools.create },
+              { title: 'create', path: paths.dashboard.schools.new },
             ],
           },
           {
@@ -91,7 +91,7 @@ export function useNavData() {
             icon: ICONS.user,
             children: [
               { title: 'list', path: paths.dashboard.students.list },
-              { title: 'create', path: paths.dashboard.students.create },
+              { title: 'create', path: paths.dashboard.students.new },
             ],
           },
           {
@@ -100,7 +100,7 @@ export function useNavData() {
             icon: ICONS.user,
             children: [
               { title: 'list', path: paths.dashboard.teachers.list },
-              { title: 'create', path: paths.dashboard.teachers.create },
+              { title: 'create', path: paths.dashboard.teachers.new },
             ],
           },
           {
@@ -109,7 +109,7 @@ export function useNavData() {
             icon: ICONS.user,
             children: [
               { title: 'list', path: paths.dashboard.staff.list },
-              { title: 'create', path: paths.dashboard.staff.create },
+              { title: 'create', path: paths.dashboard.staff.new },
             ],
           },
         ],

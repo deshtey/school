@@ -79,7 +79,7 @@ export default function StudentProfileView() {
         heading="Profile"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Student', href: paths.dashboard.student.root },
+          { name: 'Student', href: paths.dashboard.students.list },
           { name: student?.displayName },
         ]}
         sx={{
