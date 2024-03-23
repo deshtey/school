@@ -8,6 +8,12 @@ export function fDate(date, newFormat) {
   return date ? format(new Date(date), fm) : '';
 }
 
+export function fTime(date, newFormat) {
+  const fm = newFormat || 'p';
+
+  return date ? format(new Date(date), fm) : '';
+}
+
 export function fDateTime(date, newFormat) {
   const fm = newFormat || 'dd MMM yyyy p';
 
@@ -24,4 +30,21 @@ export function fToNow(date) {
         addSuffix: true,
       })
     : '';
+}
+
+export function isBetween(inputDate, startDate, endDate) {
+  const date = new Date(inputDate);
+
+  const results =
+    new Date(date.toDateString()) >= new Date(startDate.toDateString()) &&
+    new Date(date.toDateString()) <= new Date(endDate.toDateString());
+
+  return results;
+}
+
+export function isAfter(startDate, endDate) {
+  const results =
+    startDate && endDate ? new Date(startDate).getTime() > new Date(endDate).getTime() : false;
+
+  return results;
 }

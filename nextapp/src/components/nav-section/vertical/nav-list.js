@@ -1,54 +1,69 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect, useCallback } from 'react';
-// @mui
+
 import Collapse from '@mui/material/Collapse';
-// routes
+
 import { usePathname } from 'src/routes/hooks';
 import { useActiveLink } from 'src/routes/hooks/use-active-link';
-//
+
 import NavItem from './nav-item';
 
 // ----------------------------------------------------------------------
 
-export default function NavList({ data, depth, hasChild, config }) {
+export default function NavList({ data, depth, slotProps }) {
   const pathname = usePathname();
 
-  const active = useActiveLink(data.path, hasChild);
+  const active = useActiveLink(data.path, !!data.children);
 
-  const externalLink = data.path.includes('http');
-
-  const [open, setOpen] = useState(active);
+  const [openMenu, setOpenMenu] = useState(active);
 
   useEffect(() => {
     if (!active) {
-      handleClose();
+      handleCloseMenu();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  const handleToggle = useCallback(() => {
-    setOpen((prev) => !prev);
-  }, []);
+  const handleToggleMenu = useCallback(() => {
+    if (data.children) {
+      setOpenMenu((prev) => !prev);
+    }
+  }, [data.children]);
 
-  const handleClose = useCallback(() => {
-    setOpen(false);
+  const handleCloseMenu = useCallback(() => {
+    setOpenMenu(false);
   }, []);
 
   return (
     <>
       <NavItem
-        item={data}
+        open={openMenu}
+        onClick={handleToggleMenu}
+        //
+        title={data.title}
+        path={data.path}
+        icon={data.icon}
+        info={data.info}
+        roles={data.roles}
+        caption={data.caption}
+        disabled={data.disabled}
+        //
         depth={depth}
-        open={open}
+        hasChild={!!data.children}
+        externalLink={data.path.includes('http')}
+        currentRole={slotProps?.currentRole}
+        //
         active={active}
-        externalLink={externalLink}
-        onClick={handleToggle}
-        config={config}
+        className={active ? 'active' : ''}
+        sx={{
+          mb: `${slotProps?.gap}px`,
+          ...(depth === 1 ? slotProps?.rootItem : slotProps?.subItem),
+        }}
       />
 
-      {hasChild && (
-        <Collapse in={open} unmountOnExit>
-          <NavSubList data={data.children} depth={depth} config={config} />
+      {!!data.children && (
+        <Collapse in={openMenu} unmountOnExit>
+          <NavSubList data={data.children} depth={depth} slotProps={slotProps} />
         </Collapse>
       )}
     </>
@@ -56,32 +71,25 @@ export default function NavList({ data, depth, hasChild, config }) {
 }
 
 NavList.propTypes = {
-  config: PropTypes.object,
   data: PropTypes.object,
   depth: PropTypes.number,
-  hasChild: PropTypes.bool,
+  slotProps: PropTypes.object,
 };
 
 // ----------------------------------------------------------------------
 
-function NavSubList({ data, depth, config }) {
+function NavSubList({ data, depth, slotProps }) {
   return (
     <>
       {data.map((list) => (
-        <NavList
-          key={list.title + list.path}
-          data={list}
-          depth={depth + 1}
-          hasChild={!!list.children}
-          config={config}
-        />
+        <NavList key={list.title} data={list} depth={depth + 1} slotProps={slotProps} />
       ))}
     </>
   );
 }
 
 NavSubList.propTypes = {
-  config: PropTypes.object,
   data: PropTypes.array,
   depth: PropTypes.number,
+  slotProps: PropTypes.object,
 };

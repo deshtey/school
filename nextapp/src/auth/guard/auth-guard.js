@@ -1,23 +1,34 @@
 import PropTypes from 'prop-types';
-import { useEffect, useCallback, useState } from 'react';
-// routes
+import { useState, useEffect, useCallback } from 'react';
+
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-//
+
+import { SplashScreen } from 'src/components/loading-screen';
+
 import { useAuthContext } from '../hooks';
 
 // ----------------------------------------------------------------------
 
 const loginPaths = {
   jwt: paths.auth.jwt.login,
-  auth0: paths.auth.auth0.login,
-  amplify: paths.auth.amplify.login,
-  firebase: paths.auth.firebase.login,
 };
 
 // ----------------------------------------------------------------------
 
 export default function AuthGuard({ children }) {
+  const { loading } = useAuthContext();
+
+  return <>{loading ? <SplashScreen /> : <Container> {children}</Container>}</>;
+}
+
+AuthGuard.propTypes = {
+  children: PropTypes.node,
+};
+
+// ----------------------------------------------------------------------
+
+function Container({ children }) {
   const router = useRouter();
 
   const { authenticated, method } = useAuthContext();
@@ -52,6 +63,6 @@ export default function AuthGuard({ children }) {
   return <>{children}</>;
 }
 
-AuthGuard.propTypes = {
+Container.propTypes = {
   children: PropTypes.node,
 };

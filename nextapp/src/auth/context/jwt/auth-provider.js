@@ -1,19 +1,19 @@
 'use client';
 
 import PropTypes from 'prop-types';
-import { useEffect, useReducer, useCallback, useMemo } from 'react';
-// utils
+import { useMemo, useEffect, useReducer, useCallback } from 'react';
+
 import axios, { endpoints } from 'src/utils/axios';
-//
+
 import { AuthContext } from './auth-context';
-import { isValidToken, setSession } from './utils';
+import { setSession, isValidToken } from './utils';
 
 // ----------------------------------------------------------------------
-
-// NOTE:
-// We only build demo at basic level.
-// Customer will need to do some extra handling yourself if you want to extend the logic and other features...
-
+/**
+ * NOTE:
+ * We only build demo at basic level.
+ * Customer will need to do some extra handling yourself if you want to extend the logic and other features...
+ */
 // ----------------------------------------------------------------------
 
 const initialState = {
@@ -70,7 +70,10 @@ export function AuthProvider({ children }) {
         dispatch({
           type: 'INITIAL',
           payload: {
-            user,
+            user: {
+              ...user,
+              accessToken,
+            },
           },
         });
       } else {
@@ -112,7 +115,10 @@ export function AuthProvider({ children }) {
     dispatch({
       type: 'LOGIN',
       payload: {
-        user,
+        user: {
+          ...user,
+          accessToken,
+        },
       },
     });
   }, []);
@@ -135,7 +141,10 @@ export function AuthProvider({ children }) {
     dispatch({
       type: 'REGISTER',
       payload: {
-        user,
+        user: {
+          ...user,
+          accessToken,
+        },
       },
     });
   }, []);

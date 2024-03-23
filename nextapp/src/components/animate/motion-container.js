@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
 import { m } from 'framer-motion';
-// @mui
+import PropTypes from 'prop-types';
+
 import Box from '@mui/material/Box';
-//
+
 import { varContainer } from './variants';
 
 // ----------------------------------------------------------------------

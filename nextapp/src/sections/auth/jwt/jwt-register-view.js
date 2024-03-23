@@ -1,28 +1,27 @@
 'use client';
 
 import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-// @mui
-import LoadingButton from '@mui/lab/LoadingButton';
+
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
-// hooks
-import { useBoolean } from 'src/hooks/use-boolean';
-// routes
+
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-import { useSearchParams, useRouter } from 'src/routes/hooks';
-// config
-import { PATH_AFTER_LOGIN } from 'src/config-global';
-// auth
+import { useRouter, useSearchParams } from 'src/routes/hooks';
+
+import { useBoolean } from 'src/hooks/use-boolean';
+
 import { useAuthContext } from 'src/auth/hooks';
-// components
+import { PATH_AFTER_LOGIN } from 'src/config-global';
+
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
@@ -96,10 +95,10 @@ export default function JwtRegisterView() {
     <Typography
       component="div"
       sx={{
-        color: 'text.secondary',
         mt: 2.5,
-        typography: 'caption',
         textAlign: 'center',
+        typography: 'caption',
+        color: 'text.secondary',
       }}
     >
       {'By signing up, I agree to '}
@@ -115,51 +114,55 @@ export default function JwtRegisterView() {
   );
 
   const renderForm = (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Stack spacing={2.5}>
-        {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
-
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFTextField name="firstName" label="First name" />
-          <RHFTextField name="lastName" label="Last name" />
-        </Stack>
-
-        <RHFTextField name="email" label="Email address" />
-
-        <RHFTextField
-          name="password"
-          label="Password"
-          type={password.value ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={password.onToggle} edge="end">
-                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-
-        <LoadingButton
-          fullWidth
-          color="inherit"
-          size="large"
-          type="submit"
-          variant="contained"
-          loading={isSubmitting}
-        >
-          Create account
-        </LoadingButton>
+    <Stack spacing={2.5}>
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+        <RHFTextField name="firstName" label="First name" />
+        <RHFTextField name="lastName" label="Last name" />
       </Stack>
-    </FormProvider>
+
+      <RHFTextField name="email" label="Email address" />
+
+      <RHFTextField
+        name="password"
+        label="Password"
+        type={password.value ? 'text' : 'password'}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={password.onToggle} edge="end">
+                <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
+
+      <LoadingButton
+        fullWidth
+        color="inherit"
+        size="large"
+        type="submit"
+        variant="contained"
+        loading={isSubmitting}
+      >
+        Create account
+      </LoadingButton>
+    </Stack>
   );
 
   return (
     <>
       {renderHead}
 
-      {renderForm}
+      {!!errorMsg && (
+        <Alert severity="error" sx={{ m: 3 }}>
+          {errorMsg}
+        </Alert>
+      )}
+
+      <FormProvider methods={methods} onSubmit={onSubmit}>
+        {renderForm}
+      </FormProvider>
 
       {renderTerms}
     </>

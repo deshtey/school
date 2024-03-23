@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-// @mui
+
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
-// theme
+
 import { bgBlur } from 'src/theme/css';
-//
+
 import Iconify from '../iconify';
 
 // ----------------------------------------------------------------------

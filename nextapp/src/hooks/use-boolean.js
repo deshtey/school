@@ -1,6 +1,4 @@
-'use client';
-
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 
 // ----------------------------------------------------------------------
 

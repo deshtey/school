@@ -1,10 +1,10 @@
+import { m } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-import { m } from 'framer-motion';
-// @mui
-import { alpha } from '@mui/material/styles';
+
 import Box from '@mui/material/Box';
-//
+import { alpha } from '@mui/material/styles';
+
 import Logo from '../logo';
 
 // ----------------------------------------------------------------------
@@ -29,7 +29,7 @@ export default function SplashScreen({ sx, ...other }) {
         height: 1,
         zIndex: 9998,
         display: 'flex',
-        position: 'fixed',
+        position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
         bgcolor: 'background.default',

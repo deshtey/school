@@ -1,4 +1,4 @@
-import { Public_Sans, Barlow } from 'next/font/google';
+import { Barlow, Public_Sans } from 'next/font/google';
 
 // ----------------------------------------------------------------------
 
@@ -25,14 +25,14 @@ export function responsiveFontSizes({ sm, md, lg }) {
 }
 
 export const primaryFont = Public_Sans({
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
   display: 'swap',
   fallback: ['Helvetica', 'Arial', 'sans-serif'],
 });
 
 export const secondaryFont = Barlow({
-  weight: ['900'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
   display: 'swap',
   fallback: ['Helvetica', 'Arial', 'sans-serif'],
@@ -45,6 +45,7 @@ export const secondaryFont = Barlow({
 
 export const typography = {
   fontFamily: primaryFont.style.fontFamily,
+  fontSecondaryFamily: secondaryFont.style.fontFamily,
   fontWeightRegular: 400,
   fontWeightMedium: 500,
   fontWeightSemiBold: 600,

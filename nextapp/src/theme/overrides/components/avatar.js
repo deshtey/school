@@ -6,14 +6,14 @@ import { avatarGroupClasses } from '@mui/material/AvatarGroup';
 const COLORS = ['default', 'primary', 'secondary', 'info', 'success', 'warning', 'error'];
 
 const colorByName = (name) => {
-  const charAt = name.charAt(0);
+  const charAt = name.charAt(0).toLowerCase();
 
-  if (['A', 'C', 'F'].includes(charAt)) return 'primary';
-  if (['E', 'D', 'H'].includes(charAt)) return 'secondary';
-  if (['I', 'K', 'L'].includes(charAt)) return 'info';
-  if (['M', 'N', 'P'].includes(charAt)) return 'success';
-  if (['Q', 'S', 'T'].includes(charAt)) return 'warning';
-  if (['V', 'X', 'Y'].includes(charAt)) return 'error';
+  if (['a', 'c', 'f'].includes(charAt)) return 'primary';
+  if (['e', 'd', 'h'].includes(charAt)) return 'secondary';
+  if (['i', 'k', 'l'].includes(charAt)) return 'info';
+  if (['m', 'n', 'p'].includes(charAt)) return 'success';
+  if (['q', 's', 't'].includes(charAt)) return 'warning';
+  if (['v', 'x', 'y'].includes(charAt)) return 'error';
   return 'default';
 };
 

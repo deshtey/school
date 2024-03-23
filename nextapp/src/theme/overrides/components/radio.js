@@ -1,3 +1,5 @@
+import { radioClasses } from '@mui/material/Radio';
+
 // ----------------------------------------------------------------------
 
 export function radio(theme) {
@@ -10,11 +12,22 @@ export function radio(theme) {
         },
       },
     },
-
     MuiRadio: {
       styleOverrides: {
-        root: {
-          padding: theme.spacing(1),
+        root: ({ ownerState }) => {
+          const { color } = ownerState;
+
+          return {
+            padding: theme.spacing(1),
+            ...(color === 'default' && {
+              [`&.${radioClasses.checked}`]: {
+                color: theme.palette.text.primary,
+              },
+            }),
+            [`&.${radioClasses.disabled}`]: {
+              color: theme.palette.action.disabled,
+            },
+          };
         },
       },
     },

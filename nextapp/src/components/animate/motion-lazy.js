@@ -1,7 +1,7 @@
 'use client';
 
 import PropTypes from 'prop-types';
-import { LazyMotion, m, domMax } from 'framer-motion';
+import { m, domMax, LazyMotion } from 'framer-motion';
 
 // ----------------------------------------------------------------------
 

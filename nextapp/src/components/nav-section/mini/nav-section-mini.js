@@ -1,49 +1,42 @@
-import PropTypes from 'prop-types';
 import { memo } from 'react';
+import PropTypes from 'prop-types';
+
 import Stack from '@mui/material/Stack';
-//
-import { navMiniConfig } from '../config';
+
 import NavList from './nav-list';
 
 // ----------------------------------------------------------------------
 
-function NavSectionMini({ data, config, sx, ...other }) {
+function NavSectionMini({ data, slotProps, ...other }) {
   return (
-    <Stack sx={sx} {...other}>
+    <Stack component="nav" id="nav-section-mini" spacing={`${slotProps?.gap || 4}px`} {...other}>
       {data.map((group, index) => (
-        <Group key={group.subheader || index} items={group.items} config={navMiniConfig(config)} />
+        <Group key={group.subheader || index} items={group.items} slotProps={slotProps} />
       ))}
     </Stack>
   );
 }
 
 NavSectionMini.propTypes = {
-  config: PropTypes.object,
   data: PropTypes.array,
-  sx: PropTypes.object,
+  slotProps: PropTypes.object,
 };
 
 export default memo(NavSectionMini);
 
 // ----------------------------------------------------------------------
 
-function Group({ items, config }) {
+function Group({ items, slotProps }) {
   return (
     <>
       {items.map((list) => (
-        <NavList
-          key={list.title + list.path}
-          data={list}
-          depth={1}
-          hasChild={!!list.children}
-          config={config}
-        />
+        <NavList key={list.title} data={list} depth={1} slotProps={slotProps} />
       ))}
     </>
   );
 }
 
 Group.propTypes = {
-  config: PropTypes.object,
   items: PropTypes.array,
+  slotProps: PropTypes.object,
 };

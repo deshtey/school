@@ -1,7 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
 import NProgress from 'nprogress';
+import { Suspense, useEffect } from 'react';
+
+import { useRouter, usePathname, useSearchParams } from 'src/routes/hooks';
+
 import StyledProgressBar from './styles';
 
 // ----------------------------------------------------------------------
@@ -12,7 +15,9 @@ export default function ProgressBar() {
 
     const handleAnchorClick = (event) => {
       const targetUrl = event.currentTarget.href;
+
       const currentUrl = window.location.href;
+
       if (targetUrl !== currentUrl) {
         NProgress.start();
       }
@@ -21,7 +26,12 @@ export default function ProgressBar() {
     const handleMutation = () => {
       const anchorElements = document.querySelectorAll('a[href]');
 
-      anchorElements.forEach((anchor) => anchor.addEventListener('click', handleAnchorClick));
+      const filteredAnchors = Array.from(anchorElements).filter((element) => {
+        const href = element.getAttribute('href');
+        return href && href.startsWith('/');
+      });
+
+      filteredAnchors.forEach((anchor) => anchor.addEventListener('click', handleAnchorClick));
     };
 
     const mutationObserver = new MutationObserver(handleMutation);
@@ -36,5 +46,29 @@ export default function ProgressBar() {
     });
   });
 
-  return <StyledProgressBar />;
+  return (
+    <>
+      <StyledProgressBar />
+
+      <Suspense fallback={null}>
+        <NProgressDone />
+      </Suspense>
+    </>
+  );
+}
+
+// ----------------------------------------------------------------------
+
+function NProgressDone() {
+  const pathname = usePathname();
+
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    NProgress.done();
+  }, [pathname, router, searchParams]);
+
+  return null;
 }

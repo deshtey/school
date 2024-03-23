@@ -1,28 +1,27 @@
 'use client';
 
 import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-// @mui
-import LoadingButton from '@mui/lab/LoadingButton';
+
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
-// routes
+
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-import { useSearchParams, useRouter } from 'src/routes/hooks';
-// config
-import { PATH_AFTER_LOGIN } from 'src/config-global';
-// hooks
+import { useRouter, useSearchParams } from 'src/routes/hooks';
+
 import { useBoolean } from 'src/hooks/use-boolean';
-// auth
+
 import { useAuthContext } from 'src/auth/hooks';
-// components
+import { PATH_AFTER_LOGIN } from 'src/config-global';
+
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
@@ -90,8 +89,6 @@ export default function JwtLoginView() {
 
   const renderForm = (
     <Stack spacing={2.5}>
-      {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
-
       <RHFTextField name="email" label="Email address" />
 
       <RHFTextField
@@ -127,14 +124,22 @@ export default function JwtLoginView() {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
+    <>
       {renderHead}
 
       <Alert severity="info" sx={{ mb: 3 }}>
         Use email : <strong>demo@minimals.cc</strong> / password :<strong> demo1234</strong>
       </Alert>
 
-      {renderForm}
-    </FormProvider>
+      {!!errorMsg && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {errorMsg}
+        </Alert>
+      )}
+
+      <FormProvider methods={methods} onSubmit={onSubmit}>
+        {renderForm}
+      </FormProvider>
+    </>
   );
 }

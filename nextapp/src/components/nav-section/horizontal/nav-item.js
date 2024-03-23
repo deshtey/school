@@ -1,100 +1,112 @@
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
-// @mui
+
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
-import ListItemText from '@mui/material/ListItemText';
-// routes
+import { styled } from '@mui/material/styles';
+import ListItemButton from '@mui/material/ListItemButton';
+
 import { RouterLink } from 'src/routes/components';
-//
+
 import Iconify from '../../iconify';
-//
-import { StyledItem, StyledIcon } from './styles';
 
 // ----------------------------------------------------------------------
 
-const NavItem = forwardRef(({ item, depth, open, active, externalLink, config, ...other }, ref) => {
-  const { title, path, icon, info, children, disabled, caption, roles } = item;
+const NavItem = forwardRef(
+  (
+    {
+      title,
+      path,
+      icon,
+      info,
+      disabled,
+      caption,
+      roles,
+      //
+      open,
+      depth,
+      active,
+      hasChild,
+      externalLink,
+      currentRole = 'admin',
+      ...other
+    },
+    ref
+  ) => {
+    const subItem = depth !== 1;
 
-  const subItem = depth !== 1;
+    const renderContent = (
+      <StyledNavItem
+        ref={ref}
+        open={open}
+        depth={depth}
+        active={active}
+        disabled={disabled}
+        {...other}
+      >
+        {icon && (
+          <Box component="span" className="icon">
+            {icon}
+          </Box>
+        )}
 
-  const renderContent = (
-    <StyledItem
-      disableGutters
-      ref={ref}
-      open={open}
-      depth={depth}
-      active={active}
-      disabled={disabled}
-      config={config}
-      {...other}
-    >
-      {icon && (
-        <StyledIcon
-          size={config.iconSize}
+        {title && (
+          <Box component="span" className="label">
+            {title}
+          </Box>
+        )}
+
+        {caption && (
+          <Tooltip title={caption} arrow>
+            <Iconify width={16} icon="eva:info-outline" className="caption" />
+          </Tooltip>
+        )}
+
+        {info && (
+          <Box component="span" className="info">
+            {info}
+          </Box>
+        )}
+
+        {hasChild && (
+          <Iconify
+            width={16}
+            className="arrow"
+            icon={subItem ? 'eva:arrow-ios-forward-fill' : 'eva:arrow-ios-downward-fill'}
+          />
+        )}
+      </StyledNavItem>
+    );
+
+    // Hidden item by role
+    if (roles && !roles.includes(`${currentRole}`)) {
+      return null;
+    }
+
+    if (externalLink)
+      return (
+        <Link
+          href={path}
+          target="_blank"
+          rel="noopener"
+          color="inherit"
+          underline="none"
           sx={{
-            ...(subItem && { mr: 1.5 }),
+            ...(disabled && {
+              cursor: 'default',
+            }),
           }}
         >
-          {icon}
-        </StyledIcon>
-      )}
+          {renderContent}
+        </Link>
+      );
 
-      {!(config.hiddenLabel && !subItem) && (
-        <ListItemText
-          sx={{
-            ...(!subItem && {
-              ml: 1,
-            }),
-          }}
-          primary={title}
-          primaryTypographyProps={{
-            noWrap: true,
-            typography: 'body2',
-            textTransform: 'capitalize',
-            fontWeight: active ? 'fontWeightBold' : 'fontWeightMedium',
-            ...(subItem && {
-              fontWeight: active ? 'fontWeightSemiBold' : 'fontWeightMedium',
-            }),
-          }}
-        />
-      )}
-
-      {info && (
-        <Box component="span" sx={{ ml: 0.5, lineHeight: 0 }}>
-          {info}
-        </Box>
-      )}
-
-      {caption && (
-        <Tooltip title={caption} arrow>
-          <Iconify width={16} icon="eva:info-outline" sx={{ ml: 0.5, color: 'text.disabled' }} />
-        </Tooltip>
-      )}
-
-      {!!children && (
-        <Iconify
-          icon={subItem ? 'eva:arrow-ios-forward-fill' : 'eva:arrow-ios-downward-fill'}
-          width={16}
-          sx={{ flexShrink: 0, ml: 0.5 }}
-        />
-      )}
-    </StyledItem>
-  );
-
-  // Hidden item by role
-  if (roles && !roles.includes(`${config.currentRole}`)) {
-    return null;
-  }
-
-  // External link
-  if (externalLink)
     return (
       <Link
+        component={RouterLink}
         href={path}
-        target="_blank"
-        rel="noopener"
+        color="inherit"
         underline="none"
         sx={{
           ...(disabled && {
@@ -105,31 +117,130 @@ const NavItem = forwardRef(({ item, depth, open, active, externalLink, config, .
         {renderContent}
       </Link>
     );
-
-  // Default
-  return (
-    <Link
-      component={RouterLink}
-      href={path}
-      underline="none"
-      sx={{
-        ...(disabled && {
-          cursor: 'default',
-        }),
-      }}
-    >
-      {renderContent}
-    </Link>
-  );
-});
+  }
+);
 
 NavItem.propTypes = {
-  active: PropTypes.bool,
-  config: PropTypes.object,
-  depth: PropTypes.number,
-  externalLink: PropTypes.bool,
-  item: PropTypes.object,
   open: PropTypes.bool,
+  active: PropTypes.bool,
+  path: PropTypes.string,
+  depth: PropTypes.number,
+  icon: PropTypes.element,
+  info: PropTypes.element,
+  title: PropTypes.string,
+  disabled: PropTypes.bool,
+  hasChild: PropTypes.bool,
+  caption: PropTypes.string,
+  externalLink: PropTypes.bool,
+  currentRole: PropTypes.string,
+  roles: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default NavItem;
+
+// ----------------------------------------------------------------------
+
+const StyledNavItem = styled(ListItemButton, {
+  shouldForwardProp: (prop) => prop !== 'active',
+})(({ active, open, depth, theme }) => {
+  const subItem = depth !== 1;
+
+  const opened = open && !active;
+
+  const baseStyles = {
+    item: {
+      ...theme.typography.body2,
+      borderRadius: 6,
+      color: theme.palette.text.secondary,
+      fontWeight: theme.typography.fontWeightMedium,
+    },
+    icon: {
+      width: 22,
+      height: 22,
+      flexShrink: 0,
+      marginRight: theme.spacing(1),
+    },
+    label: {
+      textTransform: 'capitalize',
+    },
+    caption: {
+      marginLeft: theme.spacing(0.75),
+      color: theme.palette.text.disabled,
+    },
+    info: {
+      display: 'inline-flex',
+      marginLeft: theme.spacing(0.75),
+    },
+    arrow: {
+      marginLeft: theme.spacing(0.75),
+    },
+  };
+
+  return {
+    // Root item
+    ...(!subItem && {
+      ...baseStyles.item,
+      minHeight: 32,
+      flexShrink: 0,
+      padding: theme.spacing(0, 0.75),
+      '& .icon': {
+        ...baseStyles.icon,
+      },
+      '& .label': {
+        ...baseStyles.label,
+        whiteSpace: 'nowrap',
+      },
+      '& .caption': {
+        ...baseStyles.caption,
+      },
+      '& .info': {
+        ...baseStyles.info,
+      },
+      '& .arrow': {
+        ...baseStyles.arrow,
+      },
+      ...(active && {
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.action.selected,
+        fontWeight: theme.typography.fontWeightSemiBold,
+      }),
+      ...(opened && {
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.action.hover,
+      }),
+    }),
+
+    // Sub item
+    ...(subItem && {
+      ...baseStyles.item,
+      minHeight: 34,
+      padding: theme.spacing(0, 1),
+      '& .icon': {
+        ...baseStyles.icon,
+      },
+      '& .label': {
+        ...baseStyles.label,
+        flexGrow: 1,
+      },
+      '& .caption': {
+        ...baseStyles.caption,
+      },
+      '& .info': {
+        ...baseStyles.info,
+      },
+      '& .arrow': {
+        ...baseStyles.arrow,
+        marginRight: theme.spacing(-0.5),
+      },
+      ...(active && {
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.action.selected,
+        fontWeight: theme.typography.fontWeightSemiBold,
+      }),
+      ...(opened && {
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.action.hover,
+      }),
+    }),
+  };
+});

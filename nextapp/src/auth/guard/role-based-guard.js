@@ -1,14 +1,14 @@
-import PropTypes from 'prop-types';
 import { m } from 'framer-motion';
-// @mui
+import PropTypes from 'prop-types';
+
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-// hooks
+
 import { useMockedUser } from 'src/hooks/use-mocked-user';
-// assets
+
 import { ForbiddenIllustration } from 'src/assets/illustrations';
-// components
-import { MotionContainer, varBounce } from 'src/components/animate';
+
+import { varBounce, MotionContainer } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
 

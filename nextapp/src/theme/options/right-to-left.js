@@ -1,9 +1,7 @@
-import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-// rtl
-import rtlPlugin from 'stylis-plugin-rtl';
-// emotion
+import PropTypes from 'prop-types';
 import createCache from '@emotion/cache';
+import rtlPlugin from 'stylis-plugin-rtl';
 import { CacheProvider } from '@emotion/react';
 
 // ----------------------------------------------------------------------
@@ -31,13 +29,3 @@ RTL.propTypes = {
   children: PropTypes.node,
   themeDirection: PropTypes.oneOf(['rtl', 'ltr']),
 };
-
-// ----------------------------------------------------------------------
-
-export function direction(themeDirection) {
-  const theme = {
-    direction: themeDirection,
-  };
-
-  return theme;
-}

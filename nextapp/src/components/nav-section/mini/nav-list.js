@@ -1,91 +1,83 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect, useRef, useCallback } from 'react';
-// @mui
+import { useRef, useState, useEffect, useCallback } from 'react';
+
 import Stack from '@mui/material/Stack';
 import Popover from '@mui/material/Popover';
-import { appBarClasses } from '@mui/material/AppBar';
-// routes
+
 import { usePathname } from 'src/routes/hooks';
 import { useActiveLink } from 'src/routes/hooks/use-active-link';
-//
+
 import NavItem from './nav-item';
 
 // ----------------------------------------------------------------------
 
-export default function NavList({ data, depth, hasChild, config }) {
+export default function NavList({ data, depth, slotProps }) {
   const navRef = useRef(null);
 
   const pathname = usePathname();
 
-  const active = useActiveLink(data.path, hasChild);
+  const active = useActiveLink(data.path, !!data.children);
 
-  const externalLink = data.path.includes('http');
-
-  const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
 
   useEffect(() => {
-    if (open) {
-      handleClose();
+    if (openMenu) {
+      handleCloseMenu();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  useEffect(() => {
-    const appBarEl = Array.from(document.querySelectorAll(`.${appBarClasses.root}`));
-
-    // Reset styles when hover
-    const styles = () => {
-      document.body.style.overflow = '';
-      document.body.style.padding = '';
-      // Apply for Window
-      appBarEl.forEach((elem) => {
-        elem.style.padding = '';
-      });
-    };
-
-    if (open) {
-      styles();
-    } else {
-      styles();
+  const handleOpenMenu = useCallback(() => {
+    if (data.children) {
+      setOpenMenu(true);
     }
-  }, [open]);
+  }, [data.children]);
 
-  const handleOpen = useCallback(() => {
-    setOpen(true);
-  }, []);
-
-  const handleClose = useCallback(() => {
-    setOpen(false);
+  const handleCloseMenu = useCallback(() => {
+    setOpenMenu(false);
   }, []);
 
   return (
     <>
       <NavItem
         ref={navRef}
-        item={data}
+        open={openMenu}
+        onMouseEnter={handleOpenMenu}
+        onMouseLeave={handleCloseMenu}
+        //
+        title={data.title}
+        path={data.path}
+        icon={data.icon}
+        info={data.info}
+        roles={data.roles}
+        caption={data.caption}
+        disabled={data.disabled}
+        //
         depth={depth}
-        open={open}
+        hasChild={!!data.children}
+        externalLink={data.path.includes('http')}
+        currentRole={slotProps?.currentRole}
+        //
         active={active}
-        externalLink={externalLink}
-        onMouseEnter={handleOpen}
-        onMouseLeave={handleClose}
-        config={config}
+        className={active ? 'active' : ''}
+        sx={depth === 1 ? slotProps?.rootItem : slotProps?.subItem}
       />
 
-      {hasChild && (
+      {!!data.children && (
         <Popover
-          open={open}
+          disableScrollLock
+          open={openMenu}
           anchorEl={navRef.current}
           anchorOrigin={{ vertical: 'center', horizontal: 'right' }}
           transformOrigin={{ vertical: 'center', horizontal: 'left' }}
           slotProps={{
             paper: {
-              onMouseEnter: handleOpen,
-              onMouseLeave: handleClose,
+              onMouseEnter: handleOpenMenu,
+              onMouseLeave: handleCloseMenu,
               sx: {
                 mt: 0.5,
-                width: 160,
-                ...(open && {
+                minWidth: 160,
+                ...(openMenu && {
                   pointerEvents: 'auto',
                 }),
               },
@@ -95,7 +87,7 @@ export default function NavList({ data, depth, hasChild, config }) {
             pointerEvents: 'none',
           }}
         >
-          <NavSubList data={data.children} depth={depth} config={config} />
+          <NavSubList data={data.children} depth={depth} slotProps={slotProps} />
         </Popover>
       )}
     </>
@@ -103,32 +95,25 @@ export default function NavList({ data, depth, hasChild, config }) {
 }
 
 NavList.propTypes = {
-  config: PropTypes.object,
   data: PropTypes.object,
   depth: PropTypes.number,
-  hasChild: PropTypes.bool,
+  slotProps: PropTypes.object,
 };
 
 // ----------------------------------------------------------------------
 
-function NavSubList({ data, depth, config }) {
+function NavSubList({ data, depth, slotProps }) {
   return (
     <Stack spacing={0.5}>
       {data.map((list) => (
-        <NavList
-          key={list.title + list.path}
-          data={list}
-          depth={depth + 1}
-          hasChild={!!list.children}
-          config={config}
-        />
+        <NavList key={list.title} data={list} depth={depth + 1} slotProps={slotProps} />
       ))}
     </Stack>
   );
 }
 
 NavSubList.propTypes = {
-  config: PropTypes.object,
   data: PropTypes.array,
   depth: PropTypes.number,
+  slotProps: PropTypes.object,
 };

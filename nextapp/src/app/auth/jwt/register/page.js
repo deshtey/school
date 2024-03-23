@@ -1,4 +1,3 @@
-// sections
 import { JwtRegisterView } from 'src/sections/auth/jwt';
 
 // ----------------------------------------------------------------------
