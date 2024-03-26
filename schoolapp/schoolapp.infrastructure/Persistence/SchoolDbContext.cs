@@ -6,6 +6,7 @@ using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.Exams;
 using schoolapp.Domain.Entities.People;
 using schoolapp.Infrastructure.Identity;
+using System.Reflection.Emit;
 namespace schoolapp.Infrastructure.Data;
 
 public class SchoolDbContext : IdentityDbContext<SchoolUser>, ISchoolDbContext
@@ -27,8 +28,26 @@ public class SchoolDbContext : IdentityDbContext<SchoolUser>, ISchoolDbContext
     {
 
         base.OnModelCreating(builder);
+        builder.HasDefaultSchema("school");
+
         builder.Entity<School>()
         .ToTable("schools", schema: "school");
+        builder.Entity<Student>()
+    .ToTable("students", schema: "school");
+        builder.Entity<Teacher>()
+    .ToTable("teachers", schema: "school");
+        builder.Entity<Parent>()
+    .ToTable("parents", schema: "school");
+        builder.Entity<SupportStaff>()
+    .ToTable("supportstaffs", schema: "school");
+        builder.Entity<Exam>()
+    .ToTable("exams", schema: "school");
+        builder.Entity<ExamType>()
+    .ToTable("examtypes", schema: "school");
+        builder.Entity<ClassRoom>()
+    .ToTable("classrooms", schema: "school");
+        builder.Entity<Grade>()
+    .ToTable("grades", schema: "school");
 
         //builder.Entity<Student>()
         //.HasOne(s => s.StudentClass)

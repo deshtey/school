@@ -12,14 +12,15 @@ using schoolapp.Infrastructure.Data;
 namespace schoolapp.Infrastructure.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20240127205032_removeclassroomstudent")]
-    partial class removeclassroomstudent
+    [Migration("20240326090818_initial_setup")]
+    partial class initial_setup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("school")
                 .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -48,7 +49,7 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("AspNetRoles", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -73,7 +74,7 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("AspNetRoleClaims", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -98,7 +99,7 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("AspNetUserClaims", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -122,7 +123,7 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("AspNetUserLogins", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -137,7 +138,7 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("AspNetUserRoles", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -158,7 +159,7 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("AspNetUserTokens", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.ClassRoom", b =>
@@ -185,7 +186,10 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("ClassRooms");
+                    b.HasIndex("TeacherId")
+                        .IsUnique();
+
+                    b.ToTable("classrooms", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.Grade", b =>
@@ -211,7 +215,7 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("Grades");
+                    b.ToTable("grades", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.Exams.Exam", b =>
@@ -240,7 +244,7 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("Exams");
+                    b.ToTable("exams", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.Exams.ExamType", b =>
@@ -262,7 +266,7 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("ExamTypes");
+                    b.ToTable("examtypes", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.Parent", b =>
@@ -320,7 +324,7 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("Parents");
+                    b.ToTable("parents", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.Student", b =>
@@ -384,7 +388,7 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("Students");
+                    b.ToTable("students", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.SupportStaff", b =>
@@ -442,7 +446,7 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("Staff");
+                    b.ToTable("supportstaffs", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.Teacher", b =>
@@ -504,7 +508,7 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("Teachers");
+                    b.ToTable("teachers", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.School", b =>
@@ -622,7 +626,7 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("AspNetUsers", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -683,6 +687,14 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("schoolapp.Domain.Entities.People.Teacher", "ClassTeacher")
+                        .WithOne("ClassRoom")
+                        .HasForeignKey("schoolapp.Domain.Entities.ClassGrades.ClassRoom", "TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClassTeacher");
 
                     b.Navigation("School");
                 });
@@ -783,6 +795,12 @@ namespace schoolapp.Infrastructure.Migrations
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.ClassRoom", b =>
                 {
                     b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.People.Teacher", b =>
+                {
+                    b.Navigation("ClassRoom")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

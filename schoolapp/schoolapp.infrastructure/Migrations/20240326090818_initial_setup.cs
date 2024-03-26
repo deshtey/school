@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace schoolapp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class initial_setup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,6 +17,7 @@ namespace schoolapp.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
+                schema: "school",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
@@ -31,6 +32,7 @@ namespace schoolapp.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
+                schema: "school",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
@@ -79,6 +81,7 @@ namespace schoolapp.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
+                schema: "school",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -93,6 +96,7 @@ namespace schoolapp.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
+                        principalSchema: "school",
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -100,6 +104,7 @@ namespace schoolapp.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
+                schema: "school",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -114,6 +119,7 @@ namespace schoolapp.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "school",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -121,6 +127,7 @@ namespace schoolapp.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
+                schema: "school",
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
@@ -134,6 +141,7 @@ namespace schoolapp.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "school",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -141,6 +149,7 @@ namespace schoolapp.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
+                schema: "school",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "text", nullable: false),
@@ -152,12 +161,14 @@ namespace schoolapp.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
+                        principalSchema: "school",
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "school",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -165,6 +176,7 @@ namespace schoolapp.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
+                schema: "school",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "text", nullable: false),
@@ -178,164 +190,150 @@ namespace schoolapp.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "school",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClassRooms",
+                name: "examtypes",
+                schema: "school",
                 columns: table => new
                 {
-                    ClassRoomId = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Year = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    GradeId = table.Column<int>(type: "integer", nullable: false),
+                    Desc = table.Column<string>(type: "text", nullable: false),
+                    SchoolId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_examtypes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_examtypes_schools_SchoolId",
+                        column: x => x.SchoolId,
+                        principalSchema: "school",
+                        principalTable: "schools",
+                        principalColumn: "SchoolId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "grades",
+                schema: "school",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Desc = table.Column<string>(type: "text", nullable: false),
+                    SchoolId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_grades", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_grades_schools_SchoolId",
+                        column: x => x.SchoolId,
+                        principalSchema: "school",
+                        principalTable: "schools",
+                        principalColumn: "SchoolId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "parents",
+                schema: "school",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ParentId = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Gender = table.Column<int>(type: "integer", nullable: false),
+                    DOB = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
+                    Phone = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Joined = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    SchoolId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_parents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_parents_schools_SchoolId",
+                        column: x => x.SchoolId,
+                        principalSchema: "school",
+                        principalTable: "schools",
+                        principalColumn: "SchoolId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "supportstaffs",
+                schema: "school",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    StaffId = table.Column<int>(type: "integer", nullable: false),
+                    SchoolId = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Gender = table.Column<int>(type: "integer", nullable: false),
+                    DOB = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
+                    Phone = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Joined = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_supportstaffs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_supportstaffs_schools_SchoolId",
+                        column: x => x.SchoolId,
+                        principalSchema: "school",
+                        principalTable: "schools",
+                        principalColumn: "SchoolId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "teachers",
+                schema: "school",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TeacherId = table.Column<int>(type: "integer", nullable: false),
-                    SchoolId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClassRooms", x => x.ClassRoomId);
-                    table.ForeignKey(
-                        name: "FK_ClassRooms_schools_SchoolId",
-                        column: x => x.SchoolId,
-                        principalSchema: "school",
-                        principalTable: "schools",
-                        principalColumn: "SchoolId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Drivers",
-                columns: table => new
-                {
-                    DriverId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    SchoolId = table.Column<int>(type: "integer", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
-                    StudentId = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Gender = table.Column<int>(type: "integer", nullable: false),
-                    DOB = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Status = table.Column<bool>(type: "boolean", nullable: false),
-                    Phone = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Drivers", x => x.DriverId);
-                    table.ForeignKey(
-                        name: "FK_Drivers_schools_SchoolId",
-                        column: x => x.SchoolId,
-                        principalSchema: "school",
-                        principalTable: "schools",
-                        principalColumn: "SchoolId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ExamTypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Desc = table.Column<string>(type: "text", nullable: false),
-                    SchoolId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ExamTypes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ExamTypes_schools_SchoolId",
-                        column: x => x.SchoolId,
-                        principalSchema: "school",
-                        principalTable: "schools",
-                        principalColumn: "SchoolId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Grades",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Desc = table.Column<string>(type: "text", nullable: false),
-                    SchoolId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Grades", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Grades_schools_SchoolId",
-                        column: x => x.SchoolId,
-                        principalSchema: "school",
-                        principalTable: "schools",
-                        principalColumn: "SchoolId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Parents",
-                columns: table => new
-                {
-                    ParentId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    SchoolId = table.Column<int>(type: "integer", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
-                    StudentId = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Gender = table.Column<int>(type: "integer", nullable: false),
-                    DOB = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Status = table.Column<bool>(type: "boolean", nullable: false),
-                    Phone = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Parents", x => x.ParentId);
-                    table.ForeignKey(
-                        name: "FK_Parents_schools_SchoolId",
-                        column: x => x.SchoolId,
-                        principalSchema: "school",
-                        principalTable: "schools",
-                        principalColumn: "SchoolId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Teachers",
-                columns: table => new
-                {
-                    TeacherId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     RegNo = table.Column<string>(type: "text", nullable: false),
                     SchoolId = table.Column<int>(type: "integer", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true),
-                    StudentId = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Gender = table.Column<int>(type: "integer", nullable: false),
                     DOB = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Status = table.Column<bool>(type: "boolean", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false)
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Joined = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Teachers", x => x.TeacherId);
+                    table.PrimaryKey("PK_teachers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Teachers_schools_SchoolId",
+                        name: "FK_teachers_schools_SchoolId",
                         column: x => x.SchoolId,
                         principalSchema: "school",
                         principalTable: "schools",
@@ -344,45 +342,8 @@ namespace schoolapp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Students",
-                columns: table => new
-                {
-                    StudentId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RegNumber = table.Column<string>(type: "text", nullable: false),
-                    Status = table.Column<bool>(type: "boolean", nullable: false),
-                    JoinDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    SchoolId = table.Column<int>(type: "integer", nullable: false),
-                    ClassRoomId = table.Column<int>(type: "integer", nullable: true),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Gender = table.Column<int>(type: "integer", nullable: false),
-                    DOB = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Phone = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Students", x => x.StudentId);
-                    table.ForeignKey(
-                        name: "FK_Students_ClassRooms_ClassRoomId",
-                        column: x => x.ClassRoomId,
-                        principalTable: "ClassRooms",
-                        principalColumn: "ClassRoomId");
-                    table.ForeignKey(
-                        name: "FK_Students_schools_SchoolId",
-                        column: x => x.SchoolId,
-                        principalSchema: "school",
-                        principalTable: "schools",
-                        principalColumn: "SchoolId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Exams",
+                name: "exams",
+                schema: "school",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -394,15 +355,16 @@ namespace schoolapp.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Exams", x => x.Id);
+                    table.PrimaryKey("PK_exams", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Exams_ExamTypes_ExamTypeId",
+                        name: "FK_exams_examtypes_ExamTypeId",
                         column: x => x.ExamTypeId,
-                        principalTable: "ExamTypes",
+                        principalSchema: "school",
+                        principalTable: "examtypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Exams_schools_SchoolId",
+                        name: "FK_exams_schools_SchoolId",
                         column: x => x.SchoolId,
                         principalSchema: "school",
                         principalTable: "schools",
@@ -411,26 +373,70 @@ namespace schoolapp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClassRoomStudents",
+                name: "classrooms",
+                schema: "school",
                 columns: table => new
                 {
                     ClassRoomId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    StudentRegNumber = table.Column<string>(type: "text", nullable: false),
-                    SchoolId = table.Column<int>(type: "integer", nullable: false),
-                    StudentId = table.Column<int>(type: "integer", nullable: false)
+                    Year = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    GradeId = table.Column<int>(type: "integer", nullable: false),
+                    TeacherId = table.Column<int>(type: "integer", nullable: false),
+                    SchoolId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClassRoomStudents", x => x.ClassRoomId);
+                    table.PrimaryKey("PK_classrooms", x => x.ClassRoomId);
                     table.ForeignKey(
-                        name: "FK_ClassRoomStudents_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "StudentId",
+                        name: "FK_classrooms_schools_SchoolId",
+                        column: x => x.SchoolId,
+                        principalSchema: "school",
+                        principalTable: "schools",
+                        principalColumn: "SchoolId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ClassRoomStudents_schools_SchoolId",
+                        name: "FK_classrooms_teachers_TeacherId",
+                        column: x => x.TeacherId,
+                        principalSchema: "school",
+                        principalTable: "teachers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "students",
+                schema: "school",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RegNumber = table.Column<string>(type: "text", nullable: false),
+                    ClassroomId = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Gender = table.Column<int>(type: "integer", nullable: false),
+                    DOB = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
+                    Phone = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Joined = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    SchoolId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_students_classrooms_ClassroomId",
+                        column: x => x.ClassroomId,
+                        principalSchema: "school",
+                        principalTable: "classrooms",
+                        principalColumn: "ClassRoomId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_students_schools_SchoolId",
                         column: x => x.SchoolId,
                         principalSchema: "school",
                         principalTable: "schools",
@@ -440,99 +446,113 @@ namespace schoolapp.Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
+                schema: "school",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
+                schema: "school",
                 table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
+                schema: "school",
                 table: "AspNetUserClaims",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
+                schema: "school",
                 table: "AspNetUserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
+                schema: "school",
                 table: "AspNetUserRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
+                schema: "school",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
+                schema: "school",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClassRooms_SchoolId",
-                table: "ClassRooms",
+                name: "IX_classrooms_SchoolId",
+                schema: "school",
+                table: "classrooms",
                 column: "SchoolId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClassRoomStudents_SchoolId",
-                table: "ClassRoomStudents",
-                column: "SchoolId");
+                name: "IX_classrooms_TeacherId",
+                schema: "school",
+                table: "classrooms",
+                column: "TeacherId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClassRoomStudents_StudentId",
-                table: "ClassRoomStudents",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Drivers_SchoolId",
-                table: "Drivers",
-                column: "SchoolId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Exams_ExamTypeId",
-                table: "Exams",
+                name: "IX_exams_ExamTypeId",
+                schema: "school",
+                table: "exams",
                 column: "ExamTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Exams_SchoolId",
-                table: "Exams",
+                name: "IX_exams_SchoolId",
+                schema: "school",
+                table: "exams",
                 column: "SchoolId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExamTypes_SchoolId",
-                table: "ExamTypes",
+                name: "IX_examtypes_SchoolId",
+                schema: "school",
+                table: "examtypes",
                 column: "SchoolId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Grades_SchoolId",
-                table: "Grades",
+                name: "IX_grades_SchoolId",
+                schema: "school",
+                table: "grades",
                 column: "SchoolId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parents_SchoolId",
-                table: "Parents",
+                name: "IX_parents_SchoolId",
+                schema: "school",
+                table: "parents",
                 column: "SchoolId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_ClassRoomId",
-                table: "Students",
-                column: "ClassRoomId");
+                name: "IX_students_ClassroomId",
+                schema: "school",
+                table: "students",
+                column: "ClassroomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_SchoolId",
-                table: "Students",
+                name: "IX_students_SchoolId",
+                schema: "school",
+                table: "students",
                 column: "SchoolId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Teachers_SchoolId",
-                table: "Teachers",
+                name: "IX_supportstaffs_SchoolId",
+                schema: "school",
+                table: "supportstaffs",
+                column: "SchoolId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_teachers_SchoolId",
+                schema: "school",
+                table: "teachers",
                 column: "SchoolId");
         }
 
@@ -540,52 +560,64 @@ namespace schoolapp.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
+                name: "AspNetRoleClaims",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserClaims");
+                name: "AspNetUserClaims",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserLogins");
+                name: "AspNetUserLogins",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
+                name: "AspNetUserRoles",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserTokens");
+                name: "AspNetUserTokens",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "ClassRoomStudents");
+                name: "exams",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "Drivers");
+                name: "grades",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "Exams");
+                name: "parents",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "Grades");
+                name: "students",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "Parents");
+                name: "supportstaffs",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "Teachers");
+                name: "AspNetRoles",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "AspNetUsers",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "examtypes",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "classrooms",
+                schema: "school");
 
             migrationBuilder.DropTable(
-                name: "ExamTypes");
-
-            migrationBuilder.DropTable(
-                name: "ClassRooms");
+                name: "teachers",
+                schema: "school");
 
             migrationBuilder.DropTable(
                 name: "schools",
