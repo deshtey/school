@@ -8,5 +8,6 @@ namespace schoolapp.Domain.Entities.People
         public string RegNumber { get; set; }
         public int ClassroomId { get; set; }
         public virtual ClassRoom StudentClass { get; set; }
+        public virtual ICollection<Parent> Parents { get; set; }=new List<Parent>();
     }
 }

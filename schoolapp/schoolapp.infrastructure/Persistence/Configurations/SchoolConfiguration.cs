@@ -1,18 +1,27 @@
-﻿using schoolapp.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using schoolapp.Domain.Entities.Base;
 
-namespace schoolapp.Infrastructure.Persistence.Configurations;
-
-public class SchoolConfiguration : IEntityTypeConfiguration<School>
+public static class ModelBuilderExtensions
 {
-    public void Configure(EntityTypeBuilder<School> builder)
+    public static void ConfigureOwnedAddress(this ModelBuilder modelBuilder, IMutableEntityType entity)
     {
-        builder.Property(t => t.SchoolName)
-            .HasMaxLength(200)
-            .IsRequired();
-
-        //builder
-        //    .OwnsOne(b => b.Colour);
+        var addressProperty = entity.ClrType.GetProperty("Address");
+        if (addressProperty != null && addressProperty.PropertyType == typeof(Address))
+        {
+            modelBuilder.Entity(entity.ClrType).OwnsOne(
+                
+                //.OwnsOne(
+                addressProperty.Name,"address", addressMapping =>
+                {
+                    addressMapping.Property("Street").HasColumnName("street");
+                    addressMapping.Property("City").HasColumnName("city");
+                    addressMapping.Property("ZipCode").HasColumnName("zipcode");
+                    addressMapping.Property("PostalCode").HasColumnName("postalcode");
+                    addressMapping.Property("Country").HasColumnName("country");
+                    addressMapping.Property("Phone").HasColumnName("phone");
+                    addressMapping.Property("Fax").HasColumnName("fax");
+                });
+        }
     }
 }

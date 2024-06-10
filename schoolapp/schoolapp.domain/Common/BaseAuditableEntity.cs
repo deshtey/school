@@ -9,10 +9,9 @@ public abstract class BaseAuditableEntity
     public string CreatedByUserId { get; set; }
     [NotMapped]
     public virtual AppUser CreatedByUser { get; set; }
-
     public DateTimeOffset? LastModified { get; set; }
-
     public string? LastModifiedByUserId { get; set; }
     [NotMapped]
     public virtual AppUser LastModifiedByUser { get; set; }
+    public bool Active { get; set; }
 }

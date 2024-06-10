@@ -24,7 +24,9 @@ namespace schoolapp.Application.Services
 
         public async Task<IEnumerable<Student>?> GetStudents(int schoolId)
         {
-            var students = await _context.Students.Where(s=>s.SchoolId==schoolId).ToListAsync();
+            var students = await _context.Students.Where(s=>s.SchoolId==schoolId)
+                //.Include(s=>s.P)
+                .ToListAsync();
             return students;
         }
 

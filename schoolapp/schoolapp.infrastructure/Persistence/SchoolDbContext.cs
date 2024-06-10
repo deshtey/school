@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using IdentityModel;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Domain.Entities;
+using schoolapp.Domain.Entities.Base;
 using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.Exams;
 using schoolapp.Domain.Entities.People;
@@ -29,17 +32,50 @@ public class SchoolDbContext : IdentityDbContext<SchoolUser>, ISchoolDbContext
 
         base.OnModelCreating(builder);
         builder.HasDefaultSchema("school");
+        foreach (var entity in builder.Model.GetEntityTypes())
+        {
+            entity.SetTableName(entity.GetTableName().ToLower());
 
+            foreach (var property in entity.GetProperties())
+            {
+                property.SetColumnName(property.GetColumnName().ToLower());
+            }
+
+            foreach (var key in entity.GetKeys())
+            {
+                key.SetName(key.GetName().ToLower());
+            }
+
+            //foreach (var index in entity.GetIndexes())
+            //{
+            //    index.SetDatabaseName(index.Name.ToLower());
+            //}
+
+            foreach (var foreignKey in entity.GetForeignKeys())
+            {
+                foreignKey.SetConstraintName(foreignKey.GetConstraintName().ToLower());
+            }
+            var addressProperty = entity.FindProperty(typeof(Address));
+
+
+        }
         builder.Entity<School>()
-        .ToTable("schools", schema: "school");
+        .ToTable("schools", schema: "school")
+        .OwnsOne(a => a.Address);
+
         builder.Entity<Student>()
-    .ToTable("students", schema: "school");
+        .ToTable("students", schema: "school")
+        .OwnsOne(a => a.Address);
         builder.Entity<Teacher>()
-    .ToTable("teachers", schema: "school");
+    .ToTable("teachers", schema: "school")
+     .OwnsOne(a => a.Address);
         builder.Entity<Parent>()
-    .ToTable("parents", schema: "school");
+    .ToTable("parents", schema: "school")
+    .OwnsOne(a => a.Address);
+
         builder.Entity<SupportStaff>()
-    .ToTable("supportstaffs", schema: "school");
+        .ToTable("supportstaffs", schema: "school")
+        .OwnsOne(a => a.Address);
         builder.Entity<Exam>()
     .ToTable("exams", schema: "school");
         builder.Entity<ExamType>()
@@ -48,11 +84,6 @@ public class SchoolDbContext : IdentityDbContext<SchoolUser>, ISchoolDbContext
     .ToTable("classrooms", schema: "school");
         builder.Entity<Grade>()
     .ToTable("grades", schema: "school");
-
-        //builder.Entity<Student>()
-        //.HasOne(s => s.StudentClass)
-        //.WithOne(s => s.Student)
-        //.HasForeignKey<ClassRoomStudent>(c => c.StudentId);
 
     }
 }
