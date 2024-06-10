@@ -1,22 +1,20 @@
-﻿using schoolapp.Application.Common.Interfaces;
-using schoolapp.Domain.Common;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using schoolapp.application.Common.Interfaces;
+using schoolapp.Domain.Common;
+using schoolapp.Infrastructure.Security.CurrentUserProvider;
 
 namespace schoolapp.Infrastructure.Persistence.Interceptors;
 
 public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
-    private readonly ICurrentUserService _currentUserService;
-    private readonly IDateTime _dateTime;
+    private readonly IUserProvider _userProvider;
 
     public AuditableEntitySaveChangesInterceptor(
-        ICurrentUserService currentUserService,
-        IDateTime dateTime)
+         IUserProvider userProvider)
     {
-        _currentUserService = currentUserService;
-        _dateTime = dateTime;
+        _userProvider = userProvider;
     }
 
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
@@ -41,14 +39,14 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedBy = _currentUserService.UserId;
-                entry.Entity.Created = _dateTime.Now;
-            } 
+                entry.Entity.CreatedByUserId = _userProvider.GetCurrentUser().Id;
+                entry.Entity.Created = IDateTime.Now;
+            }
 
             if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
-                entry.Entity.LastModifiedBy = _currentUserService.UserId;
-                entry.Entity.LastModified = _dateTime.Now;
+                entry.Entity.LastModifiedByUserId = _userProvider.GetCurrentUser().Id;
+                entry.Entity.LastModified = IDateTime.Now;
             }
         }
     }
@@ -57,8 +55,8 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 public static class Extensions
 {
     public static bool HasChangedOwnedEntities(this EntityEntry entry) =>
-        entry.References.Any(r => 
-            r.TargetEntry != null && 
-            r.TargetEntry.Metadata.IsOwned() && 
+        entry.References.Any(r =>
+            r.TargetEntry != null &&
+            r.TargetEntry.Metadata.IsOwned() &&
             (r.TargetEntry.State == EntityState.Added || r.TargetEntry.State == EntityState.Modified));
 }

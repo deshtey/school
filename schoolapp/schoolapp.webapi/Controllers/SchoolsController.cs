@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using schoolapp.Application.Common.Security;
+using schoolapp.application.Common.Security.Request;
 using schoolapp.Application.Contracts;
 using schoolapp.Domain.Entities;
 

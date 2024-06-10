@@ -1,8 +1,8 @@
-﻿using schoolapp.Application.Common.Interfaces;
+﻿using schoolapp.application.Common.Interfaces;
 
 namespace schoolapp.Infrastructure.Services;
 
 public class DateTimeService : IDateTime
 {
-    public DateTime Now => DateTime.Now;
+    public static DateTimeOffset Now => DateTime.Now;
 }

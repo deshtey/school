@@ -1,6 +1,7 @@
-﻿using schoolapp.Application.Common.Models;
+﻿
+using schoolapp.Application.Common.Models;
 
-namespace schoolapp.Application.Common.Interfaces;
+namespace schoolapp.application.Common.Interfaces;
 
 public interface IIdentityService
 {

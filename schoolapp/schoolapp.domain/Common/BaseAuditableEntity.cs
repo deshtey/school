@@ -5,12 +5,12 @@ namespace schoolapp.Domain.Common;
 
 public abstract class BaseAuditableEntity 
 {
-    public DateTime Created { get; set; }
+    public DateTimeOffset Created { get; set; }
     public string CreatedByUserId { get; set; }
     [NotMapped]
     public virtual AppUser CreatedByUser { get; set; }
 
-    public DateTime? LastModified { get; set; }
+    public DateTimeOffset? LastModified { get; set; }
 
     public string? LastModifiedByUserId { get; set; }
     [NotMapped]

@@ -1,6 +1,6 @@
-﻿namespace schoolapp.Application.Common.Interfaces;
+﻿namespace schoolapp.application.Common.Interfaces;
 
 public interface IDateTime
 {
-    DateTime Now { get; }
+   static DateTimeOffset Now { get; }
 }

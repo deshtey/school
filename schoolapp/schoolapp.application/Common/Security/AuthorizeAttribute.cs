@@ -1,4 +1,4 @@
-﻿namespace schoolapp.Application.Common.Security;
+﻿namespace schoolapp.application.Common.Security;
 
 /// <summary>
 /// Specifies the class this attribute is applied to requires authorization.

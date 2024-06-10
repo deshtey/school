@@ -1,20 +1,22 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using schoolapp.application.Common.Interfaces;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Common.Models;
+using schoolapp.Domain.Entities.Identity;
 
 namespace schoolapp.Infrastructure.Identity;
 
 public class IdentityService : IIdentityService
 {
-    private readonly UserManager<SchoolUser> _userManager;
-    private readonly IUserClaimsPrincipalFactory<SchoolUser> _userClaimsPrincipalFactory;
+    private readonly UserManager<AppUser> _userManager;
+    private readonly IUserClaimsPrincipalFactory<AppUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
 
     public IdentityService(
-        UserManager<SchoolUser> userManager,
-        IUserClaimsPrincipalFactory<SchoolUser> userClaimsPrincipalFactory,
+        UserManager<AppUser> userManager,
+        IUserClaimsPrincipalFactory<AppUser> userClaimsPrincipalFactory,
         IAuthorizationService authorizationService)
     {
         _userManager = userManager;
@@ -31,7 +33,7 @@ public class IdentityService : IIdentityService
 
     public async Task<(Result<bool> Result, string UserId)> CreateUserAsync(string userName, string password)
     {
-        var user = new SchoolUser
+        var user = new AppUser
         {
             UserName = userName,
             Email = userName,
@@ -83,7 +85,7 @@ public class IdentityService : IIdentityService
         return user != null ? await DeleteUserAsync(user) : true;
     }
 
-    public async Task<bool> DeleteUserAsync(SchoolUser user)
+    public async Task<bool> DeleteUserAsync(AppUser user)
     {
         var result = await _userManager.DeleteAsync(user);
 

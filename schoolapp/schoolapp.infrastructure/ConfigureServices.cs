@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using schoolapp.application.Common.Interfaces;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Infrastructure.Data;
 using schoolapp.Infrastructure.Identity;
@@ -57,7 +58,7 @@ public static class DependencyInjection
                 .AddEntityFrameworkStores<SchoolDbContext>();
 #endif
 
-            services.AddSingleton<IDateTime, DateTimeService>();
+            //services.AddSingleton<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
 
             //services.AddAuthorization(options =>
