@@ -115,7 +115,7 @@ export const paths = {
       booking: `${ROOTS.ADMIN}/booking`,
       file: `${ROOTS.ADMIN}/file`,
     },
-    user: {
+    school: {
       root: `${ROOTS.ADMIN}/user`,
       new: `${ROOTS.ADMIN}/user/new`,
       list: `${ROOTS.ADMIN}/user/list`,

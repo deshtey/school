@@ -97,16 +97,16 @@ export function useNavData() {
         items: [
           // USER
           {
-            title: t('user'),
-            path: paths.admin.user.root,
-            icon: ICONS.user,
+            title: t('school'),
+            path: paths.admin.school.root,
+            icon: ICONS.school,
             children: [
-              { title: t('profile'), path: paths.admin.user.root },
-              { title: t('cards'), path: paths.admin.user.cards },
-              { title: t('list'), path: paths.admin.user.list },
-              { title: t('create'), path: paths.admin.user.new },
-              { title: t('edit'), path: paths.admin.user.demo.edit },
-              { title: t('account'), path: paths.admin.user.account },
+              { title: t('profile'), path: paths.admin.school.root },
+              { title: t('cards'), path: paths.admin.school.cards },
+              { title: t('list'), path: paths.admin.school.list },
+              { title: t('create'), path: paths.admin.school.new },
+              { title: t('edit'), path: paths.admin.school.demo.edit },
+              { title: t('account'), path: paths.admin.school.account },
             ],
           },
 
