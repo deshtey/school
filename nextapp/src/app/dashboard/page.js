@@ -1,11 +1,11 @@
-import OneView from 'src/sections/one/view';
+import { OverviewAppView } from 'src/sections/overview/app/view';
 
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Dashboard: One',
+  title: 'Dashboard: App',
 };
 
-export default function Page() {
-  return <OneView />;
+export default function OverviewAppPage() {
+  return <OverviewAppView />;
 }

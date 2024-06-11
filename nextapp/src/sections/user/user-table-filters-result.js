@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-// @mui
+import { useCallback } from 'react';
+
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
-// components
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
@@ -20,14 +20,22 @@ export default function UserTableFiltersResult({
   results,
   ...other
 }) {
-  const handleRemoveStatus = () => {
-    onFilters('status', 'all');
-  };
+  const handleRemoveKeyword = useCallback(() => {
+    onFilters('name', '');
+  }, [onFilters]);
 
-  const handleRemoveRole = (inputValue) => {
-    const newValue = filters.role.filter((item) => item !== inputValue);
-    onFilters('role', newValue);
-  };
+  const handleRemoveStatus = useCallback(() => {
+    onFilters('status', 'all');
+  }, [onFilters]);
+
+  const handleRemoveRole = useCallback(
+    (inputValue) => {
+      const newValue = filters.role.filter((item) => item !== inputValue);
+
+      onFilters('role', newValue);
+    },
+    [filters.role, onFilters]
+  );
 
   return (
     <Stack spacing={1.5} {...other}>
@@ -50,6 +58,12 @@ export default function UserTableFiltersResult({
             {filters.role.map((item) => (
               <Chip key={item} label={item} size="small" onDelete={() => handleRemoveRole(item)} />
             ))}
+          </Block>
+        )}
+
+        {!!filters.name && (
+          <Block label="Keyword:">
+            <Chip label={filters.name} size="small" onDelete={handleRemoveKeyword} />
           </Block>
         )}
 

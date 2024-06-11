@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
-import { useState, useRef, useCallback } from 'react';
-// @mui
-import { alpha } from '@mui/material/styles';
+import { useRef, useState, useCallback } from 'react';
+
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
+import { alpha } from '@mui/material/styles';
 import Checkbox from '@mui/material/Checkbox';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
@@ -17,12 +17,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import AvatarGroup, { avatarGroupClasses } from '@mui/material/AvatarGroup';
 
-// hooks
 import { useMockedUser } from 'src/hooks/use-mocked-user';
-// utils
+
 import { fDate } from 'src/utils/format-time';
 import { fShortenNumber } from 'src/utils/format-number';
-// components
+
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 
@@ -56,7 +55,11 @@ export default function ProfilePostItem({ post }) {
   const renderHead = (
     <CardHeader
       disableTypography
-      avatar={<Avatar src={user?.photoURL} alt={user?.displayName} />}
+      avatar={
+        <Avatar src={user?.photoURL} alt={user?.displayName}>
+          {user?.displayName?.charAt(0).toUpperCase()}
+        </Avatar>
+      }
       title={
         <Link color="inherit" variant="subtitle1">
           {user?.displayName}

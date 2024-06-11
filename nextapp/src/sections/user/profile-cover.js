@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-// @mui
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import ListItemText from '@mui/material/ListItemText';
-import { useTheme, alpha } from '@mui/material/styles';
-// theme
+import { alpha, useTheme } from '@mui/material/styles';
+
 import { bgGradient } from 'src/theme/css';
 
 // ----------------------------------------------------------------------
@@ -35,15 +35,17 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
         }}
       >
         <Avatar
-          src={avatarUrl}
           alt={name}
+          src={avatarUrl}
           sx={{
             mx: 'auto',
             width: { xs: 64, md: 128 },
             height: { xs: 64, md: 128 },
             border: `solid 2px ${theme.palette.common.white}`,
           }}
-        />
+        >
+          {name?.charAt(0).toUpperCase()}
+        </Avatar>
 
         <ListItemText
           sx={{

@@ -28,6 +28,7 @@ build
 .vercel
 .netlify
 .unimportedrc.json
+tsconfig.tsbuildinfo
 .vscode
 
 npm-debug.log*
