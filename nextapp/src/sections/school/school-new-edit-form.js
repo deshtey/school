@@ -95,7 +95,7 @@ export default function SchoolNewEditForm({ currentSchool }) {
       reset();
       enqueueSnackbar(currentSchool ? 'Update success!' : 'Create success!');
       router.push(paths.admin.school.list);
-      console.info('DATA', data);
+      //console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
@@ -226,8 +226,9 @@ export default function SchoolNewEditForm({ currentSchool }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
-              <RHFTextField name="email" label="Email Address" />
+              <RHFTextField name="name" label="School Name" />
+              <RHFTextField name="email" label="School Address" />
+              <RHFTextField name="website" label="School Website" />
               <RHFTextField name="phoneNumber" label="Phone Number" />
 
               <RHFAutocomplete
