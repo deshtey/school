@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Infrastructure;
 using schoolapp.webapi.Services;
@@ -15,7 +16,18 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 
 // Swagger/OpenAPI setup
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opt =>
+{
+    //opt.SwaggerDoc("v1", new OpenApiInfo { Title = "My Api", Version = "v1" });
+    opt.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Scheme = "bearer"
+    });
+   // opt.OperationFilter<AuthenticationRequirementsOperationFilter>();
+});
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();

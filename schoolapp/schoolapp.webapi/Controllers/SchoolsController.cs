@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using schoolapp.application.Common.Security.Request;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
 using schoolapp.Domain.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,7 +22,7 @@ namespace schoolapp.webapi.Controllers
         }
         // GET: api/<SchoolsController
         [HttpGet]
-        public async Task<IEnumerable<School>> Get()
+        public async Task<IEnumerable<SchoolDto>> Get()
         {
             return await _schoolService.GetSchools();
         }
@@ -35,7 +36,7 @@ namespace schoolapp.webapi.Controllers
 
         // POST api/<SchoolsController>
         [HttpPost]
-        public async Task Post([FromBody] School school)
+        public async Task Post([FromBody] SchoolDto school)
         {
             await _schoolService.PostSchool(school, cancellationToken);
         }

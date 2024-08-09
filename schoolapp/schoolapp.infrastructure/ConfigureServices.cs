@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using schoolapp.application.Common.Interfaces;
 using schoolapp.Application.Common.Interfaces;
-using schoolapp.Domain.Entities.Identity;
 using schoolapp.Infrastructure.Data;
 using schoolapp.Infrastructure.Identity;
 using schoolapp.Infrastructure.Persistence.Interceptors;

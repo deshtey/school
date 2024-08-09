@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using schoolapp.application.Common.Interfaces;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Common.Models;
-using schoolapp.Domain.Entities.Identity;
 
 namespace schoolapp.Infrastructure.Identity;
 

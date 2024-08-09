@@ -1,6 +1,4 @@
-﻿using schoolapp.Domain.Entities.Identity;
-
-namespace schoolapp.Infrastructure.Identity
+﻿namespace schoolapp.Infrastructure.Identity
 {
     public class UserDto
     {

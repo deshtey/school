@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Domain.Entities;
 using schoolapp.Domain.Entities.Base;
@@ -9,6 +10,7 @@ using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.Exams;
 using schoolapp.Domain.Entities.People;
 using schoolapp.Infrastructure.Identity;
+using schoolapp.Infrastructure.Persistence.Configurations;
 using System.Reflection.Emit;
 namespace schoolapp.Infrastructure.Data;
 
@@ -27,63 +29,48 @@ public class SchoolDbContext : IdentityDbContext<SchoolUser>, ISchoolDbContext
     //public DbSet<ClassRoomStudent> ClassRoomStudents { get; set; }
     public DbSet<Grade> Grades { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
-        base.OnModelCreating(builder);
-        builder.HasDefaultSchema("school");
-        foreach (var entity in builder.Model.GetEntityTypes())
-        {
-            entity.SetTableName(entity.GetTableName().ToLower());
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.HasDefaultSchema("school");
 
-            foreach (var property in entity.GetProperties())
-            {
-                property.SetColumnName(property.GetColumnName().ToLower());
-            }
-
-            foreach (var key in entity.GetKeys())
-            {
-                key.SetName(key.GetName().ToLower());
-            }
-
-            //foreach (var index in entity.GetIndexes())
-            //{
-            //    index.SetDatabaseName(index.Name.ToLower());
-            //}
-
-            foreach (var foreignKey in entity.GetForeignKeys())
-            {
-                foreignKey.SetConstraintName(foreignKey.GetConstraintName().ToLower());
-            }
-            var addressProperty = entity.FindProperty(typeof(Address));
-
-
-        }
-        builder.Entity<School>()
-        .ToTable("schools", schema: "school")
-        .OwnsOne(a => a.Address);
-
-        builder.Entity<Student>()
-        .ToTable("students", schema: "school")
-        .OwnsOne(a => a.Address);
-        builder.Entity<Teacher>()
-    .ToTable("teachers", schema: "school")
-     .OwnsOne(a => a.Address);
-        builder.Entity<Parent>()
-    .ToTable("parents", schema: "school")
-    .OwnsOne(a => a.Address);
-
-        builder.Entity<SupportStaff>()
-        .ToTable("supportstaffs", schema: "school")
-        .OwnsOne(a => a.Address);
-        builder.Entity<Exam>()
-    .ToTable("exams", schema: "school");
-        builder.Entity<ExamType>()
-    .ToTable("examtypes", schema: "school");
-        builder.Entity<ClassRoom>()
-    .ToTable("classrooms", schema: "school");
-        builder.Entity<Grade>()
-    .ToTable("grades", schema: "school");
-
+        modelBuilder.ApplyConfiguration(new SchoolEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentParentConfiguration());
     }
+
+
+
+
+        //foreach (var entity in builder.Model.GetEntityTypes())
+        //{
+        //    entity.SetTableName(entity.GetTableName().ToLower());
+
+        //    foreach (var property in entity.GetProperties())
+        //    {
+        //        property.SetColumnName(property.GetColumnName().ToLower());
+        //    }
+
+        //    foreach (var key in entity.GetKeys())
+        //    {
+        //        key.SetName(key.GetName().ToLower());
+        //    }
+
+        //    //foreach (var index in entity.GetIndexes())
+        //    //{
+        //    //    index.SetDatabaseName(index.Name.ToLower());
+        //    //}
+
+        //    foreach (var foreignKey in entity.GetForeignKeys())
+        //    {
+        //        foreignKey.SetConstraintName(foreignKey.GetConstraintName().ToLower());
+        //    }
+        //    var addressProperty = entity.FindProperty(typeof(SchoolAddress));
+
+
+        //}
+  
+
+    
 }

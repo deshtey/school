@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using schoolapp.Domain.Entities.Identity;
+using schoolapp.Infrastructure.Identity;
 using schoolapp.Infrastructure.Security.CurrentUserProvider;
 
 namespace schoolapp.Infrastructure.Security.CurrentUserProvider;

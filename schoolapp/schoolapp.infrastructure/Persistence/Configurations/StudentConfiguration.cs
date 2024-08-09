@@ -1,19 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.People;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace schoolapp.Infrastructure.Persistence.Configurations
 {
     internal class StudentConfiguration : IEntityTypeConfiguration<Student>
     {
-        public void Configure(EntityTypeBuilder<Student> builder)
+        public void Configure(EntityTypeBuilder<Student> studentConfiguration)
         {
-            throw new NotImplementedException();
+            studentConfiguration.ToTable("students");
+
+            studentConfiguration
+                .OwnsOne(o => o.StudentAddress);
+
+            studentConfiguration.HasOne<ClassRoom>()
+                .WithMany()
+                .HasForeignKey(o => o.ClassroomId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

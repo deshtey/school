@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using schoolapp.application.Common.Interfaces;
 using schoolapp.application.DTOs;
-using schoolapp.Domain.Entities.Identity;
 using schoolapp.Infrastructure.Identity;
 
 namespace schoolapp.Infrastructure.Security.Auth;

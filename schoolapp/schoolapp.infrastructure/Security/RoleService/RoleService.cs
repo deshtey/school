@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using schoolapp.Domain.Entities.Identity;
+using schoolapp.Infrastructure.Identity;
 
 namespace schoolapp.Infrastructure.Security.RoleService;
 

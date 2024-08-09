@@ -1,10 +1,8 @@
-﻿using schoolapp.Domain.Entities.Base;
-
-namespace schoolapp.Domain.Entities
+﻿namespace schoolapp.Application.DTOs
 {
-    public class School : BaseAuditableEntity
+    public class SchoolDto
     {
-        public int SchoolId { get; set; }
+        public int? SchoolId { get; set; }
         public string SchoolName { get; set; }
         public string Location { get; set; }
         public string? Street { get; set; }
@@ -16,6 +14,5 @@ namespace schoolapp.Domain.Entities
         public string? Phone { get; set; }
         public string? Fax { get; set; }
         public string? HomePage { get; set; } = string.Empty;
-
     }
 }
