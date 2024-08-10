@@ -14,7 +14,7 @@ using schoolapp.Infrastructure.Persistence.Configurations;
 using System.Reflection.Emit;
 namespace schoolapp.Infrastructure.Data;
 
-public class SchoolDbContext : IdentityDbContext<SchoolUser>, ISchoolDbContext
+public class SchoolDbContext : IdentityDbContext<AppUser>, ISchoolDbContext
 {
     public SchoolDbContext(DbContextOptions<SchoolDbContext> options) : base(options) { }
 

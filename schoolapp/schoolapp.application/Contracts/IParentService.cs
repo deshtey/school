@@ -1,4 +1,5 @@
-﻿using schoolapp.Domain.Entities.People;
+﻿using schoolapp.Application.DTOs;
+using schoolapp.Domain.Entities.People;
 
 namespace schoolapp.Application.Contracts
 {
@@ -9,7 +10,7 @@ namespace schoolapp.Application.Contracts
         Task<Parent?> PutParent(int id, Parent Parent, CancellationToken cancellationToken);
         Task<bool?> PostParent(Parent Parent, CancellationToken cancellationToken);
         Task<bool> DeleteParent(int id, CancellationToken cancellationToken);
-        Task <bool> PostParents(List<Parent> parents, CancellationToken cancellationToken);
-        Task<bool> PutParents(List<Parent> parents, CancellationToken cancellationToken);
+        Task <bool> PostParents(List<ParentDto> parents, CancellationToken cancellationToken);
+        Task<bool> PutParents(List<ParentDto> parents, CancellationToken cancellationToken);
     }
 }

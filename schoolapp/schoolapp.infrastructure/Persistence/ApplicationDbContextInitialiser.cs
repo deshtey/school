@@ -10,10 +10,10 @@ public class SchoolDbContextInitialiser
 {
     private readonly ILogger<SchoolDbContextInitialiser> _logger;
     private readonly SchoolDbContext _context;
-    private readonly UserManager<SchoolUser> _userManager;
+    private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
-    public SchoolDbContextInitialiser(ILogger<SchoolDbContextInitialiser> logger, SchoolDbContext context, UserManager<SchoolUser> userManager, RoleManager<IdentityRole> roleManager)
+    public SchoolDbContextInitialiser(ILogger<SchoolDbContextInitialiser> logger, SchoolDbContext context, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _logger = logger;
         _context = context;
@@ -61,7 +61,7 @@ public class SchoolDbContextInitialiser
         }
 
         //Default users
-        var administrator = new SchoolUser { UserName = "administrator@localhost", Email = "administrator@localhost" };
+        var administrator = new AppUser { UserName = "administrator@localhost", Email = "administrator@localhost" };
 
         if (_userManager.Users.All(u => u.UserName != administrator.UserName))
         {

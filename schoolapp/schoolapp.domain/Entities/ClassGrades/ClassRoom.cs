@@ -7,6 +7,7 @@ namespace schoolapp.Domain.Entities.ClassGrades
         public int ClassRoomId { get; set; }
         public DateTime Year { get; set; }
         public int GradeId { get; set; }
+        public string ClassroomName { get; set; }
         public int TeacherId { get; set; }
         public int SchoolId { get; set; }
         public virtual School School { get; set; }

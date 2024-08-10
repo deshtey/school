@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
 using schoolapp.Domain.Entities.People;
 
 namespace schoolapp.Application.Services
@@ -140,6 +141,16 @@ namespace schoolapp.Application.Services
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;
+        }
+
+        public Task<bool> PostParents(List<ParentDto> parents, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> PutParents(List<ParentDto> parents, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

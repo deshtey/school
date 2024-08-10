@@ -30,6 +30,8 @@ public static class DependencyInjection
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             //Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
+            services.AddScoped<IUserService, UserService>();
+
             services.AddScoped<IUserProvider, UserProvider>();
             services.AddScoped<ISaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();
 

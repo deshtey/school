@@ -36,7 +36,10 @@ namespace schoolapp.Application.Services
                 Phone = s.Phone,
                 Region = s.Region,
                 Street = s.Street,
-                ZipCode = s.ZipCode
+                ZipCode = s.ZipCode,
+                Active = s.Active,
+                CreatedAt = s.Created,
+               
             })
             .ToListAsync(); 
         }
@@ -104,6 +107,7 @@ namespace schoolapp.Application.Services
                 HomePage = _school.HomePage,
                 Location = _school.Location,
                 ZipCode = _school.ZipCode,
+                Active=true
                   
             };
             _context.Schools.Add(school);

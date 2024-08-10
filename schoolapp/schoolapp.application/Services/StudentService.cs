@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
 using schoolapp.Domain.Entities.People;
 
 namespace schoolapp.Application.Services
@@ -16,33 +17,90 @@ namespace schoolapp.Application.Services
             _logger = logger;
         }
 
-        public async Task<Student?> GetStudent(int id, int schoolId)
+        public async Task<StudentParentDto?> GetStudent(int id, int schoolId)
         {
-            var student =  await _context.Students.FindAsync(id);
-            return student == null ? null : student;
+
+            var student = await _context.Students
+                .Where(s => s.Id == id)
+                .Select(s => new StudentParentDto
+                {
+                    Id = s.Id,
+                    SchoolId = s.SchoolId,
+                    StudentDto =
+                    {
+                        Status = s.Status,
+                        Name = s.Name,
+                        DOB = s.DOB,
+                        ClassroomId = s.ClassroomId,
+                        Email = s.Email,
+                        Gender = s.Gender,
+                        Phone = s.Phone,
+                        RegNumber = s.RegNumber ,
+                        StudentClass=s.StudentClass.ClassroomName
+                    },
+                    ParentsDto = new List<ParentDto>
+                    {
+                        new ParentDto {  }
+                    }
+                }).FirstOrDefaultAsync();
+
+            return student == null ? new StudentParentDto() : student;
         }
 
-        public async Task<IEnumerable<Student>?> GetStudents(int schoolId)
+        public async Task<IEnumerable<StudentParentDto>?> GetStudents(int schoolId)
         {
             var students = await _context.Students.Where(s=>s.SchoolId==schoolId)
-                //.Include(s=>s.P)
+                .Include(s=>s.StudentClass)
+                .Select(s=>new StudentParentDto
+                {
+                    Id = s.Id,
+                    SchoolId = s.SchoolId,
+                    StudentDto=
+                    {
+                        Status = s.Status,
+                        Name = s.Name,
+                        DOB = s.DOB,
+                        ClassroomId = s.ClassroomId,
+                        Email = s.Email,
+                        Gender = s.Gender,
+                        Phone = s.Phone,
+                        RegNumber = s.RegNumber ,
+                        StudentClass=s.StudentClass.ClassroomName
+                    },
+                    ParentsDto = new List<ParentDto>
+                    {
+                        new ParentDto {  }
+                    }
+                })
                 .ToListAsync();
             return students;
         }
 
-        public async Task<bool?> PostStudent(Student student, CancellationToken cancellationToken)
+        public async Task<Student?> PostStudent(StudentParentDto studentparentDto, CancellationToken cancellationToken)
         {
             if (_context.Students == null)
             {
                 return null;
             }
-            _context.Students.Add(student);
+            Student _student = new()
+            {
+                Active = true,
+                Id = studentparentDto.Id,
+                SchoolId = studentparentDto.SchoolId,
+                Name = studentparentDto.StudentDto.Name,
+                Email = studentparentDto.StudentDto.Email,
+                ClassroomId = studentparentDto.StudentDto.ClassroomId,
+                Gender = studentparentDto.StudentDto.Gender,
+                RegNumber = studentparentDto.StudentDto.RegNumber
+            };
+
+            _context.Students.Add(_student);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return true;
+            return _student;
         }
 
-        public async Task<Student?> PutStudent(int id, Student student, CancellationToken cancellationToken)
+        public async Task<Student?> PutStudent(int id, StudentParentDto student, CancellationToken cancellationToken)
         {
             if (student == null || id != student.Id)
             {
@@ -89,5 +147,11 @@ namespace schoolapp.Application.Services
             return true;
         }
 
+        Task<StudentParentDto?> IStudentService.PutStudent(int id, StudentParentDto Student, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+   
     }
 }

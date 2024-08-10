@@ -51,17 +51,16 @@ public class AuthService : IAuthService
     {
         var user = await _userManager.FindByNameAsync(request.Email);
 
-
         user ??= await _userManager.FindByEmailAsync(request.Email);
 
         if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
         {
-            throw new ArgumentException($"Unable to authenticate user {request.Email}");
+            throw new UnauthorizedAccessException($"Unable to authenticate user {request.Email}");
         }
 
         var token = _tokenGenerator.GenerateToken(user.Id, user.FirstName, user.LastName, user.Email);
 
-        return new UserDto { AccessToken = token, User = user };
+        return new UserDto { AccessToken = token, User = new AppUserDto { Email= user.Email,FirstName=user.FirstName,LastName=user.LastName,OtherName=user.OtherName,PhoneNumber=user.PhoneNumber,Id=user.Id } };
     }
 
     public string GetTokenFromRequest(HttpRequest request)
@@ -73,7 +72,6 @@ public class AuthService : IAuthService
 
         if (authHeader.Count > 0)
         {
-            // Extract the token from the Authorization header (e.g., Bearer <token>)
             var authValue = authHeader.ToString().Split(' ');
             if (authValue.Length == 2 && authValue[0].Equals("Bearer", StringComparison.OrdinalIgnoreCase))
             {

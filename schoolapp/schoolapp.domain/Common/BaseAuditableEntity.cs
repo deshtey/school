@@ -2,9 +2,9 @@
 
 public abstract class BaseAuditableEntity 
 {
-    public DateTimeOffset Created { get; set; }
+    public DateTimeOffset Created { get; set; } = DateTimeOffset.Now;
     public string CreatedByUserId { get; set; }
-    public DateTimeOffset? LastModified { get; set; }
+    public DateTimeOffset? LastModified { get; set; } = DateTimeOffset.Now;
     public string? LastModifiedByUserId { get; set; }
-    public bool Active { get; set; }
+    public bool Active { get; set; } = true;
 }

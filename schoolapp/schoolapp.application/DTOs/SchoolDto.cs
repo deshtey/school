@@ -13,6 +13,8 @@
         public string? Region { get; set; }
         public string? Phone { get; set; }
         public string? Fax { get; set; }
+        public bool Active { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
         public string? HomePage { get; set; } = string.Empty;
     }
 }

@@ -21,32 +21,33 @@ namespace Studentapp.webapi.Controllers
         }
         // GET: api/<StudentsController
         [HttpGet]
-        public async Task<IEnumerable<Student>> Get(int schoolId)
+        public async Task<IEnumerable<StudentParentDto>> Get(int schoolId)
         {
             return await _StudentService.GetStudents(schoolId);
         }
 
         // GET api/<StudentsController>/5
         [HttpGet("{id}")]
-        public async Task<Student> Get(int id, int schoolId)
+        public async Task<StudentParentDto> Get(int id, int schoolId)
         {
             return await _StudentService.GetStudent(id, schoolId);
         }
 
         // POST api/<StudentsController>
         [HttpPost]
-        public async Task Post([FromBody] StudentDto studentDto)
+        public async Task Post([FromBody] StudentParentDto studentParentDto)
         {
-            await _StudentService.PostStudent(studentDto.Student, cancellationToken);
-            await _parentService.PostParents(studentDto.Parents, cancellationToken);
+            //TODO This should be a transaction
+            var student =  await _StudentService.PostStudent(studentParentDto, cancellationToken);
+            await _parentService.PostParents(studentParentDto.ParentsDto, cancellationToken);
         }
 
         // PUT api/<StudentsController>/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] StudentDto studentDto)
+        public async Task Put(int id, [FromBody] StudentParentDto studentParentDto)
         {
-            await _StudentService.PutStudent(id, studentDto.Student, cancellationToken);
-            await _parentService.PutParents(studentDto.Parents, cancellationToken);
+            await _StudentService.PutStudent(id, studentParentDto, cancellationToken);
+            await _parentService.PutParents(studentParentDto.ParentsDto, cancellationToken);
         }
 
         // DELETE api/<StudentsController>/5

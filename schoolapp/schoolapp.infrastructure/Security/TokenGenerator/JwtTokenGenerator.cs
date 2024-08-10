@@ -34,7 +34,8 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new(JwtRegisteredClaimNames.Name, firstName),
             new(JwtRegisteredClaimNames.FamilyName, lastName),
             new(JwtRegisteredClaimNames.Email, email),
-            new("id", id.ToString()),
+            new(JwtRegisteredClaimNames.Sub, id),
+            new(JwtRegisteredClaimNames.Iss, "school_app")
         };
 
         //roles.ForEach(role => claims.Add(new(ClaimTypes.Role, role)));

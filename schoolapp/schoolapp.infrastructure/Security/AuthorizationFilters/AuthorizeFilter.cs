@@ -46,8 +46,7 @@ namespace schoolapp.Infrastructure.Security.AuthorizationFilters
                 {
                     var principal = GetPrincipalFromToken(token);
                     context.HttpContext.User = principal;
-                    var userId = _context.HttpContext.User.FindFirst(c => c.Type == "id")?.Value;
-                    // Get the authorize attribute from the controller or action
+                    var userId = _context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;          // Get the authorize attribute from the controller or action
 
 
                     // Check permissions
