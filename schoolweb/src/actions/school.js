@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { useMemo } from 'react';
 
-import { fetcher, endpoints } from 'src/utils/axios';
+import { fetcher, endpoints, fetcherPost } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -16,8 +16,7 @@ const swrOptions = {
 export function useGetSchools() {
   const url = endpoints.school.list;
 
-  const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
-  console.log(data);
+  const { data, isLoading, error, isValidating } = useSWR(url, fetcherPost, swrOptions);
   const memoizedValue = useMemo(
     () => ({
       schools: data ?? [],
@@ -51,7 +50,51 @@ export function useGetSchool(title) {
 
   return memoizedValue;
 }
+export function usePostSchools() {
+  const url = endpoints.school.list;
 
+  const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
+
+  const createSchool = async (schoolData) => {
+    try {
+      const response = await axios.post(url, schoolData);
+      // Revalidate the cache to update the list of schools
+      mutate(url);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating school:', error);
+      throw error;
+    }
+  };
+
+  const updateSchool = async (schoolId, schoolData) => {
+    const updateUrl = `${url}/${schoolId}`;
+    try {
+      const response = await axios.put(updateUrl, schoolData);
+      // Revalidate the cache to update the list of schools
+      mutate(url);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating school:', error);
+      throw error;
+    }
+  };
+
+  const memoizedValue = useMemo(
+    () => ({
+      schools: data ?? [],
+      schoolsLoading: isLoading,
+      schoolsError: error,
+      schoolsValidating: isValidating,
+      schoolsEmpty: !isLoading && !data?.length,
+      createSchool,
+      updateSchool,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
 // ----------------------------------------------------------------------
 
 export function useGetLatestSchools(title) {

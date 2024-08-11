@@ -9,8 +9,7 @@ export const metadata = { title: `School details | Dashboard - ${CONFIG.site.nam
 
 export default function Page({ params }) {
   const { id } = params;
-
-  const currentSchool = _schools.find((school) => school.id === id);
+  const currentSchool = {}; //_schools.find((school) => school.id === id);
 
   return <SchoolDetailsView school={currentSchool} />;
 }

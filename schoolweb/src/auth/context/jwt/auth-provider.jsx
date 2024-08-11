@@ -12,18 +12,18 @@ export function AuthProvider({ children }) {
   const checkUserSession = useCallback(async () => {
     try {
       //dispatch(setLoading(true));
-      const accessToken = sessionStorage.getItem(STORAGE_KEY);
+      const accessToken = localStorage.getItem(STORAGE_KEY);
 
       if (accessToken) {
         // Fetch user data using the access token
-        // const userData = await fetchUserData(accessToken);
-        // dispatch(setUser(userData));
+        const userData = await fetchUserData(accessToken);
+        //dispatch(setUser(userData));
       } else {
-        dispatch(setUser(null));
+        //dispatch(setUser(null));
       }
     } catch (error) {
       console.error(error);
-      // dispatch(setUser(null));
+      //dispatch(setUser(null));
     } finally {
       //dispatch(setLoading(false));
     }

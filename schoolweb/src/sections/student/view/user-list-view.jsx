@@ -2,8 +2,8 @@
 
 import { useState, useCallback } from 'react';
 
-import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -14,15 +14,14 @@ import IconButton from '@mui/material/IconButton';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
-import { fIsAfter, fIsBetween } from 'src/utils/format-time';
-
 import { varAlpha } from 'src/theme/styles';
-import { AdminContent } from 'src/layouts/admin';
-import { _school, ORDER_STATUS_OPTIONS } from 'src/_mock';
+import { DashboardContent } from 'src/layouts/dashboard';
+import { _roles, _studentList, USER_STATUS_OPTIONS } from 'src/_mock';
 
 import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
@@ -42,66 +41,46 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { SchoolTableRow } from '../school-table-row';
-import { SchoolTableToolbar } from '../school-table-toolbar';
-import { SchoolTableFiltersResult } from '../school-table-filters-result';
-import { useGetSchools } from 'src/actions/school';
-import { RouterLink } from 'src/routes/components';
+import { StudentTableRow } from '../student-table-row';
+import { StudentTableToolbar } from '../student-table-toolbar';
+import { StudentTableFiltersResult } from '../student-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'schoolNumber', label: 'School', width: 88 },
-  { id: 'name', label: 'Customer' },
-  { id: 'createdAt', label: 'Date', width: 140 },
-  {
-    id: 'totalQuantity',
-    label: 'Items',
-    width: 120,
-    align: 'center',
-  },
-  { id: 'totalAmount', label: 'Price', width: 140 },
-  { id: 'status', label: 'Status', width: 110 },
+  { id: 'name', label: 'Name' },
+  { id: 'phoneNumber', label: 'Phone number', width: 180 },
+  { id: 'company', label: 'Company', width: 220 },
+  { id: 'role', label: 'Role', width: 180 },
+  { id: 'status', label: 'Status', width: 100 },
   { id: '', width: 88 },
 ];
 
 // ----------------------------------------------------------------------
 
-export function SchoolListView() {
-  const table = useTable({ defaultSchoolBy: 'schoolNumber' });
-  const { schools, schoolsEmpty, schoolsError, schoolsLoading, schoolsValidating } =
-    useGetSchools();
-  console.log(schools);
+export function StudentListView() {
+  const table = useTable();
+
   const router = useRouter();
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(schools);
+  const [tableData, setTableData] = useState(_studentList);
 
-  const filters = useSetState({
-    name: '',
-    status: 'all',
-    startDate: null,
-    endDate: null,
-  });
-
-  const dateError = fIsAfter(filters.state.startDate, filters.state.endDate);
+  const filters = useSetState({ name: '', role: [], status: 'all' });
 
   const dataFiltered = applyFilter({
-    inputData: schools,
-    comparator: getComparator(table.school, table.schoolBy),
+    inputData: tableData,
+    comparator: getComparator(table.order, table.orderBy),
     filters: filters.state,
-    dateError,
   });
 
   const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
 
   const canReset =
-    !!filters.state.name ||
-    filters.state.status !== 'all' ||
-    (!!filters.state.startDate && !!filters.state.endDate);
+    !!filters.state.name || filters.state.role.length > 0 || filters.state.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -131,9 +110,9 @@ export function SchoolListView() {
     });
   }, [dataFiltered.length, dataInPage.length, table, tableData]);
 
-  const handleViewRow = useCallback(
+  const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.admin.school.details(id));
+      router.push(paths.dashboard.student.edit(id));
     },
     [router]
   );
@@ -148,22 +127,22 @@ export function SchoolListView() {
 
   return (
     <>
-      <AdminContent>
+      <DashboardContent>
         <CustomBreadcrumbs
           heading="List"
           links={[
-            { name: 'Admin', href: paths.admin.root },
-            { name: 'School', href: paths.admin.school.root },
+            { name: 'Dashboard', href: paths.dashboard.root },
+            { name: 'Student', href: paths.dashboard.student.root },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.admin.schools.new}
+              href={paths.dashboard.student.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New school
+              New student
             </Button>
           }
           sx={{ mb: { xs: 3, md: 5 } }}
@@ -192,14 +171,14 @@ export function SchoolListView() {
                       'soft'
                     }
                     color={
-                      (tab.value === 'completed' && 'success') ||
+                      (tab.value === 'active' && 'success') ||
                       (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'cancelled' && 'error') ||
+                      (tab.value === 'banned' && 'error') ||
                       'default'
                     }
                   >
-                    {['completed', 'pending', 'cancelled', 'refunded'].includes(tab.value)
-                      ? tableData.filter((user) => user.status === tab.value).length
+                    {['active', 'pending', 'banned', 'rejected'].includes(tab.value)
+                      ? tableData.filter((student) => student.status === tab.value).length
                       : tableData.length}
                   </Label>
                 }
@@ -207,14 +186,14 @@ export function SchoolListView() {
             ))}
           </Tabs>
 
-          <SchoolTableToolbar
+          <StudentTableToolbar
             filters={filters}
             onResetPage={table.onResetPage}
-            dateError={dateError}
+            options={{ roles: _roles }}
           />
 
           {canReset && (
-            <SchoolTableFiltersResult
+            <StudentTableFiltersResult
               filters={filters}
               totalResults={dataFiltered.length}
               onResetPage={table.onResetPage}
@@ -242,11 +221,11 @@ export function SchoolListView() {
               }
             />
 
-            <Scrollbar sx={{ minHeight: 444 }}>
+            <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
                 <TableHeadCustom
-                  school={table.school}
-                  schoolBy={table.schoolBy}
+                  order={table.order}
+                  orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
                   rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
@@ -266,13 +245,13 @@ export function SchoolListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <SchoolTableRow
-                        key={row.schoolId}
+                      <StudentTableRow
+                        key={row.id}
                         row={row}
-                        selected={table.selected.includes(row.schoolId)}
-                        onSelectRow={() => table.onSelectRow(row.schoolId)}
-                        onDeleteRow={() => handleDeleteRow(row.schoolId)}
-                        onViewRow={() => handleViewRow(row.schoolId)}
+                        selected={table.selected.includes(row.id)}
+                        onSelectRow={() => table.onSelectRow(row.id)}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                        onEditRow={() => handleEditRow(row.id)}
                       />
                     ))}
 
@@ -297,7 +276,7 @@ export function SchoolListView() {
             onRowsPerPageChange={table.onChangeRowsPerPage}
           />
         </Card>
-      </AdminContent>
+      </DashboardContent>
 
       <ConfirmDialog
         open={confirm.value}
@@ -325,15 +304,14 @@ export function SchoolListView() {
   );
 }
 
-function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name, startDate, endDate } = filters;
+function applyFilter({ inputData, comparator, filters }) {
+  const { name, status, role } = filters;
 
-  console.log(inputData);
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
-    const school = comparator(a[0], b[0]);
-    if (school !== 0) return school;
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
     return a[1] - b[1];
   });
 
@@ -341,21 +319,16 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   if (name) {
     inputData = inputData.filter(
-      (school) =>
-        school.schoolNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        school.customer.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        school.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (student) => student.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((school) => school.status === status);
+    inputData = inputData.filter((student) => student.status === status);
   }
 
-  if (!dateError) {
-    if (startDate && endDate) {
-      inputData = inputData.filter((school) => fIsBetween(school.createdAt, startDate, endDate));
-    }
+  if (role.length) {
+    inputData = inputData.filter((student) => role.includes(student.role));
   }
 
   return inputData;

@@ -8,10 +8,10 @@ import Typography from '@mui/material/Typography';
 
 import { RouterLink } from 'src/routes/components';
 
-import { SimpleLayout } from 'src/layouts/admin';
 import { PageNotFoundIllustration } from 'src/assets/illustrations';
 
 import { varBounce, MotionContainer } from 'src/components/animate';
+import { SimpleLayout } from 'src/layouts/simple';
 
 // ----------------------------------------------------------------------
 

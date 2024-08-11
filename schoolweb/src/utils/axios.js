@@ -27,8 +27,29 @@ export const fetcher = async (args) => {
     throw error;
   }
 };
+export const fetcherPost = async (url, method = 'GET', data = null) => {
+  const token = localStorage.getItem('authToken'); // Or however you store your auth token
 
-// ----------------------------------------------------------------------
+  try {
+    const config = {
+      method,
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    if (data && (method === 'POST' || method === 'PUT')) {
+      config.data = data;
+    }
+
+    const response = await axios(config);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const endpoints = {
   chat: '/api/chat',
