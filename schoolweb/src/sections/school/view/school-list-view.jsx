@@ -159,7 +159,7 @@ export function SchoolListView() {
           action={
             <Button
               component={RouterLink}
-              href={paths.admin.schools.new}
+              href={paths.admin.school.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >

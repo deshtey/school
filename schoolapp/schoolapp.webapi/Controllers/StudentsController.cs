@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using schoolapp.Domain.Entities.People;
 using schoolapp.Application.DTOs;
 using schoolapp.Application.Contracts;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -38,6 +38,7 @@ namespace Studentapp.webapi.Controllers
         public async Task Post([FromBody] StudentParentDto studentParentDto)
         {
             //TODO This should be a transaction
+
             var student =  await _StudentService.PostStudent(studentParentDto, cancellationToken);
             await _parentService.PostParents(studentParentDto.ParentsDto, cancellationToken);
         }

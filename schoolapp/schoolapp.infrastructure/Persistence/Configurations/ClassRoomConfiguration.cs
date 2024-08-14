@@ -1,0 +1,18 @@
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
+using schoolapp.Domain.Entities;
+using schoolapp.Domain.Entities.ClassGrades;
+
+namespace schoolapp.Infrastructure.Persistence.Configurations;
+class ClassRoomEntityConfiguration
+    : IEntityTypeConfiguration<ClassRoom>
+{
+    public void Configure(EntityTypeBuilder<ClassRoom> classRoomConfiguration)
+    {
+        classRoomConfiguration.ToTable("classrooms");
+
+        classRoomConfiguration.Property(s => s.ClassroomName)
+            .HasColumnName("classroomname")
+            .HasMaxLength(20);
+    }
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using schoolapp.application.Common.Security.Request;
 using schoolapp.Application.Contracts;
 using schoolapp.Application.DTOs;
@@ -8,7 +9,6 @@ using schoolapp.Domain.Entities;
 
 namespace schoolapp.webapi.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SchoolsController : ControllerBase

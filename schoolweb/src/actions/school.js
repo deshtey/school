@@ -16,7 +16,7 @@ const swrOptions = {
 export function useGetSchools() {
   const url = endpoints.school.list;
 
-  const { data, isLoading, error, isValidating } = useSWR(url, fetcherPost, swrOptions);
+  const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
       schools: data ?? [],
@@ -53,7 +53,7 @@ export function useGetSchool(title) {
 export function usePostSchools() {
   const url = endpoints.school.list;
 
-  const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
+  const { data, isLoading, error, isValidating } = useSWR(url, fetcherPost, swrOptions);
 
   const createSchool = async (schoolData) => {
     try {

@@ -35,7 +35,10 @@ namespace schoolapp.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OtherName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -62,17 +65,19 @@ namespace schoolapp.Infrastructure.Migrations
                 {
                     SchoolId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SchoolName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    schoolname = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Region = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Fax = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HomePage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Logo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Region = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HomePage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -202,28 +207,6 @@ namespace schoolapp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExamTypes",
-                schema: "school",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Desc = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SchoolId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ExamTypes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ExamTypes_schools_SchoolId",
-                        column: x => x.SchoolId,
-                        principalSchema: "school",
-                        principalTable: "schools",
-                        principalColumn: "SchoolId",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Grades",
                 schema: "school",
                 columns: table => new
@@ -253,19 +236,21 @@ namespace schoolapp.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ParentId = table.Column<int>(type: "int", nullable: false),
+                    NationalId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SchoolId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LastModifiedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false),
-                    DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<int>(type: "int", nullable: true),
+                    DOB = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -294,11 +279,12 @@ namespace schoolapp.Infrastructure.Migrations
                     LastModifiedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false),
-                    DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<int>(type: "int", nullable: true),
+                    DOB = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -328,11 +314,12 @@ namespace schoolapp.Infrastructure.Migrations
                     LastModifiedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false),
-                    DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<int>(type: "int", nullable: true),
+                    DOB = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -347,45 +334,15 @@ namespace schoolapp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Exams",
-                schema: "school",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExamTypeId = table.Column<int>(type: "int", nullable: false),
-                    SchoolId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Exams", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Exams_ExamTypes_ExamTypeId",
-                        column: x => x.ExamTypeId,
-                        principalSchema: "school",
-                        principalTable: "ExamTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Exams_schools_SchoolId",
-                        column: x => x.SchoolId,
-                        principalSchema: "school",
-                        principalTable: "schools",
-                        principalColumn: "SchoolId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ClassRooms",
                 schema: "school",
                 columns: table => new
                 {
                     ClassRoomId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Year = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
                     GradeId = table.Column<int>(type: "int", nullable: false),
+                    ClassroomName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TeacherId = table.Column<int>(type: "int", nullable: false),
                     SchoolId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -405,7 +362,7 @@ namespace schoolapp.Infrastructure.Migrations
                         principalSchema: "school",
                         principalTable: "schools",
                         principalColumn: "SchoolId",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -429,11 +386,12 @@ namespace schoolapp.Infrastructure.Migrations
                     LastModifiedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false),
-                    DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<int>(type: "int", nullable: true),
+                    DOB = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SchoolId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -452,7 +410,7 @@ namespace schoolapp.Infrastructure.Migrations
                         principalSchema: "school",
                         principalTable: "ClassRooms",
                         principalColumn: "ClassRoomId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_students_schools_SchoolId",
                         column: x => x.SchoolId,
@@ -463,31 +421,30 @@ namespace schoolapp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "student_parents",
+                name: "student_parent",
                 schema: "school",
                 columns: table => new
                 {
                     StudentId = table.Column<int>(type: "int", nullable: false),
-                    ParentId = table.Column<int>(type: "int", nullable: false),
-                    RelationshipType = table.Column<int>(type: "int", nullable: false)
+                    ParentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_student_parents", x => new { x.StudentId, x.ParentId });
+                    table.PrimaryKey("PK_student_parent", x => new { x.ParentId, x.StudentId });
                     table.ForeignKey(
-                        name: "FK_student_parents_Parents_ParentId",
+                        name: "FK_student_parent_Parents_ParentId",
                         column: x => x.ParentId,
                         principalSchema: "school",
                         principalTable: "Parents",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_student_parents_students_StudentId",
+                        name: "FK_student_parent_students_StudentId",
                         column: x => x.StudentId,
                         principalSchema: "school",
                         principalTable: "students",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -550,24 +507,6 @@ namespace schoolapp.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Exams_ExamTypeId",
-                schema: "school",
-                table: "Exams",
-                column: "ExamTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Exams_SchoolId",
-                schema: "school",
-                table: "Exams",
-                column: "SchoolId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ExamTypes_SchoolId",
-                schema: "school",
-                table: "ExamTypes",
-                column: "SchoolId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Grades_SchoolId",
                 schema: "school",
                 table: "Grades",
@@ -586,10 +525,10 @@ namespace schoolapp.Infrastructure.Migrations
                 column: "SchoolId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_student_parents_ParentId",
+                name: "IX_student_parent_StudentId",
                 schema: "school",
-                table: "student_parents",
-                column: "ParentId");
+                table: "student_parent",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_students_ClassroomId",
@@ -640,10 +579,6 @@ namespace schoolapp.Infrastructure.Migrations
                 schema: "school");
 
             migrationBuilder.DropTable(
-                name: "Exams",
-                schema: "school");
-
-            migrationBuilder.DropTable(
                 name: "Grades",
                 schema: "school");
 
@@ -652,7 +587,7 @@ namespace schoolapp.Infrastructure.Migrations
                 schema: "school");
 
             migrationBuilder.DropTable(
-                name: "student_parents",
+                name: "student_parent",
                 schema: "school");
 
             migrationBuilder.DropTable(
@@ -661,10 +596,6 @@ namespace schoolapp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers",
-                schema: "school");
-
-            migrationBuilder.DropTable(
-                name: "ExamTypes",
                 schema: "school");
 
             migrationBuilder.DropTable(

@@ -12,8 +12,8 @@ using schoolapp.Infrastructure.Data;
 namespace schoolapp.Infrastructure.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20240810075906_appuser")]
-    partial class appuser
+    [Migration("20240813090526_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -171,6 +171,10 @@ namespace schoolapp.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClassRoomId"));
 
+                    b.Property<string>("ClassroomName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("GradeId")
                         .HasColumnType("int");
 
@@ -180,8 +184,8 @@ namespace schoolapp.Infrastructure.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Year")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
 
                     b.HasKey("ClassRoomId");
 
@@ -219,57 +223,6 @@ namespace schoolapp.Infrastructure.Migrations
                     b.ToTable("Grades", "school");
                 });
 
-            modelBuilder.Entity("schoolapp.Domain.Entities.Exams.Exam", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ExamTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SchoolId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExamTypeId");
-
-                    b.HasIndex("SchoolId");
-
-                    b.ToTable("Exams", "school");
-                });
-
-            modelBuilder.Entity("schoolapp.Domain.Entities.Exams.ExamType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Desc")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SchoolId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SchoolId");
-
-                    b.ToTable("ExamTypes", "school");
-                });
-
             modelBuilder.Entity("schoolapp.Domain.Entities.People.Parent", b =>
                 {
                     b.Property<int>("Id")
@@ -288,15 +241,17 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DOB")
+                    b.Property<DateTime?>("DOB")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Gender")
+                    b.Property<int?>("Gender")
                         .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset?>("LastModified")
                         .HasColumnType("datetimeoffset");
@@ -308,11 +263,11 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ParentId")
-                        .HasColumnType("int");
+                    b.Property<string>("NationalId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SchoolId")
@@ -321,6 +276,9 @@ namespace schoolapp.Infrastructure.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -350,15 +308,17 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DOB")
+                    b.Property<DateTime?>("DOB")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Gender")
+                    b.Property<int?>("Gender")
                         .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset?>("LastModified")
                         .HasColumnType("datetimeoffset");
@@ -371,7 +331,6 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RegNumber")
@@ -401,20 +360,17 @@ namespace schoolapp.Infrastructure.Migrations
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.StudentParent", b =>
                 {
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RelationshipType")
+                    b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.HasKey("StudentId", "ParentId");
+                    b.HasKey("ParentId", "StudentId");
 
-                    b.HasIndex("ParentId");
+                    b.HasIndex("StudentId");
 
-                    b.ToTable("student_parents", "school");
+                    b.ToTable("student_parent", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.SupportStaff", b =>
@@ -435,15 +391,17 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DOB")
+                    b.Property<DateTime?>("DOB")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Gender")
+                    b.Property<int?>("Gender")
                         .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset?>("LastModified")
                         .HasColumnType("datetimeoffset");
@@ -456,7 +414,6 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SchoolId")
@@ -494,15 +451,17 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DOB")
+                    b.Property<DateTime?>("DOB")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Gender")
+                    b.Property<int?>("Gender")
                         .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset?>("LastModified")
                         .HasColumnType("datetimeoffset");
@@ -515,7 +474,6 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RegNo")
@@ -550,6 +508,9 @@ namespace schoolapp.Infrastructure.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
@@ -563,7 +524,8 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Fax")
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HomePage")
@@ -579,6 +541,10 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Logo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
@@ -591,7 +557,8 @@ namespace schoolapp.Infrastructure.Migrations
                     b.Property<string>("SchoolName")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("schoolname");
 
                     b.Property<string>("Street")
                         .HasColumnType("nvarchar(max)");
@@ -760,36 +727,6 @@ namespace schoolapp.Infrastructure.Migrations
                     b.Navigation("School");
                 });
 
-            modelBuilder.Entity("schoolapp.Domain.Entities.Exams.Exam", b =>
-                {
-                    b.HasOne("schoolapp.Domain.Entities.Exams.ExamType", "ExamType")
-                        .WithMany()
-                        .HasForeignKey("ExamTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("schoolapp.Domain.Entities.School", "School")
-                        .WithMany()
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ExamType");
-
-                    b.Navigation("School");
-                });
-
-            modelBuilder.Entity("schoolapp.Domain.Entities.Exams.ExamType", b =>
-                {
-                    b.HasOne("schoolapp.Domain.Entities.School", "School")
-                        .WithMany()
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
-                });
-
             modelBuilder.Entity("schoolapp.Domain.Entities.People.Parent", b =>
                 {
                     b.HasOne("schoolapp.Domain.Entities.School", "School")
@@ -864,21 +801,17 @@ namespace schoolapp.Infrastructure.Migrations
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.StudentParent", b =>
                 {
-                    b.HasOne("schoolapp.Domain.Entities.People.Parent", "Parent")
+                    b.HasOne("schoolapp.Domain.Entities.People.Parent", null)
                         .WithMany("StudentParents")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("schoolapp.Domain.Entities.People.Student", "Student")
+                    b.HasOne("schoolapp.Domain.Entities.People.Student", null)
                         .WithMany("StudentParents")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Parent");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.SupportStaff", b =>

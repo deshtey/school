@@ -12,8 +12,9 @@ class SchoolEntityConfiguration
 
         //schoolConfiguration
         //    .OwnsOne(o => o.SchoolAddress);
-
+    
         schoolConfiguration.Property(s => s.SchoolName)
+            .HasColumnName("schoolname")
             .HasMaxLength(200);
     }
 }

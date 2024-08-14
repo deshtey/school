@@ -68,10 +68,8 @@ export function JwtSignInView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      localStorage.setItem('token', data.accessToken);
       await dispatch(signIn(data)).unwrap();
-      console.log('success');
-      // await signInWithPassword({ email: data.email, password: data.password });
-      // await checkUserSession?.();
 
       router.refresh();
     } catch (error) {

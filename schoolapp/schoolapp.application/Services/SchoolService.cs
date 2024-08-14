@@ -30,7 +30,7 @@ namespace schoolapp.Application.Services
                 Country = s.Country,
                 City = s.City,
                 PostalCode = s.PostalCode,
-                Fax = s.Fax,
+                Address = s.Address,
                 HomePage = s.HomePage,
                 Location = s.Location,
                 Phone = s.Phone,
@@ -38,7 +38,6 @@ namespace schoolapp.Application.Services
                 Street = s.Street,
                 ZipCode = s.ZipCode,
                 Active = s.Active,
-                CreatedAt = s.Created,
                
             })
             .ToListAsync(); 
@@ -100,10 +99,12 @@ namespace schoolapp.Application.Services
                 City = _school.City,                    
                 PostalCode = _school.PostalCode,
                 Country = _school.Country,
-                Fax = _school.Fax,
+                Address = _school.Address,
+                Email = _school.Email,
                 Phone = _school.Phone,
                 Region = _school.Region,
                 SchoolName = _school.SchoolName,
+                Logo = _school.LogoUrl,
                 HomePage = _school.HomePage,
                 Location = _school.Location,
                 ZipCode = _school.ZipCode,

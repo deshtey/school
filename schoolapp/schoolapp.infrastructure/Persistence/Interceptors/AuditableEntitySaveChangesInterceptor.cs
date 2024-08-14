@@ -10,6 +10,7 @@ namespace schoolapp.Infrastructure.Persistence.Interceptors;
 public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
     private readonly IUserProvider _userProvider;
+    private readonly IDateTimeService dateTimeService;
 
     public AuditableEntitySaveChangesInterceptor(
          IUserProvider userProvider)
@@ -40,13 +41,13 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.CreatedByUserId = _userProvider.GetCurrentUser().Id;
-                entry.Entity.Created = IDateTime.Now;
+                entry.Entity.Created = IDateTimeService.Now;
             }
 
             if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
                 entry.Entity.LastModifiedByUserId = _userProvider.GetCurrentUser().Id;
-                entry.Entity.LastModified = IDateTime.Now;
+                entry.Entity.LastModified = IDateTimeService.Now;
             }
         }
     }

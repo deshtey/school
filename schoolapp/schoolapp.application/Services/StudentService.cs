@@ -49,31 +49,44 @@ namespace schoolapp.Application.Services
 
         public async Task<IEnumerable<StudentParentDto>?> GetStudents(int schoolId)
         {
-            var students = await _context.Students.Where(s=>s.SchoolId==schoolId)
-                .Include(s=>s.StudentClass)
-                .Select(s=>new StudentParentDto
-                {
-                    Id = s.Id,
-                    SchoolId = s.SchoolId,
-                    StudentDto=
-                    {
-                        Status = s.Status,
-                        Name = s.Name,
-                        DOB = s.DOB,
-                        ClassroomId = s.ClassroomId,
-                        Email = s.Email,
-                        Gender = s.Gender,
-                        Phone = s.Phone,
-                        RegNumber = s.RegNumber ,
-                        StudentClass=s.StudentClass.ClassroomName
-                    },
-                    ParentsDto = new List<ParentDto>
-                    {
-                        new ParentDto {  }
-                    }
-                })
-                .ToListAsync();
-            return students;
+            try
+            {
+
+
+                var students = await _context.Students
+               .Where(s => s.SchoolId == schoolId)
+               .Select(s => new StudentParentDto
+               {
+                   Id = s.Id,
+                   SchoolId = s.SchoolId,
+                   StudentDto = new StudentDto
+                   {
+                       Status = s.Status,
+                       Name = s.Name,
+                       DOB = s.DOB,
+                       Email = s.Email,
+                       Gender = s.Gender,
+                       Phone = s.Phone,
+                       RegNumber = s.RegNumber
+                   },
+                       ParentsDto = s.Parents.Select(p => new ParentDto
+                       {
+                           Id=p.Id,
+                            Name = p.Name,
+                            Email = p.Email,
+                            Phone = p.Phone,
+                       }).ToList()
+                   
+               })
+               .ToListAsync();
+                return students;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching students");
+                throw;
+            }
         }
 
         public async Task<Student?> PostStudent(StudentParentDto studentparentDto, CancellationToken cancellationToken)
@@ -82,21 +95,51 @@ namespace schoolapp.Application.Services
             {
                 return null;
             }
+            int schoolId = studentparentDto.SchoolId;
             Student _student = new()
             {
                 Active = true,
                 Id = studentparentDto.Id,
-                SchoolId = studentparentDto.SchoolId,
+                SchoolId = schoolId,
                 Name = studentparentDto.StudentDto.Name,
                 Email = studentparentDto.StudentDto.Email,
-                ClassroomId = studentparentDto.StudentDto.ClassroomId,
+                ClassroomId = studentparentDto.StudentDto.ClassroomId??0,
                 Gender = studentparentDto.StudentDto.Gender,
-                RegNumber = studentparentDto.StudentDto.RegNumber
+                RegNumber = studentparentDto.StudentDto.RegNumber,
+                Image = studentparentDto.StudentDto.ImageUrl
             };
+
+            using var transaction = _context.BeginTransactionAsync();
+           
 
             _context.Students.Add(_student);
             await _context.SaveChangesAsync(cancellationToken);
-
+            foreach(var _parent in studentparentDto.ParentsDto)
+            {
+                Parent parent = await _context.Parents.FirstOrDefaultAsync(p => p.Email == _parent.Email, cancellationToken);
+                if (parent == null)
+                {
+                    parent = new Parent
+                    {
+                        Active = true,
+                        Email = _parent.Email,
+                        Gender = _parent.Gender,
+                        Phone = _parent.Phone,
+                        Name = _parent.Name,
+                        SchoolId = schoolId,
+                    };
+                    _context.Parents.Add(parent);
+                    await _context.SaveChangesAsync(cancellationToken);
+                    // Insert the relationship in the StudentParents table
+                    var studentParent = new StudentParent
+                    {
+                        StudentId = _student.Id,
+                        ParentId = parent.Id
+                    };
+                    _context.StudentParents.Add(studentParent);
+                }
+                await _context.SaveChangesAsync(cancellationToken);
+            }
             return _student;
         }
 

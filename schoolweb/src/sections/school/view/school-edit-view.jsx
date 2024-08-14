@@ -29,37 +29,35 @@ import { fData } from 'src/utils/format-number';
 import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
+import { usePostSchools } from 'src/actions/school';
 
 // ----------------------------------------------------------------------
 
 export const NewSchoolSchema = zod.object({
-  avatarUrl: schemaHelper.file({
-    message: { required_error: 'Avatar is required!' },
-  }),
-  name: zod.string().min(1, { message: 'Name is required!' }),
+  // avatarUrl: schemaHelper.file({
+  //   message: { required_error: 'Avatar is required!' },
+  // }),
+  schoolName: zod.string().min(1, { message: 'Name is required!' }),
   email: zod
     .string()
     .min(1, { message: 'Email is required!' })
     .email({ message: 'Email must be a valid email address!' }),
-  phoneNumber: schemaHelper.phoneNumber({ isValidPhoneNumber }),
+  phone: schemaHelper.phoneNumber({ isValidPhoneNumber }),
   country: schemaHelper.objectOrNull({
     message: { required_error: 'Country is required!' },
   }),
   address: zod.string().min(1, { message: 'Address is required!' }),
-  company: zod.string().min(1, { message: 'Company is required!' }),
-  state: zod.string().min(1, { message: 'State is required!' }),
+  location: zod.string().min(1, { message: 'State is required!' }),
   city: zod.string().min(1, { message: 'City is required!' }),
-  role: zod.string().min(1, { message: 'Role is required!' }),
+  homepage: zod.string().min(1, { message: 'Role is required!' }),
   zipCode: zod.string().min(1, { message: 'Zip code is required!' }),
-  // Not required
-  status: zod.string(),
-  isVerified: zod.boolean(),
 });
 
 // ----------------------------------------------------------------------
 
 export function SchoolEditView({ school: currentSchool }) {
   const router = useRouter();
+  const { schools, schoolsLoading, createSchool, updateSchool } = usePostSchools();
 
   const defaultValues = useMemo(
     () => ({
@@ -82,7 +80,7 @@ export function SchoolEditView({ school: currentSchool }) {
 
   const methods = useForm({
     mode: 'onSubmit',
-    resolver: zodResolver(NewSchoolSchema),
+    // resolver: zodResolver(NewSchoolSchema),
     defaultValues,
   });
 
@@ -97,14 +95,14 @@ export function SchoolEditView({ school: currentSchool }) {
   const values = watch();
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log('data', data);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
+      await createSchool(data);
       toast.success(currentSchool ? 'Update success!' : 'Create success!');
       router.push(paths.dashboard.school.list);
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
+      toast.error('An error occured');
     }
   });
   return (
@@ -138,7 +136,7 @@ export function SchoolEditView({ school: currentSchool }) {
 
               <Box sx={{ mb: 5 }}>
                 <Field.UploadAvatar
-                  name="avatarUrl"
+                  name="logoUrl"
                   maxSize={3145728}
                   helperText={
                     <Typography
@@ -232,9 +230,9 @@ export function SchoolEditView({ school: currentSchool }) {
                   sm: 'repeat(2, 1fr)',
                 }}
               >
-                <Field.Text name="name" label="Full name" />
+                <Field.Text name="schoolName" label="School name" />
                 <Field.Text name="email" label="Email address" />
-                <Field.Phone name="phoneNumber" label="Phone number" />
+                <Field.Phone name="phone" label="Phone number" />
 
                 <Field.CountrySelect
                   fullWidth
@@ -242,18 +240,17 @@ export function SchoolEditView({ school: currentSchool }) {
                   label="Country"
                   placeholder="Choose a country"
                 />
+                <Field.Text name="homePage" label="School Website Url" />
 
-                <Field.Text name="state" label="State/region" />
-                <Field.Text name="city" label="City" />
+                <Field.Text name="location" label="County/State/region" />
+                <Field.Text name="city" label="City/Town" />
                 <Field.Text name="address" label="Address" />
                 <Field.Text name="zipCode" label="Zip/code" />
-                <Field.Text name="company" label="Company" />
-                <Field.Text name="role" label="Role" />
               </Box>
 
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentSchool ? 'Create school' : 'Save changes'}
+                  {!currentSchool ? 'Create schools' : 'Save changes'}
                 </LoadingButton>
               </Stack>
             </Card>

@@ -2,10 +2,10 @@
 {
     public class UserDto
     {
-        public AppUser User { get; set; }
+        public AppUserDto User { get; set; }
         public string AccessToken { get; set; }
     }
-    internal class AppUserDto : AppUser
+    public class AppUserDto 
     {
         public string Email { get; set; }
         public string FirstName { get; set; }

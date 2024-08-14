@@ -2,7 +2,7 @@
 
 namespace schoolapp.Infrastructure.Services;
 
-public class DateTimeService : IDateTime
+public class DateTimeService : IDateTimeService
 {
-    public static DateTimeOffset Now => DateTime.Now;
+    public static DateTimeOffset Now => DateTime.UtcNow;
 }

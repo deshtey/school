@@ -29,7 +29,17 @@ export const signIn = createAsyncThunk('auth/signIn', async (credentials, { reje
     return rejectWithValue(error);
   }
 });
-
+export const setAuthState = createAsyncThunk(
+  'auth/setAuthState',
+  async (authData, { rejectWithValue }) => {
+    try {
+      // You might want to fetch user data here using the token
+      return authData;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -37,6 +47,15 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
+    },
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setAuthenticated: (state, action) => {
+      state.isAuthenticated = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -57,7 +76,6 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(signIn.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.loading = false;
         state.isAuthenticated = true;
         state.token = action.payload.accessToken;
@@ -66,10 +84,15 @@ const authSlice = createSlice({
       .addCase(signIn.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(setAuthState.fulfilled, (state, action) => {
+        state.isAuthenticated = true;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
       });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setUser, setLoading, setAuthenticated } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,31 +1,39 @@
 'use client';
-
-import { STORAGE_KEY } from './constant';
-import { AuthContext } from '../auth-context';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'src/utils/axios';
+import { STORAGE_KEY } from './constant';
+import { isValidToken, setSession } from './utils';
+import { AuthContext } from '../auth-context';
+import { setAuthenticated, setLoading, setUser } from 'src/lib/authSlice';
 
 export function AuthProvider({ children }) {
   const dispatch = useDispatch();
-  const { user, loading } = useSelector((state) => state.auth);
+  const { user, loading, isAuthenticated } = useSelector((state) => state.auth);
 
   const checkUserSession = useCallback(async () => {
     try {
-      //dispatch(setLoading(true));
-      const accessToken = localStorage.getItem(STORAGE_KEY);
-
-      if (accessToken) {
-        // Fetch user data using the access token
-        const userData = await fetchUserData(accessToken);
-        //dispatch(setUser(userData));
+      dispatch(setLoading(true));
+      const accessToken = sessionStorage.getItem(STORAGE_KEY);
+      console.log(accessToken);
+      if (accessToken && isValidToken(accessToken)) {
+        setSession(accessToken);
+        const userData = localStorage.getItem('user');
+        const res = JSON.parse(userData);
+        //const res = await axios.get(endpoints.auth.me);
+        const { user } = res;
+        dispatch(setUser({ ...user, accessToken }));
+        dispatch(setAuthenticated(true));
       } else {
         //dispatch(setUser(null));
+        //dispatch(setAuthenticated(false));
       }
     } catch (error) {
-      console.error(error);
-      //dispatch(setUser(null));
+      console.error('Error checking user session:', error);
+      dispatch(setUser(null));
+      dispatch(setAuthenticated(false));
     } finally {
-      //dispatch(setLoading(false));
+      dispatch(setLoading(false));
     }
   }, [dispatch]);
 
@@ -33,17 +41,11 @@ export function AuthProvider({ children }) {
     checkUserSession();
   }, [checkUserSession]);
 
-  const checkAuthenticated = user ? 'authenticated' : 'unauthenticated';
-  const status = loading ? 'loading' : checkAuthenticated;
+  const status = loading ? 'loading' : isAuthenticated ? 'authenticated' : 'unauthenticated';
 
   const memoizedValue = useMemo(
     () => ({
-      user: user
-        ? {
-            ...user,
-            role: user?.role ?? 'admin',
-          }
-        : null,
+      user: user ? { ...user, role: user?.role ?? 'admin' } : null,
       checkUserSession,
       loading: status === 'loading',
       authenticated: status === 'authenticated',
