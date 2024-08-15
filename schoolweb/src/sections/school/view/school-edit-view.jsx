@@ -29,7 +29,7 @@ import { fData } from 'src/utils/format-number';
 import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
-import { usePostSchools } from 'src/actions/school';
+import { usePostSchool, usePostSchools, usePostSchools1 } from 'src/actions/school';
 
 // ----------------------------------------------------------------------
 
@@ -57,23 +57,19 @@ export const NewSchoolSchema = zod.object({
 
 export function SchoolEditView({ school: currentSchool }) {
   const router = useRouter();
-  const { schools, schoolsLoading, createSchool, updateSchool } = usePostSchools();
 
   const defaultValues = useMemo(
     () => ({
+      schoolName: currentSchool?.schoolName || '',
       status: currentSchool?.status || '',
-      avatarUrl: currentSchool?.avatarUrl || null,
-      isVerified: currentSchool?.isVerified || true,
-      name: currentSchool?.name || '',
+      logoUrl: currentSchool?.avatarUrl || '',
       email: currentSchool?.email || '',
-      phoneNumber: currentSchool?.phoneNumber || '',
-      country: currentSchool?.country || '',
+      phone: currentSchool?.phoneNumber || '',
+      country: currentSchool?.country || 'Kenya',
       state: currentSchool?.state || '',
       city: currentSchool?.city || '',
       address: currentSchool?.address || '',
       zipCode: currentSchool?.zipCode || '',
-      company: currentSchool?.company || '',
-      role: currentSchool?.role || '',
     }),
     [currentSchool]
   );
@@ -91,15 +87,15 @@ export function SchoolEditView({ school: currentSchool }) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-
+  //  const { data, error, isLoading, post } = usePostSchools1(defaultValues);
+  const { schools, createSchool } = usePostSchools();
   const values = watch();
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('data', data);
     try {
-      await createSchool(data);
+      await createSchool({ ...data });
       toast.success(currentSchool ? 'Update success!' : 'Create success!');
-      router.push(paths.dashboard.school.list);
+      router.push(paths.admin.school.list);
     } catch (error) {
       console.error(error);
       toast.error('An error occured');

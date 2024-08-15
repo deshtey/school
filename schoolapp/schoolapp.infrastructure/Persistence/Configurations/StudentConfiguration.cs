@@ -13,13 +13,16 @@ namespace schoolapp.Infrastructure.Persistence.Configurations
         {
             studentConfiguration.ToTable("students");
 
-            studentConfiguration
-                .OwnsOne(o => o.StudentAddress);
+            //studentConfiguration
+            //    .OwnsOne(o => o.StudentAddress);
 
-            studentConfiguration.HasOne<ClassRoom>()
-                .WithMany()
-                .HasForeignKey(o => o.ClassroomId)
+            
+            studentConfiguration
+                .HasOne(s=>s.StudentClass)
+                .WithMany(o=>o.Students)
+                .HasForeignKey(o => o.ClassRoomId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             studentConfiguration
                 .HasMany(s => s.Parents)
                 .WithMany(s => s.Students)

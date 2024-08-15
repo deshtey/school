@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 import { CONFIG } from 'src/config-global';
 
@@ -28,7 +29,9 @@ export const fetcher = async (args) => {
   }
 };
 export const fetcherPost = async (url, method = 'GET', data = null) => {
-  const token = localStorage.getItem('authToken'); // Or however you store your auth token
+  const user = useSelector((state) => state.auth);
+  console.log(user);
+  const token = localStorage.getItem('authToken');
 
   try {
     const config = {

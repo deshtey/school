@@ -50,20 +50,19 @@ import { RouterLink } from 'src/routes/components';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
+const STATUS_OPTIONS = [
+  { value: 'all', label: 'All' },
+  { value: 'active', label: 'Active' },
+  { value: 'inactive', label: 'Inactive' },
+];
 
 const TABLE_HEAD = [
-  { id: 'schoolNumber', label: 'School', width: 88 },
-  { id: 'name', label: 'Customer' },
-  { id: 'createdAt', label: 'Date', width: 140 },
-  {
-    id: 'totalQuantity',
-    label: 'Items',
-    width: 120,
-    align: 'center',
-  },
-  { id: 'totalAmount', label: 'Price', width: 140 },
-  { id: 'status', label: 'Status', width: 110 },
+  { id: 'schoolNumber', label: 'Id', width: 88 },
+  { id: 'name', label: 'SchoolName' },
+  { id: 'createdAt', label: 'Created', width: 140 },
+  { id: 'location', label: 'Location', width: 140 },
+  { id: 'phone', label: 'Phone', width: 140 },
+  { id: 'city', label: 'City', width: 110 },
   { id: '', width: 88 },
 ];
 
@@ -73,7 +72,6 @@ export function SchoolListView() {
   const table = useTable({ defaultSchoolBy: 'schoolNumber' });
   const { schools, schoolsEmpty, schoolsError, schoolsLoading, schoolsValidating } =
     useGetSchools();
-  console.log(schools);
   const router = useRouter();
 
   const confirm = useBoolean();
@@ -192,9 +190,8 @@ export function SchoolListView() {
                       'soft'
                     }
                     color={
-                      (tab.value === 'completed' && 'success') ||
-                      (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'cancelled' && 'error') ||
+                      (tab.value === 'active' && 'success') ||
+                      (tab.value === 'inactive' && 'warning') ||
                       'default'
                     }
                   >

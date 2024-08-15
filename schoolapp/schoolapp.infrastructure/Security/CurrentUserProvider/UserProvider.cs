@@ -17,9 +17,15 @@ namespace schoolapp.Infrastructure.Security.CurrentUserProvider
 
         public CurrentUser GetCurrentUser()
         {
+            var user = _httpContextAccessor.HttpContext.User;
+
             if (_httpContextAccessor.HttpContext == null)
             {
                 throw new Exception();
+            }
+            if (user?.Identity == null || !user.Identity.IsAuthenticated)
+            {
+                throw new Exception("User is not authenticated.");
             }
             if (_httpContextAccessor.HttpContext.User?.IsAuthenticated() == false)
             {

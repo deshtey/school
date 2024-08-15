@@ -12,7 +12,7 @@ using schoolapp.Infrastructure.Data;
 namespace schoolapp.Infrastructure.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20240813090526_initial")]
+    [Migration("20240814114946_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -274,7 +274,6 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StudentId")
@@ -298,8 +297,14 @@ namespace schoolapp.Infrastructure.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ClassroomId")
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ClassRoomId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
@@ -333,23 +338,31 @@ namespace schoolapp.Infrastructure.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PrimaryPhone")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RegNumber")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Region")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SchoolId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StudentClassClassRoomId")
+                    b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StudentClassClassRoomId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassroomId");
+                    b.HasIndex("ClassRoomId");
 
                     b.HasIndex("SchoolId");
 
@@ -423,7 +436,6 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -484,7 +496,6 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TeacherId")
@@ -741,10 +752,9 @@ namespace schoolapp.Infrastructure.Migrations
             modelBuilder.Entity("schoolapp.Domain.Entities.People.Student", b =>
                 {
                     b.HasOne("schoolapp.Domain.Entities.ClassGrades.ClassRoom", null)
-                        .WithMany()
-                        .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany("Students")
+                        .HasForeignKey("ClassRoomId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("schoolapp.Domain.Entities.School", "School")
                         .WithMany()
@@ -753,48 +763,10 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("schoolapp.Domain.Entities.ClassGrades.ClassRoom", "StudentClass")
-                        .WithMany("Students")
-                        .HasForeignKey("StudentClassClassRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("schoolapp.Domain.Entities.Base.StudentAddress", "StudentAddress", b1 =>
-                        {
-                            b1.Property<int>("StudentId")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("PrimaryPhone")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Region")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Street")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("StudentId");
-
-                            b1.ToTable("students", "school");
-
-                            b1.WithOwner()
-                                .HasForeignKey("StudentId");
-                        });
+                        .WithMany()
+                        .HasForeignKey("StudentClassClassRoomId");
 
                     b.Navigation("School");
-
-                    b.Navigation("StudentAddress")
-                        .IsRequired();
 
                     b.Navigation("StudentClass");
                 });

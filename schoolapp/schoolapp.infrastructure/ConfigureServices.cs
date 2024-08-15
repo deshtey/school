@@ -29,11 +29,10 @@ public static class DependencyInjection
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             //Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
-            services.AddScoped<IUserProvider, UserProvider>();
 
             services.AddScoped<IUserService, UserService>();
 
-            services.AddSingleton<IDateTimeService,DateTimeService>();
+            services.AddScoped<IUserProvider, UserProvider>();
             services.AddScoped<ISaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();
 
 
@@ -42,8 +41,8 @@ public static class DependencyInjection
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
 
 #if UseSQLServer
-              //options.UseSqlite(connectionString);
-               options.UseSqlServer(connectionString);
+                //options.UseSqlite(connectionString);
+                options.UseSqlServer(connectionString);
 
 #else
                 options.UseNpgsql(connectionString);
@@ -73,7 +72,7 @@ public static class DependencyInjection
             services.AddScoped<IRoleService, RoleService>();
             //services.AddScoped<RoleManager<IdentityRole>>();
 
-            //services.AddSingleton<IDateTimeService, DateTimeService>();
+            services.AddSingleton<IDateTimeService, DateTimeService>();
 
             //services.AddAuthorization(options =>
             //    options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));

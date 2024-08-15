@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using schoolapp.Application.DTOs;
 using schoolapp.Application.Contracts;
-using Microsoft.AspNetCore.Authorization;
+using schoolapp.application.Common.Security.Request;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Studentapp.webapi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StudentsController : ControllerBase
@@ -40,7 +41,7 @@ namespace Studentapp.webapi.Controllers
             //TODO This should be a transaction
 
             var student =  await _StudentService.PostStudent(studentParentDto, cancellationToken);
-            await _parentService.PostParents(studentParentDto.ParentsDto, cancellationToken);
+           //await _parentService.PostParents(studentParentDto.ParentsDto, cancellationToken);
         }
 
         // PUT api/<StudentsController>/5

@@ -80,28 +80,10 @@ export function SchoolTableRow({ row, selected, onViewRow, onSelectRow, onDelete
           }}
         />
       </TableCell>
-      <TableCell>
-        <Label
-          variant="soft"
-          color={
-            (row.active === 'completed' && 'success') ||
-            (!row.active === 'cancelled' && 'error') ||
-            'default'
-          }
-        >
-          {row.active}
-        </Label>
-      </TableCell>
-
+      <TableCell>{row.location}</TableCell>
+      <TableCell>{row.phone}</TableCell>
+      <TableCell>{row.city}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton
-          color={collapse.value ? 'inherit' : 'default'}
-          onClick={collapse.onToggle}
-          sx={{ ...(collapse.value && { bgcolor: 'action.hover' }) }}
-        >
-          <Iconify icon="eva:arrow-ios-downward-fill" />
-        </IconButton>
-
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>

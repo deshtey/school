@@ -10,11 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 //string conString = "Server=(localdb)\\mssqllocaldb;Database=SchoolDb;Trusted_Connection=True;MultipleActiveResultSets=true";
 //builder.Services.AddDbContext<SchoolDbContext>(options =>
 //        options.UseSqlServer(conString));
-builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddApplicationServices();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<AuthorizationFilter>();

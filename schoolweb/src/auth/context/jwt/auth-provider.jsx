@@ -15,15 +15,19 @@ export function AuthProvider({ children }) {
     try {
       dispatch(setLoading(true));
       const accessToken = sessionStorage.getItem(STORAGE_KEY);
-      console.log(accessToken);
+      let user = {};
       if (accessToken && isValidToken(accessToken)) {
-        setSession(accessToken);
-        const userData = localStorage.getItem('user');
-        const res = JSON.parse(userData);
-        //const res = await axios.get(endpoints.auth.me);
-        const { user } = res;
-        dispatch(setUser({ ...user, accessToken }));
         dispatch(setAuthenticated(true));
+
+        const userData = localStorage.getItem('user');
+        try {
+          user = JSON.parse(userData);
+          //const res = await axios.get(endpoints.auth.me);
+          //dispatch(setUser({ ...user, accessToken }));
+        } catch (error) {
+          console.log(error);
+        }
+        setSession(accessToken, user);
       } else {
         //dispatch(setUser(null));
         //dispatch(setAuthenticated(false));

@@ -73,7 +73,7 @@ export async function setSession(accessToken, user) {
   try {
     if (accessToken) {
       sessionStorage.setItem(STORAGE_KEY, accessToken);
-      localStorage.setItem('user', JSON.stringify(user));
+      user && localStorage.setItem('user', JSON.stringify(user));
       axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
       const decodedToken = jwtDecode(accessToken);

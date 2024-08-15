@@ -7,9 +7,9 @@ public abstract class Person : BaseAuditableEntity
     public string? Image { get; set; }
     public Gender? Gender { get; set; }
     public DateTime? DOB { get; set; }
-    public string Status { get; set; }
+    public string? Status { get; set; } = "active";
     public string? Phone { get; set; }
     public string? Email { get; set; }
     public int SchoolId { get; set; }
-    public virtual School School { get; set; }
+    public School School { get; set; }
 }

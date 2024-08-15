@@ -13,9 +13,10 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
     private readonly IDateTimeService dateTimeService;
 
     public AuditableEntitySaveChangesInterceptor(
-         IUserProvider userProvider)
+         IUserProvider userProvider, IDateTimeService dateTimeService)
     {
         _userProvider = userProvider;
+        this.dateTimeService = dateTimeService;
     }
 
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
@@ -41,13 +42,13 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.CreatedByUserId = _userProvider.GetCurrentUser().Id;
-                entry.Entity.Created = IDateTimeService.Now;
+                entry.Entity.Created = dateTimeService.Now;
             }
 
             if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
                 entry.Entity.LastModifiedByUserId = _userProvider.GetCurrentUser().Id;
-                entry.Entity.LastModified = IDateTimeService.Now;
+                entry.Entity.LastModified = dateTimeService.Now;
             }
         }
     }

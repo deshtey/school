@@ -31,7 +31,7 @@ namespace schoolapp.Application.Services
                         Status = s.Status,
                         Name = s.Name,
                         DOB = s.DOB,
-                        ClassroomId = s.ClassroomId,
+                        ClassroomId = s.ClassRoomId,
                         Email = s.Email,
                         Gender = s.Gender,
                         Phone = s.Phone,
@@ -103,13 +103,13 @@ namespace schoolapp.Application.Services
                 SchoolId = schoolId,
                 Name = studentparentDto.StudentDto.Name,
                 Email = studentparentDto.StudentDto.Email,
-                ClassroomId = studentparentDto.StudentDto.ClassroomId??0,
+                ClassRoomId = studentparentDto.StudentDto.ClassroomId??null,
                 Gender = studentparentDto.StudentDto.Gender,
                 RegNumber = studentparentDto.StudentDto.RegNumber,
                 Image = studentparentDto.StudentDto.ImageUrl
             };
 
-            using var transaction = _context.BeginTransactionAsync();
+            //using var transaction = _context.BeginTransactionAsync();
            
 
             _context.Students.Add(_student);
@@ -140,6 +140,7 @@ namespace schoolapp.Application.Services
                 }
                 await _context.SaveChangesAsync(cancellationToken);
             }
+         
             return _student;
         }
 
