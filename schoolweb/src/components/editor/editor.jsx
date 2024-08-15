@@ -1,3 +1,4 @@
+'use client';
 import { common, createLowlight } from 'lowlight';
 import LinkExtension from '@tiptap/extension-link';
 import ImageExtension from '@tiptap/extension-image';
