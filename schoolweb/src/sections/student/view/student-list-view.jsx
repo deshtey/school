@@ -2,8 +2,8 @@
 
 import { useState, useCallback } from 'react';
 
-import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -14,14 +14,15 @@ import IconButton from '@mui/material/IconButton';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
+import { fIsAfter, fIsBetween } from 'src/utils/format-time';
+
 import { varAlpha } from 'src/theme/styles';
-import { DashboardContent } from 'src/layouts/dashboard';
-import { _roles, _studentList, USER_STATUS_OPTIONS } from 'src/_mock';
+import { AdminContent } from 'src/layouts/admin';
+import { _student, ORDER_STATUS_OPTIONS } from 'src/_mock';
 
 import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
@@ -40,47 +41,62 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-
-import { StudentTableRow } from '../student-table-row';
+import { useGetStudents } from 'src/actions/student';
+import { RouterLink } from 'src/routes/components';
 import { StudentTableToolbar } from '../student-table-toolbar';
 import { StudentTableFiltersResult } from '../student-table-filters-result';
+import { StudentTableRow } from '../student-table-row';
 
-// ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
+const STATUS_OPTIONS = [
+  { value: 'all', label: 'All' },
+  { value: 'active', label: 'Active' },
+  { value: 'inactive', label: 'Inactive' },
+];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
-  { id: 'status', label: 'Status', width: 100 },
+  { id: 'studentNumber', label: 'Id', width: 88 },
+  { id: 'name', label: 'StudentName' },
+  { id: 'createdAt', label: 'Created', width: 140 },
+  { id: 'location', label: 'Location', width: 140 },
+  { id: 'phone', label: 'Phone', width: 140 },
+  { id: 'city', label: 'City', width: 110 },
   { id: '', width: 88 },
 ];
 
 // ----------------------------------------------------------------------
 
 export function StudentListView() {
-  const table = useTable();
-
+  const table = useTable({ defaultStudentBy: 'studentNumber' });
+  const { students, studentsEmpty, studentsError, studentsLoading, studentsValidating } =
+    useGetStudents();
   const router = useRouter();
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(_studentList);
+  const [tableData, setTableData] = useState(students);
 
-  const filters = useSetState({ name: '', role: [], status: 'all' });
+  const filters = useSetState({
+    name: '',
+    status: 'all',
+    startDate: null,
+    endDate: null,
+  });
+
+  const dateError = fIsAfter(filters.state.startDate, filters.state.endDate);
 
   const dataFiltered = applyFilter({
-    inputData: tableData,
-    comparator: getComparator(table.order, table.orderBy),
+    inputData: students,
+    comparator: getComparator(table.student, table.studentBy),
     filters: filters.state,
+    dateError,
   });
 
   const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
 
   const canReset =
-    !!filters.state.name || filters.state.role.length > 0 || filters.state.status !== 'all';
+    !!filters.state.name ||
+    filters.state.status !== 'all' ||
+    (!!filters.state.startDate && !!filters.state.endDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -110,9 +126,9 @@ export function StudentListView() {
     });
   }, [dataFiltered.length, dataInPage.length, table, tableData]);
 
-  const handleEditRow = useCallback(
+  const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.dashboard.student.edit(id));
+      router.push(paths.admin.student.details(id));
     },
     [router]
   );
@@ -127,18 +143,18 @@ export function StudentListView() {
 
   return (
     <>
-      <DashboardContent>
+      <AdminContent>
         <CustomBreadcrumbs
           heading="List"
           links={[
-            { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'Student', href: paths.dashboard.student.root },
+            { name: 'Admin', href: paths.admin.root },
+            { name: 'Student', href: paths.admin.student.root },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.dashboard.student.new}
+              href={paths.admin.student.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
@@ -172,13 +188,12 @@ export function StudentListView() {
                     }
                     color={
                       (tab.value === 'active' && 'success') ||
-                      (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'banned' && 'error') ||
+                      (tab.value === 'inactive' && 'warning') ||
                       'default'
                     }
                   >
-                    {['active', 'pending', 'banned', 'rejected'].includes(tab.value)
-                      ? tableData.filter((student) => student.status === tab.value).length
+                    {['completed', 'pending', 'cancelled', 'refunded'].includes(tab.value)
+                      ? tableData.filter((user) => user.status === tab.value).length
                       : tableData.length}
                   </Label>
                 }
@@ -189,7 +204,7 @@ export function StudentListView() {
           <StudentTableToolbar
             filters={filters}
             onResetPage={table.onResetPage}
-            options={{ roles: _roles }}
+            dateError={dateError}
           />
 
           {canReset && (
@@ -221,11 +236,11 @@ export function StudentListView() {
               }
             />
 
-            <Scrollbar>
+            <Scrollbar sx={{ minHeight: 444 }}>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
                 <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
+                  student={table.student}
+                  studentBy={table.studentBy}
                   headLabel={TABLE_HEAD}
                   rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
@@ -246,12 +261,12 @@ export function StudentListView() {
                     )
                     .map((row) => (
                       <StudentTableRow
-                        key={row.id}
+                        key={row.studentId}
                         row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
+                        selected={table.selected.includes(row.studentId)}
+                        onSelectRow={() => table.onSelectRow(row.studentId)}
+                        onDeleteRow={() => handleDeleteRow(row.studentId)}
+                        onViewRow={() => handleViewRow(row.studentId)}
                       />
                     ))}
 
@@ -276,7 +291,7 @@ export function StudentListView() {
             onRowsPerPageChange={table.onChangeRowsPerPage}
           />
         </Card>
-      </DashboardContent>
+      </AdminContent>
 
       <ConfirmDialog
         open={confirm.value}
@@ -304,14 +319,15 @@ export function StudentListView() {
   );
 }
 
-function applyFilter({ inputData, comparator, filters }) {
-  const { name, status, role } = filters;
+function applyFilter({ inputData, comparator, filters, dateError }) {
+  const { status, name, startDate, endDate } = filters;
 
+  console.log(inputData);
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
+    const student = comparator(a[0], b[0]);
+    if (student !== 0) return student;
     return a[1] - b[1];
   });
 
@@ -319,7 +335,10 @@ function applyFilter({ inputData, comparator, filters }) {
 
   if (name) {
     inputData = inputData.filter(
-      (student) => student.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (student) =>
+        student.studentNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        student.customer.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        student.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
@@ -327,8 +346,10 @@ function applyFilter({ inputData, comparator, filters }) {
     inputData = inputData.filter((student) => student.status === status);
   }
 
-  if (role.length) {
-    inputData = inputData.filter((student) => role.includes(student.role));
+  if (!dateError) {
+    if (startDate && endDate) {
+      inputData = inputData.filter((student) => fIsBetween(student.createdAt, startDate, endDate));
+    }
   }
 
   return inputData;

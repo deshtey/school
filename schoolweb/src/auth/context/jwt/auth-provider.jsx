@@ -46,7 +46,7 @@ export function AuthProvider({ children }) {
   }, [checkUserSession]);
 
   const status = loading ? 'loading' : isAuthenticated ? 'authenticated' : 'unauthenticated';
-
+  console.log(status);
   const memoizedValue = useMemo(
     () => ({
       user: user ? { ...user, role: user?.role ?? 'admin' } : null,

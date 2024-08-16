@@ -23,6 +23,8 @@ import { fData } from 'src/utils/format-number';
 import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
+import { DashboardContent } from 'src/layouts/dashboard';
+import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
 // ----------------------------------------------------------------------
 
@@ -107,8 +109,8 @@ export function StudentEditView({ student: currentStudent }) {
       <CustomBreadcrumbs
         heading="Edit"
         links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Student', href: paths.dashboard.student.root },
+          { name: 'Dashboard', href: paths.admin.root },
+          { name: 'Student', href: paths.admin.student.root },
           { name: currentStudent?.name },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}

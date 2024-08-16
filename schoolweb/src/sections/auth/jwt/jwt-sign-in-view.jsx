@@ -45,8 +45,6 @@ export function JwtSignInView() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { checkUserSession } = useAuthContext();
-
   const [errorMsg, setErrorMsg] = useState('');
 
   const password = useBoolean();

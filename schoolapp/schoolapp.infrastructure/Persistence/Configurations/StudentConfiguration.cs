@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Hosting;
-using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.People;
-using System.Reflection.Emit;
 
 namespace schoolapp.Infrastructure.Persistence.Configurations
 {

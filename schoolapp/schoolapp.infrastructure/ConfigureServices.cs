@@ -1,5 +1,5 @@
-﻿
-using AutoMapper;
+﻿#define UseSqlServer
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,11 +22,13 @@ namespace schoolapp.Infrastructure;
 
 public static class DependencyInjection
 {
+
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         try
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
+            string postgresConnectionString = configuration.GetConnectionString("PostgresConnection");
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             //Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
@@ -40,12 +42,11 @@ public static class DependencyInjection
             {
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
 
-#if UseSQLServer
-                //options.UseSqlite(connectionString);
+#if UseSqlServer
                 options.UseSqlServer(connectionString);
 
 #else
-                options.UseNpgsql(connectionString);
+                options.UseNpgsql(postgresConnectionString).UseSnakeCaseNamingConvention();
 
 #endif
             });
