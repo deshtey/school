@@ -26,5 +26,11 @@ class TeacherEntityConfiguration
          .HasColumnName("regno")
          .HasMaxLength(20);
 
+        teacherConfiguration
+        .HasOne(c => c.Department)
+        .WithMany()
+        .HasForeignKey(c => c.DepartmentId)
+        .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

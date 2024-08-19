@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using schoolapp.Domain.Entities;
 using schoolapp.Domain.Entities.ClassGrades;
 
 namespace schoolapp.Infrastructure.Persistence.Configurations;
@@ -14,5 +13,11 @@ class ClassRoomEntityConfiguration
         classRoomConfiguration.Property(s => s.ClassroomName)
             .HasColumnName("classroomname")
             .HasMaxLength(20);
+
+        classRoomConfiguration
+            .HasOne(c=>c.ClassTeacher)
+            .WithMany()
+            .HasForeignKey(c=>c.TeacherId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

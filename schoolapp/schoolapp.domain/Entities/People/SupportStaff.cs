@@ -6,6 +6,8 @@ namespace schoolapp.Domain.Entities.People
     {
         public int StaffId { get; set; }
         public int SchoolId { get; set; }
-        public virtual required School School { get; set; }
+        public string Designation { get; set; }
+        public int DepartmentId { get; set; }
+        public School School { get; set; }
     }
 }
