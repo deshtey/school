@@ -6,6 +6,7 @@ namespace schoolapp.Domain.Entities
     {
         public int SchoolId { get; set; }
         public string SchoolName { get; set; }
+        public SchoolTypes SchoolType { get; set; }
         public string Location { get; set; }
         public string Logo { get; set; }
         public string? Street { get; set; }
@@ -19,5 +20,10 @@ namespace schoolapp.Domain.Entities
         public string? Address { get; set; }
         public string? HomePage { get; set; } = string.Empty;
 
+    }
+
+    public enum SchoolTypes
+    {
+        Primary=0, Secondary=1, Tertiary=3, College=4
     }
 }

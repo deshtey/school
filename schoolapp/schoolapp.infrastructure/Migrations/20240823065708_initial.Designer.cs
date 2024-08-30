@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using schoolapp.Infrastructure.Data;
@@ -11,9 +12,11 @@ using schoolapp.Infrastructure.Data;
 namespace schoolapp.Infrastructure.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    partial class SchoolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240823065708_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,44 +25,6 @@ namespace schoolapp.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("DepartmentSupportStaff", b =>
-                {
-                    b.Property<int>("DepartmentsId")
-                        .HasColumnType("integer")
-                        .HasColumnName("departments_id");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("integer")
-                        .HasColumnName("staff_id");
-
-                    b.HasKey("DepartmentsId", "StaffId")
-                        .HasName("pk_department_support_staff");
-
-                    b.HasIndex("StaffId")
-                        .HasDatabaseName("ix_department_support_staff_staff_id");
-
-                    b.ToTable("department_support_staff", "school");
-                });
-
-            modelBuilder.Entity("DepartmentTeacher", b =>
-                {
-                    b.Property<int>("DepartmentsId")
-                        .HasColumnType("integer")
-                        .HasColumnName("departments_id");
-
-                    b.Property<int>("TeachersId")
-                        .HasColumnType("integer")
-                        .HasColumnName("teachers_id");
-
-                    b.HasKey("DepartmentsId", "TeachersId")
-                        .HasName("pk_department_teacher");
-
-                    b.HasIndex("TeachersId")
-                        .HasDatabaseName("ix_department_teacher_teachers_id");
-
-                    b.ToTable("department_teacher", "school");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -83,13 +48,13 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("normalized_name");
 
                     b.HasKey("Id")
-                        .HasName("pk_aspnetroles");
+                        .HasName("pk_asp_net_roles");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("rolenameindex");
+                        .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("aspnetroles", "school");
+                    b.ToTable("AspNetRoles", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -115,12 +80,12 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("role_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_aspnetroleclaims");
+                        .HasName("pk_asp_net_role_claims");
 
                     b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_aspnetroleclaims_role_id");
+                        .HasDatabaseName("ix_asp_net_role_claims_role_id");
 
-                    b.ToTable("aspnetroleclaims", "school");
+                    b.ToTable("AspNetRoleClaims", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -146,12 +111,12 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_aspnetuserclaims");
+                        .HasName("pk_asp_net_user_claims");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_aspnetuserclaims_user_id");
+                        .HasDatabaseName("ix_asp_net_user_claims_user_id");
 
-                    b.ToTable("aspnetuserclaims", "school");
+                    b.ToTable("AspNetUserClaims", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -176,12 +141,12 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("LoginProvider", "ProviderKey")
-                        .HasName("pk_aspnetuserlogins");
+                        .HasName("pk_asp_net_user_logins");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_aspnetuserlogins_user_id");
+                        .HasDatabaseName("ix_asp_net_user_logins_user_id");
 
-                    b.ToTable("aspnetuserlogins", "school");
+                    b.ToTable("AspNetUserLogins", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -195,12 +160,12 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("role_id");
 
                     b.HasKey("UserId", "RoleId")
-                        .HasName("pk_aspnetuserroles");
+                        .HasName("pk_asp_net_user_roles");
 
                     b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_aspnetuserroles_role_id");
+                        .HasDatabaseName("ix_asp_net_user_roles_role_id");
 
-                    b.ToTable("aspnetuserroles", "school");
+                    b.ToTable("AspNetUserRoles", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -224,9 +189,9 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("value");
 
                     b.HasKey("UserId", "LoginProvider", "Name")
-                        .HasName("pk_aspnetusertokens");
+                        .HasName("pk_asp_net_user_tokens");
 
-                    b.ToTable("aspnetusertokens", "school");
+                    b.ToTable("AspNetUserTokens", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.ClassRoom", b =>
@@ -303,7 +268,7 @@ namespace schoolapp.Infrastructure.Migrations
                     b.ToTable("grades", "school");
                 });
 
-            modelBuilder.Entity("schoolapp.Domain.Entities.Departments.Department", b =>
+            modelBuilder.Entity("schoolapp.Domain.Entities.Other.Department", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -645,6 +610,10 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("dob");
 
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("department_id");
+
                     b.Property<string>("Email")
                         .HasColumnType("text")
                         .HasColumnName("email");
@@ -692,6 +661,9 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_teachers");
+
+                    b.HasIndex("DepartmentId")
+                        .HasDatabaseName("ix_teachers_department_id");
 
                     b.HasIndex("SchoolId")
                         .HasDatabaseName("ix_teachers_school_id");
@@ -877,50 +849,16 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("user_name");
 
                     b.HasKey("Id")
-                        .HasName("pk_aspnetusers");
+                        .HasName("pk_asp_net_users");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("emailindex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("usernameindex");
+                        .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("aspnetusers", "school");
-                });
-
-            modelBuilder.Entity("DepartmentSupportStaff", b =>
-                {
-                    b.HasOne("schoolapp.Domain.Entities.Departments.Department", null)
-                        .WithMany()
-                        .HasForeignKey("DepartmentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_department_support_staff_department_departments_id");
-
-                    b.HasOne("schoolapp.Domain.Entities.People.SupportStaff", null)
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_department_support_staff_staff_staff_id");
-                });
-
-            modelBuilder.Entity("DepartmentTeacher", b =>
-                {
-                    b.HasOne("schoolapp.Domain.Entities.Departments.Department", null)
-                        .WithMany()
-                        .HasForeignKey("DepartmentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_department_teacher_department_departments_id");
-
-                    b.HasOne("schoolapp.Domain.Entities.People.Teacher", null)
-                        .WithMany()
-                        .HasForeignKey("TeachersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_department_teacher_teachers_teachers_id");
+                    b.ToTable("AspNetUsers", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -930,7 +868,7 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_aspnetroleclaims_aspnetroles_role_id");
+                        .HasConstraintName("fk_asp_net_role_claims_asp_net_roles_role_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -940,7 +878,7 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_aspnetuserclaims_asp_net_users_user_id");
+                        .HasConstraintName("fk_asp_net_user_claims_asp_net_users_user_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -950,7 +888,7 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_aspnetuserlogins_asp_net_users_user_id");
+                        .HasConstraintName("fk_asp_net_user_logins_asp_net_users_user_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -960,14 +898,14 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_aspnetuserroles_aspnetroles_role_id");
+                        .HasConstraintName("fk_asp_net_user_roles_asp_net_roles_role_id");
 
                     b.HasOne("schoolapp.Infrastructure.Identity.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_aspnetuserroles_asp_net_users_user_id");
+                        .HasConstraintName("fk_asp_net_user_roles_asp_net_users_user_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -977,7 +915,7 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_aspnetusertokens_asp_net_users_user_id");
+                        .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.ClassRoom", b =>
@@ -1076,12 +1014,21 @@ namespace schoolapp.Infrastructure.Migrations
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.Teacher", b =>
                 {
+                    b.HasOne("schoolapp.Domain.Entities.Other.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_teachers_department_department_id");
+
                     b.HasOne("schoolapp.Domain.Entities.School", "School")
                         .WithMany()
                         .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_teachers_schools_school_id");
+
+                    b.Navigation("Department");
 
                     b.Navigation("School");
                 });

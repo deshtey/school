@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using schoolapp.Infrastructure.Data;
@@ -11,9 +12,11 @@ using schoolapp.Infrastructure.Data;
 namespace schoolapp.Infrastructure.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    partial class SchoolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240826230039_departments")]
+    partial class departments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,13 +86,13 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("normalized_name");
 
                     b.HasKey("Id")
-                        .HasName("pk_aspnetroles");
+                        .HasName("pk_asp_net_roles");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("rolenameindex");
+                        .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("aspnetroles", "school");
+                    b.ToTable("AspNetRoles", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -115,12 +118,12 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("role_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_aspnetroleclaims");
+                        .HasName("pk_asp_net_role_claims");
 
                     b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_aspnetroleclaims_role_id");
+                        .HasDatabaseName("ix_asp_net_role_claims_role_id");
 
-                    b.ToTable("aspnetroleclaims", "school");
+                    b.ToTable("AspNetRoleClaims", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -146,12 +149,12 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_aspnetuserclaims");
+                        .HasName("pk_asp_net_user_claims");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_aspnetuserclaims_user_id");
+                        .HasDatabaseName("ix_asp_net_user_claims_user_id");
 
-                    b.ToTable("aspnetuserclaims", "school");
+                    b.ToTable("AspNetUserClaims", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -176,12 +179,12 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("LoginProvider", "ProviderKey")
-                        .HasName("pk_aspnetuserlogins");
+                        .HasName("pk_asp_net_user_logins");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_aspnetuserlogins_user_id");
+                        .HasDatabaseName("ix_asp_net_user_logins_user_id");
 
-                    b.ToTable("aspnetuserlogins", "school");
+                    b.ToTable("AspNetUserLogins", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -195,12 +198,12 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("role_id");
 
                     b.HasKey("UserId", "RoleId")
-                        .HasName("pk_aspnetuserroles");
+                        .HasName("pk_asp_net_user_roles");
 
                     b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_aspnetuserroles_role_id");
+                        .HasDatabaseName("ix_asp_net_user_roles_role_id");
 
-                    b.ToTable("aspnetuserroles", "school");
+                    b.ToTable("AspNetUserRoles", "school");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -224,9 +227,9 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("value");
 
                     b.HasKey("UserId", "LoginProvider", "Name")
-                        .HasName("pk_aspnetusertokens");
+                        .HasName("pk_asp_net_user_tokens");
 
-                    b.ToTable("aspnetusertokens", "school");
+                    b.ToTable("AspNetUserTokens", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.ClassRoom", b =>
@@ -877,16 +880,16 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("user_name");
 
                     b.HasKey("Id")
-                        .HasName("pk_aspnetusers");
+                        .HasName("pk_asp_net_users");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("emailindex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("usernameindex");
+                        .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("aspnetusers", "school");
+                    b.ToTable("AspNetUsers", "school");
                 });
 
             modelBuilder.Entity("DepartmentSupportStaff", b =>
@@ -930,7 +933,7 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_aspnetroleclaims_aspnetroles_role_id");
+                        .HasConstraintName("fk_asp_net_role_claims_asp_net_roles_role_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -940,7 +943,7 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_aspnetuserclaims_asp_net_users_user_id");
+                        .HasConstraintName("fk_asp_net_user_claims_asp_net_users_user_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -950,7 +953,7 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_aspnetuserlogins_asp_net_users_user_id");
+                        .HasConstraintName("fk_asp_net_user_logins_asp_net_users_user_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -960,14 +963,14 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_aspnetuserroles_aspnetroles_role_id");
+                        .HasConstraintName("fk_asp_net_user_roles_asp_net_roles_role_id");
 
                     b.HasOne("schoolapp.Infrastructure.Identity.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_aspnetuserroles_asp_net_users_user_id");
+                        .HasConstraintName("fk_asp_net_user_roles_asp_net_users_user_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -977,7 +980,7 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_aspnetusertokens_asp_net_users_user_id");
+                        .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.ClassRoom", b =>

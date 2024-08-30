@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
+using schoolapp.Application.Services;
 using schoolapp.Domain.Entities.People;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,25 +19,30 @@ namespace staffapp.webapi.Controllers
         {
             _staffService = staffService;
         }
-   
+        // GET: api/<SupportStaffController>/schoolId
+        [HttpGet("{schoolId}")]
+        public async Task<IEnumerable<SupportStaffDto>> GetAllStaff(int schoolId)
+        {
+            return await _staffService.GetSupportStaffs(schoolId);
+        }
 
         // GET api/<SupportStaffController>/5
-        [HttpGet("{id}")]
-        public async Task<SupportStaff> Get(int id)
+        [HttpGet("staff/{id}")]
+        public async Task<SupportStaffDto> GetStaff(int id)
         {
             return await _staffService.GetSupportStaff(id);
         }
 
         // POST api/<SupportStaffController>
         [HttpPost]
-        public async Task Post([FromBody] SupportStaff staff)
+        public async Task Post([FromBody] SupportStaffDto staff)
         {
             await _staffService.PostSupportStaff(staff, cancellationToken);
         }
 
         // PUT api/<SupportStaffController>/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] SupportStaff staff)
+        public async Task Put(int id, [FromBody] SupportStaffDto staff)
         {
             await _staffService.PutSupportStaff(id, staff, cancellationToken);
         }

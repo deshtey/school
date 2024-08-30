@@ -1,6 +1,6 @@
 ﻿using schoolapp.Domain.Entities.Base;
 using schoolapp.Domain.Entities.ClassGrades;
-using schoolapp.Domain.Entities.Other;
+using schoolapp.Domain.Entities.Departments;
 
 namespace schoolapp.Domain.Entities.People
 {
@@ -9,10 +9,9 @@ namespace schoolapp.Domain.Entities.People
         public int TeacherId { get; set; }
         public string? RegNo { get; set; }
         public int SchoolId { get; set; }
-        public int DepartmentId { get; set; }
         public School School { get; set; }
-        public Department Department { get; set; }
-        public List<ClassRoom> ClassRoom { get; set; }
+        public List<Department> Departments { get; set; }
+        public List<ClassRoom> ClassRooms { get; set; }
 
     }
 }

@@ -19,7 +19,7 @@ builder.Services.AddControllers(options =>
 // Swagger/OpenAPI setup
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    options.Password.RequireNonAlphanumeric=false;
+    options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 6;
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;
@@ -64,4 +64,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

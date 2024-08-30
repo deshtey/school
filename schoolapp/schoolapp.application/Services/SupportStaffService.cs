@@ -2,61 +2,87 @@
 using Microsoft.Extensions.Logging;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
 using schoolapp.Domain.Entities.People;
 
 namespace schoolapp.Application.Services
 {
-    public class SupportSupportStaffervice : ISupportStaffService
+    public class SupportStaffService : ISupportStaffService
     {
         private readonly ISchoolDbContext _context;
-        private readonly ILogger<SupportSupportStaffervice> _logger;
-        public SupportSupportStaffervice(ISchoolDbContext context, ILogger<SupportSupportStaffervice> logger)
+        private readonly ILogger<SupportStaffService> _logger;
+        public SupportStaffService(ISchoolDbContext context, ILogger<SupportStaffService> logger)
         {
             _context = context;
             _logger = logger;
         }
-
-        public async Task<SupportStaff> GetSupportStaff(int id)
+        public async Task<IEnumerable<SupportStaffDto>?> GetSupportStaffs(int schoolId)
         {
-            var supportStaff = await _context.Staff.FindAsync(id);
-            return supportStaff;
-        }
-
-        public async Task<IEnumerable<SupportStaff>?> GetSupportStaffs(int schoolId)
-        {
-            var supportStaff = await _context.Staff.Where(s => s.SchoolId == schoolId).ToListAsync();
-            return supportStaff;
-        }
-
-        public async Task<bool?> PostSupportStaff(SupportStaff supportStaff, CancellationToken cancellationToken)
-        {
-            if (_context.Staff == null)
+            if (_context.SupportStaffs == null)
             {
                 return null;
             }
-            _context.Staff.Add(supportStaff);
-            await _context.SaveChangesAsync(cancellationToken);
+            return await _context.SupportStaffs.Where(s => s.SchoolId == schoolId)
+                .Include(t => t.Departments)
+                .Select(t => new SupportStaffDto
+                {
+                    Name = t.Name,
+                    Email = t.Email,
+                    Gender = t.Gender,
+                    Phone = t.Phone,
+                    SchoolId = t.SchoolId,
+                    Status = t.Status,
+                    StaffId = t.StaffId                
+                    // Departments = t.Departments.Select(d=>new DepartmentDto{Id=d.Id,DepartmentName=d.DepartmentName}).ToList(),
+                    // ClassRooms = t.ClassRooms.Select(c=>new ClassRoomDto{ClassRoomId=c.ClassRoomId,ClassroomName=c.ClassroomName}).ToList(),
 
-            return true;
+                })
+                .ToListAsync();
         }
 
-        public async Task<SupportStaff?> PutSupportStaff(int id, SupportStaff supportStaff, CancellationToken cancellationToken)
+        public async Task<SupportStaffDto?> GetSupportStaff(int id)
         {
-            if (supportStaff == null || id != supportStaff.Id)
+            if (_context.SupportStaffs == null)
+            {
+                return null;
+            }
+            var SupportStaff = await _context.SupportStaffs.Where(t => t.StaffId == id)
+                .Include(t => t.Departments)
+                .Select(t => new SupportStaffDto
+                {
+                    Name = t.Name,
+                    Email = t.Email,
+                    Gender = t.Gender,
+                    Phone = t.Phone,
+                    SchoolId = t.SchoolId,
+                    Status = t.Status,
+                    StaffId = t.StaffId,
+                    Departments = t.Departments.Select(d => new DepartmentDto { Id = d.Id, DepartmentName = d.DepartmentName }).ToList(),
+
+                })
+                .FirstOrDefaultAsync();
+
+
+            return SupportStaff;
+        }
+
+        public async Task<SupportStaff?> PutSupportStaff(int id, SupportStaffDto SupportStaff, CancellationToken cancellationToken)
+        {
+            if (SupportStaff == null || id != SupportStaff.StaffId)
             {
                 return null;
             }
 
             try
             {
-                var existingSupportStaff = await _context.Staff.FindAsync(new object[] { id }, cancellationToken);
+                var existingSupportStaff = await _context.SupportStaffs.FindAsync([id], cancellationToken);
 
                 if (existingSupportStaff == null)
                 {
                     return null; // SupportStaff with the given ID not found.
                 }
 
-                _context.Staff.Entry(existingSupportStaff).CurrentValues.SetValues(supportStaff);
+                _context.SupportStaffs.Entry(existingSupportStaff).CurrentValues.SetValues(SupportStaff);
 
                 await _context.SaveChangesAsync(cancellationToken);
 
@@ -64,45 +90,48 @@ namespace schoolapp.Application.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating supportStaff");
+                _logger.LogError(ex, "Error updating school");
                 return null;
             }
         }
 
-        public async Task<bool> DeleteSupportStaff(int id, CancellationToken cancellationToken)
+        public async Task<bool?> PostSupportStaff(SupportStaffDto SupportStaff, CancellationToken cancellationToken)
         {
-            if (_context.Staff == null)
+            if (_context.SupportStaffs == null)
             {
-                return false;
+                return null;
             }
-            var SupportStaff = await _context.Staff.FindAsync(id);
-            if (SupportStaff == null)
+            var newSupportStaff = new SupportStaff
             {
-                return true;
-            }
+                SchoolId = SupportStaff.SchoolId,
+                Name = SupportStaff.Name,
+                DOB = SupportStaff.DOB,
+                Active = true,
+                Email = SupportStaff.Email,
+                Gender = SupportStaff.Gender,
+                Image = SupportStaff.Image,
+                Phone = SupportStaff.Phone
 
-            _context.Staff.Remove(SupportStaff);
+            };
+            _context.SupportStaffs.Add(newSupportStaff);
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;
         }
 
-        public bool SupportStaffExists(int id)
+        public async Task<bool> DeleteSupportStaff(int id, CancellationToken cancellationToken)
         {
-            return (_context.Staff?.Any(e => e.Id == id)).GetValueOrDefault();
-        }   
-
-        public async Task<bool> PostSupportStaff(List<SupportStaff> supportStaff, CancellationToken cancellationToken)
-        {
-            if (_context.Staff == null)
+            if (_context.SupportStaffs == null)
             {
                 return false;
             }
-            foreach (var staff in supportStaff)
+            var SupportStaff = await _context.SupportStaffs.FindAsync(id);
+            if (SupportStaff == null)
             {
-                _context.Staff.Add(staff);
+                return true;
             }
-           
+
+            _context.SupportStaffs.Remove(SupportStaff);
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;

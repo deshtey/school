@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using schoolapp.Domain.Entities.People;
+using schoolapp.Domain.Entities.Departments;
 
 namespace schoolapp.Infrastructure.Persistence.Configurations;
 class TeacherEntityConfiguration
@@ -27,10 +28,11 @@ class TeacherEntityConfiguration
          .HasMaxLength(20);
 
         teacherConfiguration
-        .HasOne(c => c.Department)
-        .WithMany()
-        .HasForeignKey(c => c.DepartmentId)
-        .OnDelete(DeleteBehavior.Restrict);
+        .HasMany(s => s.Departments)
+         .WithMany(s => s.Teachers)
+         .UsingEntity<StaffDepartment>(
+             s => s.ToTable("staff_department"));
+   
 
     }
 }

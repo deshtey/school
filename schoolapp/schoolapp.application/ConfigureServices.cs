@@ -12,7 +12,10 @@ public static class ConfigureServices
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddScoped<ISchoolService, SchoolService>();
         services.AddScoped<IStudentService, StudentService>();
+        services.AddScoped<ITeacherService, TeacherService>();
+        services.AddScoped<IDepartmentService, DepartmentService>();
 
+        services.AddScoped<ISupportStaffService, SupportStaffService>();
 
         return services;
     }

@@ -42,7 +42,7 @@ public static class DependencyInjection
             {
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
 
-#if UseSqlServer
+#if !UseSqlServer
                 options.UseSqlServer(connectionString);
 
 #else

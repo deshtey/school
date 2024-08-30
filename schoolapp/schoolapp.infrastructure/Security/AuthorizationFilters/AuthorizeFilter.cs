@@ -29,6 +29,7 @@ namespace schoolapp.Infrastructure.Security.AuthorizationFilters
         }
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+
             var authorizeAttribute = context.ActionDescriptor.EndpointMetadata
                      .OfType<AuthorizeAttribute>()
                      .FirstOrDefault();
