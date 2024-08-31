@@ -62,6 +62,22 @@ export const paths = {
       account: `${ROOTS.ADMIN}/student/account`,
       edit: (id) => `${ROOTS.ADMIN}/student/${id}/edit`,
     },
+    teacher: {
+      root: `${ROOTS.ADMIN}/teacher`,
+      new: `${ROOTS.ADMIN}/teacher/new`,
+      list: `${ROOTS.ADMIN}/teacher/list`,
+      cards: `${ROOTS.ADMIN}/teacher/cards`,
+      details: (id) => `${ROOTS.ADMIN}/teacher/${id}`,
+      edit: (id) => `${ROOTS.ADMIN}/teacher/${id}/edit`,
+    },
+    supportStaff: {
+      root: `${ROOTS.ADMIN}/supportStaff`,
+      new: `${ROOTS.ADMIN}/supportStaff/new`,
+      list: `${ROOTS.ADMIN}/supportStaff/list`,
+      cards: `${ROOTS.ADMIN}/supportStaff/cards`,
+      details: (id) => `${ROOTS.ADMIN}/supportStaff/${id}`,
+      edit: (id) => `${ROOTS.ADMIN}/supportStaff/${id}/edit`,
+    },
     three: `${ROOTS.ADMIN}/three`,
 
     group: {

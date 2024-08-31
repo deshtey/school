@@ -8,7 +8,7 @@ namespace schoolapp.Domain.Entities.ClassGrades
         public int Year { get; set; }
         public int GradeId { get; set; }
         public string ClassroomName { get; set; }
-        public int TeacherId { get; set; }
+        public int? TeacherId { get; set; }
         public int SchoolId { get; set; }
         public School School { get; set; }
         public Teacher ClassTeacher { get; set; }

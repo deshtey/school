@@ -1,6 +1,13 @@
 'use client';
+
+import { paths } from 'src/routes/paths';
+
+import { DashboardContent } from 'src/layouts/dashboard';
+
+import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
+
 import { z as zod } from 'zod';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import { isValidPhoneNumber } from 'react-phone-number-input/input';
@@ -15,7 +22,6 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { fData } from 'src/utils/format-number';
@@ -23,95 +29,91 @@ import { fData } from 'src/utils/format-number';
 import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
-import { DashboardContent } from 'src/layouts/dashboard';
-import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
-import { usePostStudents } from 'src/actions/student';
+import { usePostGrade, usePostGrades, usePostGrades1 } from 'src/actions/grade';
 
 // ----------------------------------------------------------------------
 
-export const NewStudentSchema = zod.object({
-  // imageUrl: schemaHelper.file({
+export const NewGradeSchema = zod.object({
+  // avatarUrl: schemaHelper.file({
   //   message: { required_error: 'Avatar is required!' },
   // }),
-  name: zod.string().min(1, { message: 'Name is required!' }),
-  regNumber: zod.string().min(1, { message: 'Reg/Adm Number is required!' }),
-
-  // email: zod
-  //   .string()
-  //   .min(1, { message: 'Email is required!' })
-  //   .email({ message: 'Email must be a valid email address!' }),
-  // phoneNumber: schemaHelper.phoneNumber({ isValidPhoneNumber }),
-  // country: schemaHelper.objectOrNull({
-  //   message: { required_error: 'Country is required!' },
-  // }),
-  // address: zod.string().min(1, { message: 'Address is required!' }),
-  // company: zod.string().min(1, { message: 'Company is required!' }),
-  // state: zod.string().min(1, { message: 'State is required!' }),
-  // city: zod.string().min(1, { message: 'City is required!' }),
-  // role: zod.string().min(1, { message: 'Role is required!' }),
-  // zipCode: zod.string().min(1, { message: 'Zip code is required!' }),
-  // // Not required
-  // status: zod.string(),
-  // isVerified: zod.boolean(),
+  gradeName: zod.string().min(1, { message: 'Name is required!' }),
+  email: zod
+    .string()
+    .min(1, { message: 'Email is required!' })
+    .email({ message: 'Email must be a valid email address!' }),
+  phone: schemaHelper.phoneNumber({ isValidPhoneNumber }),
+  country: schemaHelper.objectOrNull({
+    message: { required_error: 'Country is required!' },
+  }),
+  address: zod.string().min(1, { message: 'Address is required!' }),
+  location: zod.string().min(1, { message: 'State is required!' }),
+  city: zod.string().min(1, { message: 'City is required!' }),
+  homepage: zod.string().min(1, { message: 'Role is required!' }),
+  zipCode: zod.string().min(1, { message: 'Zip code is required!' }),
 });
 
 // ----------------------------------------------------------------------
 
-export function StudentEditView({ student: currentStudent }) {
+export function GradeEditView({ grade: currentGrade }) {
   const router = useRouter();
-
   const defaultValues = useMemo(
     () => ({
-      status: currentStudent?.status || '',
-      imageUrl: currentStudent?.imageUrl || null,
-      regNumber: currentStudent?.regNumber || null,
-      name: currentStudent?.name || '',
-      email: currentStudent?.email || '',
-      phoneNumber: currentStudent?.phoneNumber || '',
-      country: currentStudent?.country || '',
-      gender: currentStudent?.gender || null,
-      dob: currentStudent?.dob || null,
-      address: currentStudent?.address || '',
+      gradeName: currentGrade?.gradeName || '',
+      status: currentGrade?.status || '',
+      logoUrl: currentGrade?.avatarUrl || '',
+      email: currentGrade?.email || '',
+      phone: currentGrade?.phoneNumber || '',
+      country: currentGrade?.country || 'Kenya',
+      state: currentGrade?.state || '',
+      city: currentGrade?.city || '',
+      address: currentGrade?.address || '',
+      zipCode: currentGrade?.zipCode || '',
     }),
-    [currentStudent]
+    [currentGrade]
   );
 
   const methods = useForm({
     mode: 'onSubmit',
-    resolver: zodResolver(NewStudentSchema),
+    // resolver: zodResolver(NewGradeSchema),
     defaultValues,
   });
 
   const {
     reset,
     watch,
-    control,
+    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
   const values = watch();
-  const { createStudent } = usePostStudents();
+
+  useEffect(() => {
+    if (currentGrade) {
+      reset(defaultValues);
+    }
+  }, [currentGrade, defaultValues, reset]);
+  const { grades, createGrade } = usePostGrades();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await createStudent({ ...data });
-      toast.success(currentStudent ? 'Update success!' : 'Create success!');
-      router.push(paths.admin.student.list);
+      await createGrade({ ...data });
+      toast.success(currentGrade ? 'Update success!' : 'Create success!');
+      router.push(paths.admin.grade.list);
     } catch (error) {
       console.error(error);
       toast.error('An error occured');
     }
   });
-
   return (
     <DashboardContent>
       <CustomBreadcrumbs
-        heading="Edit"
+        heading="Create a new grade"
         links={[
           { name: 'Dashboard', href: paths.admin.root },
-          { name: 'Student', href: paths.admin.student.root },
-          { name: currentStudent?.name },
+          { name: 'Grade', href: paths.admin.grade.root },
+          { name: 'New Grade' },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
@@ -120,7 +122,7 @@ export function StudentEditView({ student: currentStudent }) {
         <Grid container spacing={3}>
           <Grid xs={12} md={4}>
             <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-              {currentStudent && (
+              {currentGrade && (
                 <Label
                   color={
                     (values.status === 'active' && 'success') ||
@@ -132,10 +134,9 @@ export function StudentEditView({ student: currentStudent }) {
                   {values.status}
                 </Label>
               )}
-
               <Box sx={{ mb: 5 }}>
                 <Field.UploadAvatar
-                  name="imageUrl"
+                  name="logoUrl"
                   maxSize={3145728}
                   helperText={
                     <Typography
@@ -155,7 +156,7 @@ export function StudentEditView({ student: currentStudent }) {
                 />
               </Box>
 
-              {currentStudent && (
+              {/* {currentGrade && (
                 <FormControlLabel
                   labelPlacement="start"
                   control={
@@ -190,7 +191,7 @@ export function StudentEditView({ student: currentStudent }) {
                     justifyContent: 'space-between',
                   }}
                 />
-              )}
+              )} */}
 
               <Field.Switch
                 name="isVerified"
@@ -201,17 +202,17 @@ export function StudentEditView({ student: currentStudent }) {
                       Email verified
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Disabling this will automatically send the student a verification email
+                      Disabling this will automatically send the grade a verification email
                     </Typography>
                   </>
                 }
                 sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
               />
 
-              {currentStudent && (
+              {currentGrade && (
                 <Stack justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
                   <Button variant="soft" color="error">
-                    Delete student
+                    Delete grade
                   </Button>
                 </Stack>
               )}
@@ -229,28 +230,27 @@ export function StudentEditView({ student: currentStudent }) {
                   sm: 'repeat(2, 1fr)',
                 }}
               >
-                <Field.Text name="name" label="Full name" />
-                <Field.Text name="regNumber" label="Reg/Adm Number" />
-
+                <Field.Text name="gradeName" label="Grade name" />
                 <Field.Text name="email" label="Email address" />
-                <Field.Phone name="phoneNumber" label="Phone number" />
+                <Field.Phone name="phone" label="Phone number" />
 
-                {/* <Field.CountrySelect
+                <Field.CountrySelect
                   fullWidth
                   name="country"
                   label="Country"
                   placeholder="Choose a country"
-                /> */}
+                />
+                <Field.Text name="homePage" label="Grade Website Url" />
 
-                <Field.Text name="city" label="City" />
+                <Field.Text name="location" label="County/State/region" />
+                <Field.Text name="city" label="City/Town" />
                 <Field.Text name="address" label="Address" />
                 <Field.Text name="zipCode" label="Zip/code" />
-                <Field.DatePicker name="dob" label="Date of birth" />
               </Box>
 
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentStudent ? 'Create student' : 'Save changes'}
+                  {!currentGrade ? 'Create grades' : 'Save changes'}
                 </LoadingButton>
               </Stack>
             </Card>

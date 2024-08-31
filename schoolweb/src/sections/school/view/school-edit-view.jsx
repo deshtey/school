@@ -94,7 +94,7 @@ export function SchoolEditView({ school: currentSchool }) {
       reset(defaultValues);
     }
   }, [currentSchool, defaultValues, reset]);
-  const { schools, createSchool } = usePostSchools();
+  const { createSchool } = usePostSchools();
 
   const onSubmit = handleSubmit(async (data) => {
     try {

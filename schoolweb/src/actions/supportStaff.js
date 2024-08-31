@@ -13,8 +13,8 @@ const swrOptions = {
 
 // ----------------------------------------------------------------------
 
-export function useGetSupportStaffs() {
-  const url = endpoints.supportStaff.list;
+export function useGetSupportStaffs(schoolId = 2) {
+  const url = `${endpoints.supportStaff.list}/${schoolId}`;
 
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
   const memoizedValue = useMemo(

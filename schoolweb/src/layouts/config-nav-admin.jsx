@@ -49,6 +49,8 @@ export const navData = [
       { title: 'One', path: paths.admin.root, icon: ICONS.admin },
       { title: 'Schools', path: paths.admin.school.root, icon: ICONS.ecommerce },
       { title: 'Students', path: paths.admin.student.root, icon: ICONS.ecommerce },
+      { title: 'Teachers', path: paths.admin.teacher.root, icon: ICONS.analytics },
+      { title: 'SupportStaff', path: paths.admin.supportStaff.root, icon: ICONS.analytics },
 
       { title: 'Three', path: paths.admin.three, icon: ICONS.analytics },
     ],

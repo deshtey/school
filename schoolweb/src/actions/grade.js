@@ -13,17 +13,17 @@ const swrOptions = {
 
 // ----------------------------------------------------------------------
 
-export function useGetTeachers(schoolId = 2) {
-  const url = `${endpoints.teacher.list}/${schoolId}`;
+export function useGetGrades(schoolId = 2) {
+  const url = `${endpoints.grade.list}/${schoolId}`;
 
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
-      teachers: data ?? [],
-      teachersLoading: isLoading,
-      teachersError: error,
-      teachersValidating: isValidating,
-      teachersEmpty: !isLoading && !data?.length,
+      grades: data ?? [],
+      gradesLoading: isLoading,
+      gradesError: error,
+      gradesValidating: isValidating,
+      gradesEmpty: !isLoading && !data?.length,
     }),
     [data, error, isLoading, isValidating]
   );
@@ -33,43 +33,43 @@ export function useGetTeachers(schoolId = 2) {
 
 // ----------------------------------------------------------------------
 
-export function useGetTeacher(id) {
-  const url = `${endpoints.teacher.details}/${id}`;
-  // const url = [endpoints.teacher.details, { params: { id } }];
+export function useGetGrade(id) {
+  const url = `${endpoints.grade.details}/${id}`;
+  // const url = [endpoints.grade.details, { params: { id } }];
 
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
 
   const memoizedValue = useMemo(
     () => ({
-      teacher: data,
-      teacherLoading: isLoading,
-      teacherError: error,
-      teacherValidating: isValidating,
-      teacherEmpty: !isLoading && !data,
+      grade: data,
+      gradeLoading: isLoading,
+      gradeError: error,
+      gradeValidating: isValidating,
+      gradeEmpty: !isLoading && !data,
     }),
-    [data?.teacher, error, isLoading, isValidating]
+    [data?.grade, error, isLoading, isValidating]
   );
 
   return memoizedValue;
 }
 
-export function usePostTeacher(parameters) {
-  const url = endpoints.teacher.list;
+export function usePostGrade(parameters) {
+  const url = endpoints.grade.list;
 
   const key = `${url}-${JSON.stringify(parameters)}`;
 
-  const { teacher, error, mutate } = useSWR(key, () => fetcherPost(url, parameters));
+  const { grade, error, mutate } = useSWR(key, () => fetcherPost(url, parameters));
 
   return {
-    teacher,
+    grade,
     error,
     mutate,
     isLoading: !data && !error,
   };
 }
 
-export function usePostTeachers1(params) {
-  const url = endpoints.teacher.list;
+export function usePostGrades1(params) {
+  const url = endpoints.grade.list;
 
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -103,45 +103,45 @@ export function usePostTeachers1(params) {
 
   return { data, error, isLoading, post };
 }
-export function usePostTeachers() {
-  const url = endpoints.teacher.list;
+export function usePostGrades() {
+  const url = endpoints.grade.list;
 
   const { data, isLoading, error, isValidating } = useSWR(url, fetcherPost, swrOptions);
 
-  const createTeacher = async (teacherData) => {
+  const createGrade = async (gradeData) => {
     try {
-      const response = await axiosInstance.post(url, teacherData);
-      // Revalidate the cache to update the list of teachers
+      const response = await axiosInstance.post(url, gradeData);
+      // Revalidate the cache to update the list of grades
       mutate(url);
       return response.data;
     } catch (error) {
-      console.error('Error creating teacher:', error);
+      console.error('Error creating grade:', error);
       throw error;
     }
   };
 
-  const updateTeacher = async (teacherId, teacherData) => {
-    const updateUrl = `${url}/${teacherId}`;
+  const updateGrade = async (gradeId, gradeData) => {
+    const updateUrl = `${url}/${gradeId}`;
     try {
-      const response = await axios.put(updateUrl, teacherData);
-      // Revalidate the cache to update the list of teachers
+      const response = await axios.put(updateUrl, gradeData);
+      // Revalidate the cache to update the list of grades
       mutate(url);
       return response.data;
     } catch (error) {
-      console.error('Error updating teacher:', error);
+      console.error('Error updating grade:', error);
       throw error;
     }
   };
 
   const memoizedValue = useMemo(
     () => ({
-      teachers: data ?? [],
-      teachersLoading: isLoading,
-      teachersError: error,
-      teachersValidating: isValidating,
-      teachersEmpty: !isLoading && !data?.length,
-      createTeacher,
-      updateTeacher,
+      grades: data ?? [],
+      gradesLoading: isLoading,
+      gradesError: error,
+      gradesValidating: isValidating,
+      gradesEmpty: !isLoading && !data?.length,
+      createGrade,
+      updateGrade,
     }),
     [data, error, isLoading, isValidating]
   );
@@ -150,20 +150,20 @@ export function usePostTeachers() {
 }
 // ----------------------------------------------------------------------
 
-export function useGetLatestTeachers(title) {
-  const url = title ? [endpoints.teacher.latest, { params: { title } }] : '';
+export function useGetLatestGrades(title) {
+  const url = title ? [endpoints.grade.latest, { params: { title } }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
 
   const memoizedValue = useMemo(
     () => ({
-      latestTeachers: data?.latestTeachers || [],
-      latestTeachersLoading: isLoading,
-      latestTeachersError: error,
-      latestTeachersValidating: isValidating,
-      latestTeachersEmpty: !isLoading && !data?.latestTeachers.length,
+      latestGrades: data?.latestGrades || [],
+      latestGradesLoading: isLoading,
+      latestGradesError: error,
+      latestGradesValidating: isValidating,
+      latestGradesEmpty: !isLoading && !data?.latestGrades.length,
     }),
-    [data?.latestTeachers, error, isLoading, isValidating]
+    [data?.latestGrades, error, isLoading, isValidating]
   );
 
   return memoizedValue;
@@ -171,8 +171,8 @@ export function useGetLatestTeachers(title) {
 
 // ----------------------------------------------------------------------
 
-export function useSearchTeachers(query) {
-  const url = query ? [endpoints.teacher.search, { params: { query } }] : '';
+export function useSearchGrades(query) {
+  const url = query ? [endpoints.grade.search, { params: { query } }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, {
     ...swrOptions,

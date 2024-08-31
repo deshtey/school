@@ -5,7 +5,7 @@ namespace schoolapp.Application.DTOs
 {
     public class StudentParentDto
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public int SchoolId { get; set; }
         public StudentDto StudentDto { get; set; } = new();
         public List<ParentDto> ParentsDto { get; set; } = [];
