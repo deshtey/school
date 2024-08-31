@@ -7,7 +7,7 @@ namespace schoolapp.Application.Contracts
     {
         Task<IEnumerable<SchoolDto>?> GetSchools();
         Task<School?> GetSchool(int id);
-        Task<School?> PutSchool(int id, School School, CancellationToken cancellationToken);
+        Task<School?> PutSchool(int id, SchoolDto School, CancellationToken cancellationToken);
         Task<bool?> PostSchool(SchoolDto _school, CancellationToken cancellationToken);
         Task<bool> DeleteSchool(int id, CancellationToken cancellationToken);
     }

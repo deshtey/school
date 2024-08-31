@@ -1,5 +1,6 @@
 ﻿using schoolapp.Domain.Entities.People;
 using schoolapp.Domain.Enums;
+using System.Text.Json.Serialization;
 
 namespace schoolapp.Application.DTOs
 {
@@ -28,7 +29,7 @@ namespace schoolapp.Application.DTOs
     }
     public class ParentDto
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string FirstName { get; set; }
         public string? LastName { get; set; }
         public string? OtherName { get; set; }

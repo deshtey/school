@@ -58,7 +58,7 @@ namespace schoolapp.Application.Services
             return School;
         }
 
-        public async Task<School?> PutSchool(int id, School school, CancellationToken cancellationToken)
+        public async Task<School?> PutSchool(int id, SchoolDto school, CancellationToken cancellationToken)
         {
             if (school == null || id != school.SchoolId)
             {
@@ -67,7 +67,7 @@ namespace schoolapp.Application.Services
 
             try
             {
-                var existingSchool = await _context.Schools.FindAsync(new object[] { id }, cancellationToken);
+                var existingSchool = await _context.Schools.FindAsync([id], cancellationToken);
 
                 if (existingSchool == null)
                 {

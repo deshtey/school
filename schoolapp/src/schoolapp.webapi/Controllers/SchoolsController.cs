@@ -43,7 +43,7 @@ namespace schoolapp.webapi.Controllers
 
         // PUT api/<SchoolsController>/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] School school)
+        public async Task Put(int id, [FromBody] SchoolDto school)
         {
             await _schoolService.PutSchool(id, school, cancellationToken);
         }

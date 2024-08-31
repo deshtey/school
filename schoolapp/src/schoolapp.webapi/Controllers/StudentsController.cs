@@ -7,7 +7,7 @@ using schoolapp.application.Common.Security.Request;
 
 namespace Studentapp.webapi.Controllers
 {
-   
+    [Authorize]   
     [Route("api/[controller]")]
     [ApiController]
     public class StudentsController : ControllerBase

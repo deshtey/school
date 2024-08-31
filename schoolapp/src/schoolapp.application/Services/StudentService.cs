@@ -134,13 +134,14 @@ namespace schoolapp.Application.Services
                     _context.Parents.Add(parent);
                     await _context.SaveChangesAsync(cancellationToken);
                     // Insert the relationship in the StudentParents table
-                    var studentParent = new StudentParent
-                    {
-                        StudentId = _student.Id,
-                        ParentId = parent.Id
-                    };
-                    _context.StudentParents.Add(studentParent);
+
                 }
+                var studentParent = new StudentParent
+                {
+                    StudentId = _student.Id,
+                    ParentId = parent.Id
+                };
+                _context.StudentParents.Add(studentParent);
                 await _context.SaveChangesAsync(cancellationToken);
             }
          

@@ -2,8 +2,7 @@
 import { z as zod } from 'zod';
 import { useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, Controller } from 'react-hook-form';
-import { isValidPhoneNumber } from 'react-phone-number-input/input';
+import { useForm, Controller, useFieldArray } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -33,7 +32,8 @@ export const NewStudentSchema = zod.object({
   // imageUrl: schemaHelper.file({
   //   message: { required_error: 'Avatar is required!' },
   // }),
-  name: zod.string().min(1, { message: 'Name is required!' }),
+  firstName: zod.string().min(1, { message: 'First Name is required!' }),
+  lastName: zod.string().min(1, { message: 'Last Name is required!' }),
   regNumber: zod.string().min(1, { message: 'Reg/Adm Number is required!' }),
 
   // email: zod
@@ -62,23 +62,38 @@ export function StudentEditView({ student: currentStudent }) {
 
   const defaultValues = useMemo(
     () => ({
-      status: currentStudent?.status || '',
-      imageUrl: currentStudent?.imageUrl || null,
-      regNumber: currentStudent?.regNumber || null,
-      name: currentStudent?.name || '',
-      email: currentStudent?.email || '',
-      phoneNumber: currentStudent?.phoneNumber || '',
-      country: currentStudent?.country || '',
-      gender: currentStudent?.gender || null,
-      dob: currentStudent?.dob || null,
-      address: currentStudent?.address || '',
+      id: currentStudent?.id ?? null,
+      schoolId: currentStudent?.id ?? 2,
+      studentDto: {
+        status: currentStudent?.studentDto?.status || '',
+        imageUrl: currentStudent?.studentDto?.imageUrl || null,
+        regNumber: currentStudent?.studentDto?.regNumber || null,
+        firstName: currentStudent?.studentDto?.firstName || '',
+        lastName: currentStudent?.studentDto?.lastName || '',
+        otherNames: currentStudent?.studentDto?.otherNames || '',
+        email: currentStudent?.studentDto?.email || '',
+        phoneNumber: currentStudent?.studentDto?.phoneNumber || '',
+        country: currentStudent?.studentDto?.country || '',
+        gender: currentStudent?.studentDto?.gender || null,
+        dob: currentStudent?.studentDto?.dob || null,
+        address: currentStudent?.studentDto?.address || '',
+      },
+      parentsDto: [
+        {
+          id: currentStudent?.parentDto?.id || null,
+          firstName: currentStudent?.parentDto?.firstName || '',
+          lastName: currentStudent?.parentDto?.lastName || '',
+          otherNames: currentStudent?.parentDto?.otherNames || '',
+          phone: currentStudent?.parentDto?.phone || '',
+          email: currentStudent?.parentDto?.email || '',
+        },
+      ],
     }),
     [currentStudent]
   );
 
   const methods = useForm({
     mode: 'onSubmit',
-    resolver: zodResolver(NewStudentSchema),
     defaultValues,
   });
 
@@ -90,14 +105,25 @@ export function StudentEditView({ student: currentStudent }) {
     formState: { isSubmitting },
   } = methods;
 
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'parentsDto',
+  });
   const values = watch();
   const { createStudent } = usePostStudents();
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log(data);
     try {
-      await createStudent({ ...data });
+      let student = {
+        id: currentStudent?.id,
+        schoolId: currentStudent?.schoolId,
+        studentDto: data,
+        parentsDto: [],
+      };
+      //await createStudent({ ...student });
       toast.success(currentStudent ? 'Update success!' : 'Create success!');
-      router.push(paths.admin.student.list);
+      //router.push(paths.admin.student.list);
     } catch (error) {
       console.error(error);
       toast.error('An error occured');
@@ -192,7 +218,7 @@ export function StudentEditView({ student: currentStudent }) {
                 />
               )}
 
-              <Field.Switch
+              {/* <Field.Switch
                 name="isVerified"
                 labelPlacement="start"
                 label={
@@ -206,7 +232,7 @@ export function StudentEditView({ student: currentStudent }) {
                   </>
                 }
                 sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-              />
+              /> */}
 
               {currentStudent && (
                 <Stack justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
@@ -229,11 +255,14 @@ export function StudentEditView({ student: currentStudent }) {
                   sm: 'repeat(2, 1fr)',
                 }}
               >
-                <Field.Text name="name" label="Full name" />
-                <Field.Text name="regNumber" label="Reg/Adm Number" />
+                <Field.Text name="studentDto.firstName" label="First name" />
+                <Field.Text name="studentDto.lastName" label="Last name" />
+                <Field.Text name="studentDto.otherNames" label="Other names" />
 
-                <Field.Text name="email" label="Email address" />
-                <Field.Phone name="phoneNumber" label="Phone number" />
+                <Field.Text name="studentDto.regNumber" label="Reg/Adm Number" />
+
+                <Field.Text name="studentDto.email" label="Email address" />
+                <Field.Phone name="studentDto.phoneNumber" label="Phone number" />
 
                 {/* <Field.CountrySelect
                   fullWidth
@@ -242,12 +271,53 @@ export function StudentEditView({ student: currentStudent }) {
                   placeholder="Choose a country"
                 /> */}
 
-                <Field.Text name="city" label="City" />
-                <Field.Text name="address" label="Address" />
-                <Field.Text name="zipCode" label="Zip/code" />
-                <Field.DatePicker name="dob" label="Date of birth" />
+                <Field.Text name="studentDto.city" label="City" />
+                <Field.Text name="studentDto.address" label="Address" />
+                <Field.Text name="studentDto.zipCode" label="Zip/code" />
+                <Field.DatePicker name="studentDto.dob" label="Date of birth" />
               </Box>
+              <Box>
+                <h2 className="text-xl font-bold">Parents Information</h2>
+                {fields.map((field, index) => (
+                  <Box
+                    key={field.index}
+                    rowGap={3}
+                    columnGap={2}
+                    display="grid"
+                    gridTemplateColumns={{
+                      xs: 'repeat(1, 1fr)',
+                      sm: 'repeat(2, 1fr)',
+                    }}
+                  >
+                    <Field.Text name={`parentsDto.${index}.firstName`} placeholder="First Name" />
+                    <Field.Text name={`parentsDto.${index}.lastName`} placeholder="Last Name" />
 
+                    {/* <Select name={`parentsDto.${index}.gender`}>
+                        <option value={0}>Male</option>
+                        <option value={1}>Female</option>
+                      </Select> */}
+                    <Field.Text name={`parentsDto.${index}.phone`} placeholder="Phone" />
+                    <Field.Text
+                      name={`parentsDto.${index}.email`}
+                      type="email"
+                      placeholder="Email"
+                    />
+                    {index > 0 && (
+                      <Button type="button" onClick={() => remove(index)} variant="destructive">
+                        Remove Parent
+                      </Button>
+                    )}
+                  </Box>
+                ))}
+                <Button
+                  type="button"
+                  onClick={() =>
+                    append({ id: null, firstName: '', lastName: '', phone: '', email: '' })
+                  }
+                >
+                  Add Parent
+                </Button>
+              </Box>
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                   {!currentStudent ? 'Create student' : 'Save changes'}
