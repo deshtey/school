@@ -13,9 +13,15 @@ class ParentEntityConfiguration
         //parentConfiguration
         //    .OwnsOne(o => o.ParentAddress);
 
-        parentConfiguration.Property(s => s.Name)
-            .HasColumnName("name")
-            .HasMaxLength(20);
+        parentConfiguration.Property(s => s.FirstName)
+            .HasColumnName("first_name")
+            .HasMaxLength(100);
+        parentConfiguration.Property(s => s.LastName)
+    .HasColumnName("last_name")
+    .HasMaxLength(100);
+        parentConfiguration.Property(s => s.OtherNames)
+    .HasColumnName("other_names")
+    .HasMaxLength(100);
 
         parentConfiguration.Property(s => s.Email)
          .HasColumnName("email")

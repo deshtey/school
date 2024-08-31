@@ -11,9 +11,15 @@ class SupportStaffEntityConfiguration
     {
         supportStaffConfiguration.ToTable("supportstaffs");
 
-        supportStaffConfiguration.Property(s => s.Name)
-            .HasColumnName("name")
-            .HasMaxLength(20);
+        supportStaffConfiguration.Property(s => s.FirstName)
+            .HasColumnName("first_name")
+            .HasMaxLength(100);
+        supportStaffConfiguration.Property(s => s.LastName)
+    .HasColumnName("last_name")
+    .HasMaxLength(100);
+        supportStaffConfiguration.Property(s => s.OtherNames)
+    .HasColumnName("other_names")
+    .HasMaxLength(100);
 
         supportStaffConfiguration.Property(s => s.Email)
          .HasColumnName("email")

@@ -21,15 +21,15 @@ namespace Studentapp.webapi.Controllers
             _StudentService = StudentService;
         }
         // GET: api/<StudentsController
-        [HttpGet]
+        [HttpGet("{schoolId}")]
         public async Task<IEnumerable<StudentParentDto>> Get(int schoolId)
         {
             return await _StudentService.GetStudents(schoolId);
         }
 
         // GET api/<StudentsController>/5
-        [HttpGet("{id}")]
-        public async Task<StudentParentDto> Get(int id, int schoolId)
+        [HttpGet("{schoolId}/{id}")]
+        public async Task<StudentParentDto> Get(int schoolId, int id)
         {
             return await _StudentService.GetStudent(id, schoolId);
         }

@@ -4,7 +4,6 @@ namespace schoolapp.Domain.Entities.People
 {
     public class Parent : Person
     {
-        public string? NationalId { get; set; }
         public int SchoolId { get; set; }
         public int StudentId { get; set; }
         public List<Student> Students { get; set; } = [];

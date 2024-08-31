@@ -7,11 +7,6 @@ namespace schoolapp.Domain.Entities.People
     {
         public string RegNumber { get; set; }
         public int? ClassRoomId { get; set; }
-        public string? Street { get; set; }
-        public string? City { get; set; }
-        public string? Country { get; set; }
-        public string? Region { get; set; }
-        public string? PrimaryPhone { get; set; }
         public ClassRoom StudentClass { get; set; }
         public List<Parent> Parents { get; set; } = [];
         public List<StudentParent> StudentParents { get; set; } = [];

@@ -16,43 +16,10 @@ namespace schoolapp.Application.Services
             _context = context;
             _logger = logger;
         }
-
-        public async Task<StudentParentDto?> GetStudent(int id, int schoolId)
-        {
-
-            var student = await _context.Students
-                .Where(s => s.Id == id)
-                .Select(s => new StudentParentDto
-                {
-                    Id = s.Id,
-                    SchoolId = s.SchoolId,
-                    StudentDto =
-                    {
-                        Status = s.Status,
-                        Name = s.Name,
-                        DOB = s.DOB,
-                        ClassroomId = s.ClassRoomId,
-                        Email = s.Email,
-                        Gender = s.Gender,
-                        Phone = s.Phone,
-                        RegNumber = s.RegNumber ,
-                        StudentClass=s.StudentClass.ClassroomName
-                    },
-                    ParentsDto = new List<ParentDto>
-                    {
-                        new ParentDto {  }
-                    }
-                }).FirstOrDefaultAsync();
-
-            return student == null ? new StudentParentDto() : student;
-        }
-
         public async Task<IEnumerable<StudentParentDto>?> GetStudents(int schoolId)
         {
             try
             {
-
-
                 var students = await _context.Students
                .Where(s => s.SchoolId == schoolId)
                .Select(s => new StudentParentDto
@@ -62,21 +29,21 @@ namespace schoolapp.Application.Services
                    StudentDto = new StudentDto
                    {
                        Status = s.Status,
-                       Name = s.Name,
+                       FirstName = s.GetFullName(),
                        DOB = s.DOB,
                        Email = s.Email,
                        Gender = s.Gender,
                        Phone = s.Phone,
                        RegNumber = s.RegNumber
                    },
-                       ParentsDto = s.Parents.Select(p => new ParentDto
-                       {
-                           Id=p.Id,
-                            Name = p.Name,
-                            Email = p.Email,
-                            Phone = p.Phone,
-                       }).ToList()
-                   
+                   ParentsDto = s.Parents.Select(p => new ParentDto
+                   {
+                       Id = p.Id,
+                       FullName = p.GetFullName(),
+                       Email = p.Email,
+                       Phone = p.Phone,
+                   }).ToList()
+
                })
                .ToListAsync();
                 return students;
@@ -89,6 +56,39 @@ namespace schoolapp.Application.Services
             }
         }
 
+        public async Task<StudentParentDto?> GetStudent(int id, int schoolId)
+        {
+
+            var student = await _context.Students
+                .Where(s => s.Id == id && s.SchoolId == schoolId)
+                .Select(s => new StudentParentDto
+                {
+                    Id = s.Id,
+                    SchoolId = s.SchoolId,
+                    StudentDto = new StudentDto
+                    {
+                        Status = s.Status,
+                        FullName = s.GetFullName(),
+                        DOB = s.DOB,
+                        ClassroomId = s.ClassRoomId,
+                        Email = s.Email,
+                        Gender = s.Gender,
+                        Phone = s.Phone,
+                        RegNumber = s.RegNumber ,
+                        StudentClass=s.StudentClass.ClassroomName
+                    },
+                    ParentsDto = s.Parents.Select(p => new ParentDto
+                    {
+                        Id = p.Id,
+                        FullName = p.GetFullName(),
+                        Email = p.Email,
+                        Phone = p.Phone,
+                    }).ToList()
+                }).FirstOrDefaultAsync();
+
+            return student?? null;
+        }
+
         public async Task<Student?> PostStudent(StudentParentDto studentparentDto, CancellationToken cancellationToken)
         {
             if (_context.Students == null)
@@ -99,9 +99,10 @@ namespace schoolapp.Application.Services
             Student _student = new()
             {
                 Active = true,
-                Id = studentparentDto.Id,
                 SchoolId = schoolId,
-                Name = studentparentDto.StudentDto.Name,
+                FirstName = studentparentDto.StudentDto.FirstName,
+                LastName = studentparentDto.StudentDto.LastName,
+                OtherNames = studentparentDto.StudentDto.OtherName,
                 Email = studentparentDto.StudentDto.Email,
                 ClassRoomId = studentparentDto.StudentDto.ClassroomId??null,
                 Gender = studentparentDto.StudentDto.Gender,
@@ -125,7 +126,9 @@ namespace schoolapp.Application.Services
                         Email = _parent.Email,
                         Gender = _parent.Gender,
                         Phone = _parent.Phone,
-                        Name = _parent.Name,
+                        FirstName = _parent.FirstName,
+                        LastName = _parent.LastName,
+                        OtherNames = _parent.OtherName,
                         SchoolId = schoolId,
                     };
                     _context.Parents.Add(parent);

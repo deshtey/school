@@ -11,9 +11,15 @@ class TeacherEntityConfiguration
     {
         teacherConfiguration.ToTable("teachers");
 
-        teacherConfiguration.Property(s => s.Name)
-            .HasColumnName("name")
-            .HasMaxLength(20);
+        teacherConfiguration.Property(s => s.FirstName)
+            .HasColumnName("first_name")
+            .HasMaxLength(100);
+        teacherConfiguration.Property(s => s.LastName)
+    .HasColumnName("last_name")
+    .HasMaxLength(100);
+        teacherConfiguration.Property(s => s.OtherNames)
+    .HasColumnName("other_names")
+    .HasMaxLength(100);
 
         teacherConfiguration.Property(s => s.Email)
          .HasColumnName("email")

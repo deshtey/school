@@ -6,7 +6,7 @@ public class CategoryValidator : AbstractValidator<Student>
 {
     public CategoryValidator()
     {
-        RuleFor(p => p.Name)
+        RuleFor(p => p.LastName)
             .MaximumLength(200)
             .NotEmpty();
     }

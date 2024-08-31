@@ -12,7 +12,10 @@ namespace schoolapp.Application.DTOs
         public int SchoolId { get; set; }
         public DateTime? DOB { get; set; }
         public string? Image { get; set; }
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? OtherName { get; set; }
+        public string? FullName { get; set; }
         public Gender? Gender { get; set; }
         public string? Status { get; set; }
         public string? Phone { get; set; }

@@ -27,7 +27,7 @@ namespace schoolapp.Application.Services
                 .Include(t=>t.Departments)
                 .Select(t=>new TeacherDto
                 {
-                    Name = t.Name,
+                    FullName = t.GetFullName(),
                     Email = t.Email,
                     Gender = t.Gender,
                     Phone   = t.Phone,
@@ -52,7 +52,10 @@ namespace schoolapp.Application.Services
                 .Include(t => t.Departments)
                 .Select(t => new TeacherDto
                 {
-                    Name = t.Name,
+                    FullName = t.GetFullName(),
+                    FirstName = t.FirstName,
+                    LastName = t.LastName,
+                    OtherName = t.OtherNames,
                     Email = t.Email,
                     Gender = t.Gender,
                     Phone = t.Phone,
@@ -108,7 +111,9 @@ namespace schoolapp.Application.Services
             var newTeacher = new Teacher
             {
                 SchoolId   = teacher.SchoolId,
-                Name = teacher.Name,
+                FirstName = teacher.FirstName,
+                LastName = teacher.LastName,
+                OtherNames = teacher.OtherName,
                 DOB = teacher.DOB,
                 Active = true,
                 Email   = teacher.Email,

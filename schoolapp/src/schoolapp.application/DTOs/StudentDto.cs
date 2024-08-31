@@ -15,7 +15,10 @@ namespace schoolapp.Application.DTOs
         public string RegNumber { get; set; }
         public int? ClassroomId { get; set; }
         public string? StudentClass { get; set; }
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string? OtherName { get; set; }
+        public string? FullName { get; set; }
         public Gender? Gender { get; set; }
         public DateTime? DOB { get; set; }
         public string? Status { get; set; }
@@ -26,7 +29,10 @@ namespace schoolapp.Application.DTOs
     public class ParentDto
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? OtherName { get; set; }
+        public string? FullName { get; set; }
         public Gender? Gender { get; set; }
         public string? Status { get; set; }
         public string? Phone { get; set; }
