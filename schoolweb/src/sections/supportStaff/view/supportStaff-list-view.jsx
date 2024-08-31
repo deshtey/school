@@ -41,10 +41,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { SchoolTableRow } from '../school-table-row';
-import { SchoolTableToolbar } from '../school-table-toolbar';
-import { SchoolTableFiltersResult } from '../school-table-filters-result';
-import { useGetSchools } from 'src/actions/school';
+import { SupportStaffTableRow } from '../supportStaff-table-row';
+import { SupportStaffTableToolbar } from '../supportStaff-table-toolbar';
+import { SupportStaffTableFiltersResult } from '../supportStaff-table-filters-result';
+import { useGetSupportStaffs } from 'src/actions/supportStaff';
 import { RouterLink } from 'src/routes/components';
 
 // ----------------------------------------------------------------------
@@ -56,8 +56,8 @@ const STATUS_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  // { id: 'schoolNumber', label: 'Id', width: 88 },
-  { id: 'name', label: 'SchoolName' },
+  // { id: 'supportStaffNumber', label: 'Id', width: 88 },
+  { id: 'name', label: 'SupportStaffName' },
   { id: 'createdAt', label: 'Created', width: 140 },
   { id: 'location', label: 'Location', width: 140 },
   { id: 'phone', label: 'Phone', width: 140 },
@@ -67,15 +67,20 @@ const TABLE_HEAD = [
 
 // ----------------------------------------------------------------------
 
-export function SchoolListView() {
-  const table = useTable({ defaultSchoolBy: 'schoolNumber' });
-  const { schools, schoolsEmpty, schoolsError, schoolsLoading, schoolsValidating } =
-    useGetSchools();
+export function SupportStaffListView() {
+  const table = useTable({ defaultSupportStaffBy: 'supportStaffNumber' });
+  const {
+    supportStaffs,
+    supportStaffsEmpty,
+    supportStaffsError,
+    supportStaffsLoading,
+    supportStaffsValidating,
+  } = useGetSupportStaffs();
   const router = useRouter();
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(schools);
+  const [tableData, setTableData] = useState(supportStaffs);
 
   const filters = useSetState({
     name: '',
@@ -87,8 +92,8 @@ export function SchoolListView() {
   const dateError = fIsAfter(filters.state.startDate, filters.state.endDate);
 
   const dataFiltered = applyFilter({
-    inputData: schools,
-    comparator: getComparator(table.school, table.schoolBy),
+    inputData: supportStaffs,
+    comparator: getComparator(table.supportStaff, table.supportStaffBy),
     filters: filters.state,
     dateError,
   });
@@ -130,7 +135,7 @@ export function SchoolListView() {
 
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.admin.school.details(id));
+      router.push(paths.admin.supportStaff.details(id));
     },
     [router]
   );
@@ -150,17 +155,17 @@ export function SchoolListView() {
           heading="List"
           links={[
             { name: 'Admin', href: paths.admin.root },
-            { name: 'School', href: paths.admin.school.root },
+            { name: 'SupportStaff', href: paths.admin.supportStaff.root },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.admin.school.new}
+              href={paths.admin.supportStaff.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New school
+              New supportStaff
             </Button>
           }
           sx={{ mb: { xs: 3, md: 5 } }}
@@ -203,14 +208,14 @@ export function SchoolListView() {
             ))}
           </Tabs>
 
-          <SchoolTableToolbar
+          <SupportStaffTableToolbar
             filters={filters}
             onResetPage={table.onResetPage}
             dateError={dateError}
           />
 
           {canReset && (
-            <SchoolTableFiltersResult
+            <SupportStaffTableFiltersResult
               filters={filters}
               totalResults={dataFiltered.length}
               onResetPage={table.onResetPage}
@@ -241,8 +246,8 @@ export function SchoolListView() {
             <Scrollbar sx={{ minHeight: 444 }}>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
                 <TableHeadCustom
-                  school={table.school}
-                  schoolBy={table.schoolBy}
+                  supportStaff={table.supportStaff}
+                  supportStaffBy={table.supportStaffBy}
                   headLabel={TABLE_HEAD}
                   rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
@@ -262,13 +267,13 @@ export function SchoolListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <SchoolTableRow
-                        key={row.schoolId}
+                      <SupportStaffTableRow
+                        key={row.supportStaffId}
                         row={row}
-                        selected={table.selected.includes(row.schoolId)}
-                        onSelectRow={() => table.onSelectRow(row.schoolId)}
-                        onDeleteRow={() => handleDeleteRow(row.schoolId)}
-                        onViewRow={() => handleViewRow(row.schoolId)}
+                        selected={table.selected.includes(row.supportStaffId)}
+                        onSelectRow={() => table.onSelectRow(row.supportStaffId)}
+                        onDeleteRow={() => handleDeleteRow(row.supportStaffId)}
+                        onViewRow={() => handleViewRow(row.supportStaffId)}
                       />
                     ))}
 
@@ -327,8 +332,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
-    const school = comparator(a[0], b[0]);
-    if (school !== 0) return school;
+    const supportStaff = comparator(a[0], b[0]);
+    if (supportStaff !== 0) return supportStaff;
     return a[1] - b[1];
   });
 
@@ -336,20 +341,22 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   if (name) {
     inputData = inputData.filter(
-      (school) =>
-        school.schoolNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        school.customer.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        school.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (supportStaff) =>
+        supportStaff.supportStaffNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        supportStaff.customer.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        supportStaff.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((school) => school.status === status);
+    inputData = inputData.filter((supportStaff) => supportStaff.status === status);
   }
 
   if (!dateError) {
     if (startDate && endDate) {
-      inputData = inputData.filter((school) => fIsBetween(school.createdAt, startDate, endDate));
+      inputData = inputData.filter((supportStaff) =>
+        fIsBetween(supportStaff.createdAt, startDate, endDate)
+      );
     }
   }
 

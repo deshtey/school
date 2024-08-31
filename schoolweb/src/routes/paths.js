@@ -50,8 +50,7 @@ export const paths = {
       new: `${ROOTS.ADMIN}/school/new`,
       list: `${ROOTS.ADMIN}/school/list`,
       cards: `${ROOTS.ADMIN}/school/cards`,
-      profile: `${ROOTS.ADMIN}/school/profile`,
-      account: `${ROOTS.ADMIN}/school/account`,
+      details: (id) => `${ROOTS.ADMIN}/school/${id}`,
       edit: (id) => `${ROOTS.ADMIN}/school/${id}/edit`,
     },
     student: {

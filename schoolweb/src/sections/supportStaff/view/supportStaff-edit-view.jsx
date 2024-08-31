@@ -29,15 +29,19 @@ import { fData } from 'src/utils/format-number';
 import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
-import { usePostSchool, usePostSchools, usePostSchools1 } from 'src/actions/school';
+import {
+  usePostSupportStaff,
+  usePostSupportStaffs,
+  usePostSupportStaffs1,
+} from 'src/actions/supportStaff';
 
 // ----------------------------------------------------------------------
 
-export const NewSchoolSchema = zod.object({
+export const NewSupportStaffSchema = zod.object({
   // avatarUrl: schemaHelper.file({
   //   message: { required_error: 'Avatar is required!' },
   // }),
-  schoolName: zod.string().min(1, { message: 'Name is required!' }),
+  supportStaffName: zod.string().min(1, { message: 'Name is required!' }),
   email: zod
     .string()
     .min(1, { message: 'Email is required!' })
@@ -55,27 +59,27 @@ export const NewSchoolSchema = zod.object({
 
 // ----------------------------------------------------------------------
 
-export function SchoolEditView({ school: currentSchool }) {
+export function SupportStaffEditView({ supportStaff: currentSupportStaff }) {
   const router = useRouter();
   const defaultValues = useMemo(
     () => ({
-      schoolName: currentSchool?.schoolName || '',
-      status: currentSchool?.status || '',
-      logoUrl: currentSchool?.avatarUrl || '',
-      email: currentSchool?.email || '',
-      phone: currentSchool?.phoneNumber || '',
-      country: currentSchool?.country || 'Kenya',
-      state: currentSchool?.state || '',
-      city: currentSchool?.city || '',
-      address: currentSchool?.address || '',
-      zipCode: currentSchool?.zipCode || '',
+      supportStaffName: currentSupportStaff?.supportStaffName || '',
+      status: currentSupportStaff?.status || '',
+      logoUrl: currentSupportStaff?.avatarUrl || '',
+      email: currentSupportStaff?.email || '',
+      phone: currentSupportStaff?.phoneNumber || '',
+      country: currentSupportStaff?.country || 'Kenya',
+      state: currentSupportStaff?.state || '',
+      city: currentSupportStaff?.city || '',
+      address: currentSupportStaff?.address || '',
+      zipCode: currentSupportStaff?.zipCode || '',
     }),
-    [currentSchool]
+    [currentSupportStaff]
   );
 
   const methods = useForm({
     mode: 'onSubmit',
-    // resolver: zodResolver(NewSchoolSchema),
+    // resolver: zodResolver(NewSupportStaffSchema),
     defaultValues,
   });
 
@@ -90,17 +94,17 @@ export function SchoolEditView({ school: currentSchool }) {
   const values = watch();
 
   useEffect(() => {
-    if (currentSchool) {
+    if (currentSupportStaff) {
       reset(defaultValues);
     }
-  }, [currentSchool, defaultValues, reset]);
-  const { schools, createSchool } = usePostSchools();
+  }, [currentSupportStaff, defaultValues, reset]);
+  const { supportStaffs, createSupportStaff } = usePostSupportStaffs();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await createSchool({ ...data });
-      toast.success(currentSchool ? 'Update success!' : 'Create success!');
-      router.push(paths.admin.school.list);
+      await createSupportStaff({ ...data });
+      toast.success(currentSupportStaff ? 'Update success!' : 'Create success!');
+      router.push(paths.admin.supportStaff.list);
     } catch (error) {
       console.error(error);
       toast.error('An error occured');
@@ -109,11 +113,11 @@ export function SchoolEditView({ school: currentSchool }) {
   return (
     <DashboardContent>
       <CustomBreadcrumbs
-        heading="Create a new school"
+        heading="Create a new supportStaff"
         links={[
           { name: 'Dashboard', href: paths.admin.root },
-          { name: 'School', href: paths.admin.school.root },
-          { name: 'New School' },
+          { name: 'SupportStaff', href: paths.admin.supportStaff.root },
+          { name: 'New SupportStaff' },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
@@ -122,7 +126,7 @@ export function SchoolEditView({ school: currentSchool }) {
         <Grid container spacing={3}>
           <Grid xs={12} md={4}>
             <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-              {currentSchool && (
+              {currentSupportStaff && (
                 <Label
                   color={
                     (values.status === 'active' && 'success') ||
@@ -156,7 +160,7 @@ export function SchoolEditView({ school: currentSchool }) {
                 />
               </Box>
 
-              {/* {currentSchool && (
+              {/* {currentSupportStaff && (
                 <FormControlLabel
                   labelPlacement="start"
                   control={
@@ -202,17 +206,17 @@ export function SchoolEditView({ school: currentSchool }) {
                       Email verified
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Disabling this will automatically send the school a verification email
+                      Disabling this will automatically send the supportStaff a verification email
                     </Typography>
                   </>
                 }
                 sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
               />
 
-              {currentSchool && (
+              {currentSupportStaff && (
                 <Stack justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
                   <Button variant="soft" color="error">
-                    Delete school
+                    Delete supportStaff
                   </Button>
                 </Stack>
               )}
@@ -230,7 +234,7 @@ export function SchoolEditView({ school: currentSchool }) {
                   sm: 'repeat(2, 1fr)',
                 }}
               >
-                <Field.Text name="schoolName" label="School name" />
+                <Field.Text name="supportStaffName" label="SupportStaff name" />
                 <Field.Text name="email" label="Email address" />
                 <Field.Phone name="phone" label="Phone number" />
 
@@ -240,7 +244,7 @@ export function SchoolEditView({ school: currentSchool }) {
                   label="Country"
                   placeholder="Choose a country"
                 />
-                <Field.Text name="homePage" label="School Website Url" />
+                <Field.Text name="homePage" label="SupportStaff Website Url" />
 
                 <Field.Text name="location" label="County/State/region" />
                 <Field.Text name="city" label="City/Town" />
@@ -250,7 +254,7 @@ export function SchoolEditView({ school: currentSchool }) {
 
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentSchool ? 'Create schools' : 'Save changes'}
+                  {!currentSupportStaff ? 'Create supportStaffs' : 'Save changes'}
                 </LoadingButton>
               </Stack>
             </Card>

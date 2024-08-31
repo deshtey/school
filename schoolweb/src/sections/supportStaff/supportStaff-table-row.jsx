@@ -23,7 +23,7 @@ import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export function SchoolTableRow({ row, selected, onViewRow, onSelectRow, onDeleteRow }) {
+export function SupportStaffTableRow({ row, selected, onViewRow, onSelectRow, onDeleteRow }) {
   const confirm = useBoolean();
 
   const collapse = useBoolean();
@@ -42,13 +42,13 @@ export function SchoolTableRow({ row, selected, onViewRow, onSelectRow, onDelete
 
       {/* <TableCell hidden>
         <Link color="inherit" onClick={onViewRow} underline="always" sx={{ cursor: 'pointer' }}>
-          {row.schoolId}
+          {row.supportStaffId}
         </Link>
       </TableCell> */}
 
       <TableCell>
         <Stack spacing={2} direction="row" alignItems="center">
-          <Avatar alt={row.schoolName} src={row.schoolName} />
+          <Avatar alt={row.supportStaffName} src={row.supportStaffName} />
           <Link color="inherit" onClick={onViewRow} underline="always" sx={{ cursor: 'pointer' }}>
             <Stack
               sx={{
@@ -57,7 +57,7 @@ export function SchoolTableRow({ row, selected, onViewRow, onSelectRow, onDelete
                 alignItems: 'flex-start',
               }}
             >
-              <Box component="span">{row.schoolName}</Box>
+              <Box component="span">{row.supportStaffName}</Box>
               <Box component="span" sx={{ color: 'text.disabled' }}>
                 {row.location}
               </Box>

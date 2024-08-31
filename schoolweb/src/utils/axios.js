@@ -63,12 +63,17 @@ export const endpoints = {
 
   school: {
     list: '/api/schools',
-    details: '/api/schools/details',
+    details: '/api/schools',
     search: '/api/product/search',
   },
   student: {
     list: '/api/students',
     details: '/api/students/details',
     search: '/api/student/search',
+  },
+  teacher: {
+    list: '/api/teachers',
+    details: '/api/teachers',
+    search: '/api/teachers/search',
   },
 };

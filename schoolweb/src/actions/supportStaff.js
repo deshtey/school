@@ -13,17 +13,17 @@ const swrOptions = {
 
 // ----------------------------------------------------------------------
 
-export function useGetSchools() {
-  const url = endpoints.school.list;
+export function useGetSupportStaffs() {
+  const url = endpoints.supportStaff.list;
 
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
-      schools: data ?? [],
-      schoolsLoading: isLoading,
-      schoolsError: error,
-      schoolsValidating: isValidating,
-      schoolsEmpty: !isLoading && !data?.length,
+      supportStaffs: data ?? [],
+      supportStaffsLoading: isLoading,
+      supportStaffsError: error,
+      supportStaffsValidating: isValidating,
+      supportStaffsEmpty: !isLoading && !data?.length,
     }),
     [data, error, isLoading, isValidating]
   );
@@ -33,43 +33,43 @@ export function useGetSchools() {
 
 // ----------------------------------------------------------------------
 
-export function useGetSchool(id) {
-  const url = `${endpoints.school.details}/${id}`;
-  // const url = [endpoints.school.details, { params: { id } }];
+export function useGetSupportStaff(id) {
+  const url = `${endpoints.supportStaff.details}/${id}`;
+  // const url = [endpoints.supportStaff.details, { params: { id } }];
 
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
 
   const memoizedValue = useMemo(
     () => ({
-      school: data,
-      schoolLoading: isLoading,
-      schoolError: error,
-      schoolValidating: isValidating,
-      schoolEmpty: !isLoading && !data,
+      supportStaff: data,
+      supportStaffLoading: isLoading,
+      supportStaffError: error,
+      supportStaffValidating: isValidating,
+      supportStaffEmpty: !isLoading && !data,
     }),
-    [data?.school, error, isLoading, isValidating]
+    [data?.supportStaff, error, isLoading, isValidating]
   );
 
   return memoizedValue;
 }
 
-export function usePostSchool(parameters) {
-  const url = endpoints.school.list;
+export function usePostSupportStaff(parameters) {
+  const url = endpoints.supportStaff.list;
 
   const key = `${url}-${JSON.stringify(parameters)}`;
 
-  const { school, error, mutate } = useSWR(key, () => fetcherPost(url, parameters));
+  const { supportStaff, error, mutate } = useSWR(key, () => fetcherPost(url, parameters));
 
   return {
-    school,
+    supportStaff,
     error,
     mutate,
     isLoading: !data && !error,
   };
 }
 
-export function usePostSchools1(params) {
-  const url = endpoints.school.list;
+export function usePostSupportStaffs1(params) {
+  const url = endpoints.supportStaff.list;
 
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -103,45 +103,45 @@ export function usePostSchools1(params) {
 
   return { data, error, isLoading, post };
 }
-export function usePostSchools() {
-  const url = endpoints.school.list;
+export function usePostSupportStaffs() {
+  const url = endpoints.supportStaff.list;
 
   const { data, isLoading, error, isValidating } = useSWR(url, fetcherPost, swrOptions);
 
-  const createSchool = async (schoolData) => {
+  const createSupportStaff = async (supportStaffData) => {
     try {
-      const response = await axiosInstance.post(url, schoolData);
-      // Revalidate the cache to update the list of schools
+      const response = await axiosInstance.post(url, supportStaffData);
+      // Revalidate the cache to update the list of supportStaffs
       mutate(url);
       return response.data;
     } catch (error) {
-      console.error('Error creating school:', error);
+      console.error('Error creating supportStaff:', error);
       throw error;
     }
   };
 
-  const updateSchool = async (schoolId, schoolData) => {
-    const updateUrl = `${url}/${schoolId}`;
+  const updateSupportStaff = async (supportStaffId, supportStaffData) => {
+    const updateUrl = `${url}/${supportStaffId}`;
     try {
-      const response = await axios.put(updateUrl, schoolData);
-      // Revalidate the cache to update the list of schools
+      const response = await axios.put(updateUrl, supportStaffData);
+      // Revalidate the cache to update the list of supportStaffs
       mutate(url);
       return response.data;
     } catch (error) {
-      console.error('Error updating school:', error);
+      console.error('Error updating supportStaff:', error);
       throw error;
     }
   };
 
   const memoizedValue = useMemo(
     () => ({
-      schools: data ?? [],
-      schoolsLoading: isLoading,
-      schoolsError: error,
-      schoolsValidating: isValidating,
-      schoolsEmpty: !isLoading && !data?.length,
-      createSchool,
-      updateSchool,
+      supportStaffs: data ?? [],
+      supportStaffsLoading: isLoading,
+      supportStaffsError: error,
+      supportStaffsValidating: isValidating,
+      supportStaffsEmpty: !isLoading && !data?.length,
+      createSupportStaff,
+      updateSupportStaff,
     }),
     [data, error, isLoading, isValidating]
   );
@@ -150,20 +150,20 @@ export function usePostSchools() {
 }
 // ----------------------------------------------------------------------
 
-export function useGetLatestSchools(title) {
-  const url = title ? [endpoints.school.latest, { params: { title } }] : '';
+export function useGetLatestSupportStaffs(title) {
+  const url = title ? [endpoints.supportStaff.latest, { params: { title } }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
 
   const memoizedValue = useMemo(
     () => ({
-      latestSchools: data?.latestSchools || [],
-      latestSchoolsLoading: isLoading,
-      latestSchoolsError: error,
-      latestSchoolsValidating: isValidating,
-      latestSchoolsEmpty: !isLoading && !data?.latestSchools.length,
+      latestSupportStaffs: data?.latestSupportStaffs || [],
+      latestSupportStaffsLoading: isLoading,
+      latestSupportStaffsError: error,
+      latestSupportStaffsValidating: isValidating,
+      latestSupportStaffsEmpty: !isLoading && !data?.latestSupportStaffs.length,
     }),
-    [data?.latestSchools, error, isLoading, isValidating]
+    [data?.latestSupportStaffs, error, isLoading, isValidating]
   );
 
   return memoizedValue;
@@ -171,8 +171,8 @@ export function useGetLatestSchools(title) {
 
 // ----------------------------------------------------------------------
 
-export function useSearchSchools(query) {
-  const url = query ? [endpoints.school.search, { params: { query } }] : '';
+export function useSearchSupportStaffs(query) {
+  const url = query ? [endpoints.supportStaff.search, { params: { query } }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, {
     ...swrOptions,
