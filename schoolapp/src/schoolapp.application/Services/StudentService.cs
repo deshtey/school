@@ -16,35 +16,54 @@ namespace schoolapp.Application.Services
             _context = context;
             _logger = logger;
         }
-        public async Task<IEnumerable<StudentParentDto>?> GetStudents(int schoolId)
+        public async Task<IEnumerable<StudentDto>?> GetStudents(int schoolId)
         {
             try
             {
                 var students = await _context.Students
                .Where(s => s.SchoolId == schoolId)
-               .Select(s => new StudentParentDto
-               {
-                   Id = s.Id,
-                   SchoolId = s.SchoolId,
-                   StudentDto = new StudentDto
-                   {
-                       Status = s.Status,
-                       FirstName = s.GetFullName(),
-                       DOB = s.DOB,
-                       Email = s.Email,
-                       Gender = s.Gender,
-                       Phone = s.Phone,
-                       RegNumber = s.RegNumber
-                   },
-                   ParentsDto = s.Parents.Select(p => new ParentDto
-                   {
-                       Id = p.Id,
-                       FullName = p.GetFullName(),
-                       Email = p.Email,
-                       Phone = p.Phone,
-                   }).ToList()
+                .Select(s => new StudentDto
+                {
+                    Status = s.Status,
+                    FullName = s.GetFullName(),
+                    FirstName = s.FirstName,
+                    LastName = s.LastName,
+                    OtherName = s.OtherNames,
+                    DOB = s.DOB,
+                    Email = s.Email,
+                    Gender = s.Gender,
+                    Phone = s.Phone,
+                    RegNumber = s.RegNumber
+                })
+               //.Select(s => new StudentParentDto
+               //{
+               //    Id = s.Id,
+               //    SchoolId = s.SchoolId,
+               //    StudentDto = new StudentDto
+               //    {
+               //        Status = s.Status,
+               //        FullName = s.GetFullName(),
+               //        FirstName = s.FirstName,
+               //        LastName = s.LastName,
+               //        OtherName= s.OtherNames,
+               //        DOB = s.DOB,
+               //        Email = s.Email,
+               //        Gender = s.Gender,
+               //        Phone = s.Phone,
+               //        RegNumber = s.RegNumber
+               //    },
+               //    ParentsDto = s.Parents.Select(p => new ParentDto
+               //    {
+               //        Id = p.Id,
+               //        FullName = p.GetFullName(),
+               //        FirstName = s.FirstName,
+               //        LastName = s.LastName,
+               //        OtherName = s.OtherNames,
+               //        Email = p.Email,
+               //        Phone = p.Phone,
+               //    }).ToList()
 
-               })
+               //})
                .ToListAsync();
                 return students;
 
@@ -69,6 +88,9 @@ namespace schoolapp.Application.Services
                     {
                         Status = s.Status,
                         FullName = s.GetFullName(),
+                        FirstName = s.FirstName,
+                        LastName = s.LastName,
+                        OtherName = s.OtherNames,
                         DOB = s.DOB,
                         ClassroomId = s.ClassRoomId,
                         Email = s.Email,
@@ -80,7 +102,10 @@ namespace schoolapp.Application.Services
                     ParentsDto = s.Parents.Select(p => new ParentDto
                     {
                         Id = p.Id,
-                        FullName = p.GetFullName(),
+                        FullName = s.GetFullName(),
+                        FirstName = s.FirstName,
+                        LastName = s.LastName,
+                        OtherName = s.OtherNames,
                         Email = p.Email,
                         Phone = p.Phone,
                     }).ToList()

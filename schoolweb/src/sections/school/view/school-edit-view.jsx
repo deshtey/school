@@ -250,7 +250,7 @@ export function SchoolEditView({ school: currentSchool }) {
 
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentSchool ? 'Create schools' : 'Save changes'}
+                  {!currentSchool ? 'Create school' : 'Save changes'}
                 </LoadingButton>
               </Stack>
             </Card>

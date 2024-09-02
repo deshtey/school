@@ -22,7 +22,7 @@ namespace Studentapp.webapi.Controllers
         }
         // GET: api/<StudentsController
         [HttpGet("{schoolId}")]
-        public async Task<IEnumerable<StudentParentDto>> Get(int schoolId)
+        public async Task<IEnumerable<StudentDto>> Get(int schoolId)
         {
             return await _StudentService.GetStudents(schoolId);
         }

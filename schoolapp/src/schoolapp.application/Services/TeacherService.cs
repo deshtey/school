@@ -27,13 +27,15 @@ namespace schoolapp.Application.Services
                 .Include(t=>t.Departments)
                 .Select(t=>new TeacherDto
                 {
+                    Id = t.Id,
                     FullName = t.GetFullName(),
+                    Salutation = t.Salutation,
+                    ImageUrl = t.Image,
                     Email = t.Email,
                     Gender = t.Gender,
                     Phone   = t.Phone,
                     SchoolId    = t.SchoolId,
                     Status  = t.Status,
-                    TeacherId   = t.TeacherId,
                     RegNo = t.RegNo,
                    // Departments = t.Departments.Select(d=>new DepartmentDto{Id=d.Id,DepartmentName=d.DepartmentName}).ToList(),
                    // ClassRooms = t.ClassRooms.Select(c=>new ClassRoomDto{ClassRoomId=c.ClassRoomId,ClassroomName=c.ClassroomName}).ToList(),
@@ -114,12 +116,13 @@ namespace schoolapp.Application.Services
                 FirstName = teacher.FirstName,
                 LastName = teacher.LastName,
                 OtherNames = teacher.OtherName,
+                Salutation = teacher.Salutation,
                 DOB = teacher.DOB,
                 Active = true,
                 Email   = teacher.Email,
                 Gender = teacher.Gender,    
                 RegNo = teacher.RegNo,
-               Image = teacher.Image,
+               Image = teacher.ImageUrl,
                Phone = teacher.Phone    
 
             };

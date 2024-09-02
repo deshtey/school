@@ -5,8 +5,9 @@ public abstract class Person : BaseAuditableEntity
     public int Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public string? NationalId { get; set; }
     public string? OtherNames { get; set; }
+    public string? NationalId { get; set; }
+    public string? Salutation { get; set; }
     public string? Image { get; set; }
     public Gender? Gender { get; set; }
     public DateTime? DOB { get; set; }
@@ -25,7 +26,14 @@ public abstract class Person : BaseAuditableEntity
     {
         if (string.IsNullOrEmpty(fullName))
         {
-            fullName = $"{FirstName} {OtherNames} {LastName}".Trim();
+            if (string.IsNullOrEmpty(OtherNames))
+            {
+                fullName = $"{FirstName} {LastName}".Trim();
+            }
+            else
+            {
+                fullName = $"{FirstName} {OtherNames} {LastName}".Trim();
+            }
         }
         return fullName;
     }

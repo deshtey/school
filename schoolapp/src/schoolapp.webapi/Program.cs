@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using schoolapp.Infrastructure;
 using schoolapp.Infrastructure.Security.AuthorizationFilters;
+using schoolapp.Infrastructure.Security.CurrentUserProvider;
 using Serilog;
 using Serilog.Events;
 
@@ -20,10 +21,11 @@ Log.Logger = new LoggerConfiguration()
     "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}{NewLine}",
     rollingInterval: RollingInterval.Day)
     .CreateLogger();
-builder.Services.AddInfrastructureServices(builder.Configuration);
 
-builder.Services.AddApplicationServices();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers(options =>
 {
@@ -55,7 +57,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-app.MapDefaultEndpoints();
+//app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())

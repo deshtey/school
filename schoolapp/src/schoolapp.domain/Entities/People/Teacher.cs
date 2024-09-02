@@ -6,7 +6,7 @@ namespace schoolapp.Domain.Entities.People
 {
     public class Teacher : Person
     {
-        public int TeacherId { get; set; }
+        public string TeacherId { get; set; }
         public string? RegNo { get; set; }
         public int SchoolId { get; set; }
         public School School { get; set; }

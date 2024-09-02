@@ -54,9 +54,9 @@ const STATUS_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'studentNumber', label: 'Id', width: 88 },
-  { id: 'name', label: 'StudentName' },
-  { id: 'createdAt', label: 'Created', width: 140 },
+  { id: 'fullName', label: 'Student Name' },
+  { id: 'regNumber', label: 'Reg Number', width: 88 },
+  { id: 'status', label: 'Status', width: 140 },
   { id: 'location', label: 'Location', width: 140 },
   { id: 'phone', label: 'Phone', width: 140 },
   { id: 'city', label: 'City', width: 110 },
@@ -336,9 +336,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (student) =>
-        student.studentNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        student.customer.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        student.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        student.regNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        student.fullName.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        student.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 

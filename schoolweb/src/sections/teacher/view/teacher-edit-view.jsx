@@ -30,6 +30,7 @@ import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
 import { usePostTeacher, usePostTeachers, usePostTeachers1 } from 'src/actions/teacher';
+import { Divider, MenuItem } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -59,12 +60,16 @@ export function TeacherEditView({ teacher: currentTeacher }) {
   const router = useRouter();
   const defaultValues = useMemo(
     () => ({
-      teacherName: currentTeacher?.teacherName || '',
+      schoolId: currentTeacher?.schoolId || 2,
+      salutation: currentTeacher?.salutation || '',
+      firstName: currentTeacher?.firstName || '',
+      lastName: currentTeacher?.lastName || '',
+      otherName: currentTeacher?.otherName || '',
       status: currentTeacher?.status || '',
       logoUrl: currentTeacher?.avatarUrl || '',
       email: currentTeacher?.email || '',
       phone: currentTeacher?.phoneNumber || '',
-      country: currentTeacher?.country || 'Kenya',
+      dob: currentTeacher?.dob || null,
       state: currentTeacher?.state || '',
       city: currentTeacher?.city || '',
       address: currentTeacher?.address || '',
@@ -230,27 +235,27 @@ export function TeacherEditView({ teacher: currentTeacher }) {
                   sm: 'repeat(2, 1fr)',
                 }}
               >
-                <Field.Text name="teacherName" label="Teacher name" />
+                <Field.Select name="salutation" label="Salutation">
+                  <MenuItem value="">None</MenuItem>
+                  <Divider sx={{ borderStyle: 'dashed' }} />
+                  <MenuItem value="Mr">Mr</MenuItem>
+                  <MenuItem value="Ms">Ms</MenuItem>
+                  <MenuItem value="Mrs">Mrs</MenuItem>
+                  <MenuItem value="Tr">Tr</MenuItem>
+                  <MenuItem value="Dr">Dr</MenuItem>
+                  <MenuItem value="Prof">Prof</MenuItem>
+                </Field.Select>
+                <Field.Text name="firstName" label="First name" />
+                <Field.Text name="lastName" label="Last name" />
+                <Field.Text name="otherName" label="Other name" />
                 <Field.Text name="email" label="Email address" />
                 <Field.Phone name="phone" label="Phone number" />
-
-                <Field.CountrySelect
-                  fullWidth
-                  name="country"
-                  label="Country"
-                  placeholder="Choose a country"
-                />
-                <Field.Text name="homePage" label="Teacher Website Url" />
-
-                <Field.Text name="location" label="County/State/region" />
-                <Field.Text name="city" label="City/Town" />
-                <Field.Text name="address" label="Address" />
-                <Field.Text name="zipCode" label="Zip/code" />
+                <Field.DatePicker name="dob" label="Date of birth" />
               </Box>
 
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentTeacher ? 'Create teachers' : 'Save changes'}
+                  {!currentTeacher ? 'Create teacher' : 'Save changes'}
                 </LoadingButton>
               </Stack>
             </Card>

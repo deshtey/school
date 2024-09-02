@@ -34,7 +34,6 @@ public static class DependencyInjection
             //var postgresConnectionString = "Host=localhost;Database=schooldb;Username=postgres;Password=Working24;";
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
 
-            services.AddScoped<IUserService, UserService>();
 
             services.AddSingleton<IUserProvider, UserProvider>();
             services.AddScoped<ISaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();

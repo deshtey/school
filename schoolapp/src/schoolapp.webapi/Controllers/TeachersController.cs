@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using schoolapp.Application.Contracts;
 using schoolapp.Application.DTOs;
-using schoolapp.Domain.Entities.People;
+using schoolapp.application.Common.Security.Request;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace schoolapp.webapi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TeachersController : ControllerBase

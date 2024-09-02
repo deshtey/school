@@ -42,31 +42,18 @@ export function StudentTableRow({ row, selected, onEditRow, onSelectRow, onDelet
 
             <Stack sx={{ typography: 'body2', flex: '1 1 auto', alignItems: 'flex-start' }}>
               <Link color="inherit" onClick={onEditRow} sx={{ cursor: 'pointer' }}>
-                {row.name}
+                {row.regNumber}
               </Link>
               <Box component="span" sx={{ color: 'text.disabled' }}>
-                {row.email}
+                {row.fullName}
               </Box>
             </Stack>
           </Stack>
         </TableCell>
-
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.phoneNumber}</TableCell>
-
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.company}</TableCell>
-
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.role}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.regNumber}</TableCell>
 
         <TableCell>
-          <Label
-            variant="soft"
-            color={
-              (row.status === 'active' && 'success') ||
-              (row.status === 'pending' && 'warning') ||
-              (row.status === 'banned' && 'error') ||
-              'default'
-            }
-          >
+          <Label variant="soft" color={(row.status && 'success') || 'warning'}>
             {row.status}
           </Label>
         </TableCell>
