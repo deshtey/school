@@ -1,6 +1,7 @@
 ﻿#define UseSqlServer
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -69,6 +70,9 @@ public static class DependencyInjection
             services.AddTransient<IIdentityService, IdentityService>();
 
             services.AddScoped<IRoleService, RoleService>();
+
+            //services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+            //services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
 
             services.AddSingleton<IDateTimeService, DateTimeService>();
             var serviceProvider = services.BuildServiceProvider();

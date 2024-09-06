@@ -48,7 +48,7 @@ export function TeacherTableRow({ row, selected, onViewRow, onSelectRow, onDelet
 
       <TableCell>
         <Stack spacing={2} direction="row" alignItems="center">
-          <Avatar alt={row.teacherName} src={row.teacherName} />
+          <Avatar alt={row.fullName} src={row.imageUrl} />
           <Link color="inherit" onClick={onViewRow} underline="always" sx={{ cursor: 'pointer' }}>
             <Stack
               sx={{
@@ -57,16 +57,16 @@ export function TeacherTableRow({ row, selected, onViewRow, onSelectRow, onDelet
                 alignItems: 'flex-start',
               }}
             >
-              <Box component="span">{row.teacherName}</Box>
+              <Box component="span">{row.fullName}</Box>
               <Box component="span" sx={{ color: 'text.disabled' }}>
-                {row.location}
+                {row.salutation}
               </Box>
             </Stack>
           </Link>
         </Stack>
       </TableCell>
 
-      <TableCell>
+      {/* <TableCell>
         <ListItemText
           primary={fDate(row.createdAt)}
           secondary={fTime(row.createdAt)}
@@ -77,8 +77,8 @@ export function TeacherTableRow({ row, selected, onViewRow, onSelectRow, onDelet
             typography: 'caption',
           }}
         />
-      </TableCell>
-      <TableCell>{row.location}</TableCell>
+      </TableCell> */}
+      <TableCell>{row.email}</TableCell>
       <TableCell>{row.phone}</TableCell>
       <TableCell>{row.city}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>

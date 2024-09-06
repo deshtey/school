@@ -1,6 +1,6 @@
 namespace schoolapp.application.Common.Security.Request;
 
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public class AuthorizeAttribute : Attribute
 {
     public string? Permissions { get; set; }

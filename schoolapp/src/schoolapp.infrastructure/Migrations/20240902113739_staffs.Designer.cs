@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using schoolapp.Infrastructure.Data;
@@ -11,9 +12,11 @@ using schoolapp.Infrastructure.Data;
 namespace schoolapp.Infrastructure.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    partial class SchoolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240902113739_staffs")]
+    partial class staffs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -351,9 +354,9 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id")
-                        .HasName("pk_permissions");
+                        .HasName("pk_permission");
 
-                    b.ToTable("permissions", "school");
+                    b.ToTable("permission", "school");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.Other.RolePermission", b =>
@@ -713,6 +716,7 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("school_id");
 
                     b.Property<string>("StaffNumber")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("staff_number");
 
@@ -1162,7 +1166,7 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_role_permissions_permissions_permission_id");
+                        .HasConstraintName("fk_role_permissions_permission_permission_id");
 
                     b.Navigation("Permission");
                 });

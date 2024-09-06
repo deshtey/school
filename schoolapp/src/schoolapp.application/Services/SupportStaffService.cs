@@ -32,7 +32,7 @@ namespace schoolapp.Application.Services
                     Phone = t.Phone,
                     SchoolId = t.SchoolId,
                     Status = t.Status,
-                    StaffId = t.StaffId                
+                    StaffNumber = t.StaffNumber                
                     // Departments = t.Departments.Select(d=>new DepartmentDto{Id=d.Id,DepartmentName=d.DepartmentName}).ToList(),
                     // ClassRooms = t.ClassRooms.Select(c=>new ClassRoomDto{ClassRoomId=c.ClassRoomId,ClassroomName=c.ClassroomName}).ToList(),
 
@@ -46,17 +46,23 @@ namespace schoolapp.Application.Services
             {
                 return null;
             }
-            var SupportStaff = await _context.SupportStaffs.Where(t => t.StaffId == id)
+            var SupportStaff = await _context.SupportStaffs.Where(t => t.Id == id)
                 .Include(t => t.Departments)
                 .Select(t => new SupportStaffDto
                 {
                     FullName = t.GetFullName(),
+                    FirstName = t.FirstName,
+                    LastName = t.LastName,
+                    OtherName = t.OtherNames,
+                    DOB = t.DOB,
+                    Image = t.Image,
+                    Salutation = t.Salutation,
                     Email = t.Email,
                     Gender = t.Gender,
                     Phone = t.Phone,
                     SchoolId = t.SchoolId,
                     Status = t.Status,
-                    StaffId = t.StaffId,
+                    StaffNumber  = t.StaffNumber, 
                     Departments = t.Departments.Select(d => new DepartmentDto { Id = d.Id, DepartmentName = d.DepartmentName }).ToList(),
 
                 })
@@ -68,7 +74,7 @@ namespace schoolapp.Application.Services
 
         public async Task<SupportStaff?> PutSupportStaff(int id, SupportStaffDto SupportStaff, CancellationToken cancellationToken)
         {
-            if (SupportStaff == null || id != SupportStaff.StaffId)
+            if (SupportStaff == null || id != SupportStaff.Id)
             {
                 return null;
             }
@@ -107,6 +113,7 @@ namespace schoolapp.Application.Services
                 FirstName = SupportStaff.FirstName,
                 LastName = SupportStaff.LastName,
                 OtherNames = SupportStaff.OtherName,
+                Salutation = SupportStaff.Salutation,               
                 DOB = SupportStaff.DOB,
                 Active = true,
                 Email = SupportStaff.Email,

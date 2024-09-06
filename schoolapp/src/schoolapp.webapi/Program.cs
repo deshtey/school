@@ -1,4 +1,5 @@
 using lovedmemory.web.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using schoolapp.Infrastructure;
@@ -23,14 +24,12 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+builder.Services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<AuthorizationFilter>();
-});
 
 // Swagger/OpenAPI setup
 builder.Services.Configure<IdentityOptions>(options =>

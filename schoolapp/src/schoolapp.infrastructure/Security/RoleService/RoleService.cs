@@ -43,11 +43,11 @@ public class RoleService : IRoleService
         if (user == null)
             return false;
 
-        var role = await _roleManager.FindByNameAsync(roleName);
+        var role = await _roleManager.FindByIdAsync(roleName);
         if (role == null)
             return false;
 
-        var result = await _userManager.AddToRoleAsync(user, roleName);
+        var result = await _userManager.AddToRoleAsync(user, role.Name);
         return result.Succeeded;
     }
 

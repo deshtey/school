@@ -24,6 +24,7 @@ public class SchoolDbContext : IdentityDbContext<AppUser>, ISchoolDbContext
     public DbSet<SupportStaff> SupportStaffs { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Department> Departments { get; set; }
+    public DbSet<Permission> Permissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
 
     //public DbSet<ExamType> ExamTypes { get; set; }

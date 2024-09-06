@@ -77,8 +77,8 @@ export const endpoints = {
     search: '/api/teachers/search',
   },
   supportStaff: {
-    list: '/api/supportStaff',
-    details: '/api/supportStaff',
-    search: '/api/supportStaff/search',
+    list: '/api/staff',
+    details: '/api/staff',
+    search: '/api/staff/search',
   },
 };

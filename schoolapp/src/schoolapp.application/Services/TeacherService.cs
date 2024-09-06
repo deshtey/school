@@ -50,20 +50,23 @@ namespace schoolapp.Application.Services
             {
                 return null;
             }
-            var teacher = await _context.Teachers.Where(t=>t.TeacherId==id)
+            var teacher = await _context.Teachers.Where(t=>t.Id==id)
                 .Include(t => t.Departments)
                 .Select(t => new TeacherDto
                 {
+                    Id = t.Id,
                     FullName = t.GetFullName(),
                     FirstName = t.FirstName,
                     LastName = t.LastName,
                     OtherName = t.OtherNames,
+                    DOB = t.DOB,
+                    ImageUrl = t.Image,
+                    Salutation  = t.Salutation,
                     Email = t.Email,
                     Gender = t.Gender,
                     Phone = t.Phone,
                     SchoolId = t.SchoolId,
                     Status = t.Status,
-                    TeacherId = t.TeacherId,
                     RegNo = t.RegNo,
                     Departments = t.Departments.Select(d => new DepartmentDto { Id = d.Id, DepartmentName = d.DepartmentName }).ToList(),
                     ClassRooms = t.ClassRooms.Select(c => new ClassRoomDto { ClassRoomId = c.ClassRoomId, ClassroomName = c.ClassroomName }).ToList(),
@@ -77,7 +80,7 @@ namespace schoolapp.Application.Services
 
         public async Task<Teacher?> PutTeacher(int id, TeacherDto teacher, CancellationToken cancellationToken)
         {
-            if (teacher == null || id != teacher.TeacherId)
+            if (teacher == null || id != teacher.Id)
             {
                 return null;
             }
@@ -123,7 +126,7 @@ namespace schoolapp.Application.Services
                 Gender = teacher.Gender,    
                 RegNo = teacher.RegNo,
                Image = teacher.ImageUrl,
-               Phone = teacher.Phone    
+               Phone = teacher.Phone   
 
             };
             _context.Teachers.Add(newTeacher);

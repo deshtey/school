@@ -57,11 +57,12 @@ const STATUS_OPTIONS = [
 
 const TABLE_HEAD = [
   // { id: 'teacherNumber', label: 'Id', width: 88 },
-  { id: 'name', label: 'TeacherName' },
-  { id: 'createdAt', label: 'Created', width: 140 },
-  { id: 'location', label: 'Location', width: 140 },
+  { id: 'fullName', label: 'Name' },
+  { id: 'email', label: 'Email', width: 140 },
   { id: 'phone', label: 'Phone', width: 140 },
   { id: 'city', label: 'City', width: 110 },
+  { id: 'createdAt', label: 'Created', width: 140 },
+
   { id: '', width: 88 },
 ];
 
