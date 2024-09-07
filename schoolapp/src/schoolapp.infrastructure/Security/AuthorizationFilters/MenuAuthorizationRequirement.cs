@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using schoolapp.Infrastructure.Data;
 using schoolapp.Infrastructure.Identity;
 
 public class PermissionRequirement : IAuthorizationRequirement
 {
+
     public string Permission { get; }
 
     public PermissionRequirement(string permission)
@@ -18,19 +20,22 @@ public class PermissionRequirement : IAuthorizationRequirement
 
 public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
 {
-    
+    private readonly IMemoryCache _cache;
+
     private readonly IServiceProvider _serviceProvider;
     private readonly IHttpContextAccessor _httpContext;
     //private readonly IUserProvider _userProvider;
 
     public PermissionHandler(IServiceProvider serviceProvider, IHttpContextAccessor httpContext
+, IMemoryCache cache
         //,IUserProvider userProvider
         )
     {
 
         _serviceProvider = serviceProvider;
         _httpContext = httpContext;
-       //_userProvider = userProvider;
+        _cache = cache;
+        //_userProvider = userProvider;
     }
 
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
