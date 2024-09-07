@@ -2,33 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using schoolapp.Application.Common.Interfaces;
-using schoolapp.Domain.Entities;
-using schoolapp.Domain.Entities.ClassGrades;
-using schoolapp.Domain.Entities.Departments;
 using schoolapp.Domain.Entities.Other;
-using schoolapp.Domain.Entities.People;
 using schoolapp.Infrastructure.Identity;
 using schoolapp.Infrastructure.Persistence.Configurations;
 namespace schoolapp.Infrastructure.Data;
 
-public class SchoolDbContext : IdentityDbContext<AppUser>, ISchoolDbContext
+public class AuthDbContext : IdentityDbContext<AppUser>, IAuthDbContext
 {
     private IDbContextTransaction _currentTransaction;
-    public SchoolDbContext(DbContextOptions<SchoolDbContext> options) : base(options) { }
-    public DbSet<School> Schools { get; set; }
-    public DbSet<ClassRoom> ClassRooms { get; set; }
-    public DbSet<Student> Students { get; set; }
-    public DbSet<StudentParent> StudentParents { get; set; }
-    public DbSet<Parent> Parents { get; set; }
-    public DbSet<SupportStaff> SupportStaffs { get; set; }
-    public DbSet<Teacher> Teachers { get; set; }
-    public DbSet<Department> Departments { get; set; }
+    public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options) { }
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
-
-    //public DbSet<ExamType> ExamTypes { get; set; }
-    //public DbSet<ClassRoomStudent> ClassRoomStudents { get; set; }
-    public DbSet<Grade> Grades { get; set; }
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
         if (_currentTransaction != null)

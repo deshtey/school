@@ -150,6 +150,7 @@ public static class DependencyInjection
     private static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.Section));
+        services.AddScoped<IAuthService, AuthService>();
 
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
         services

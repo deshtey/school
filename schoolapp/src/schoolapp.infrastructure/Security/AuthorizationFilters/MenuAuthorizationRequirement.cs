@@ -5,8 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using schoolapp.Infrastructure.Data;
 using schoolapp.Infrastructure.Identity;
-using schoolapp.Infrastructure.Security.CurrentUserProvider;
-using System.Threading.Tasks;
 
 public class PermissionRequirement : IAuthorizationRequirement
 {
@@ -23,16 +21,16 @@ public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
     
     private readonly IServiceProvider _serviceProvider;
     private readonly IHttpContextAccessor _httpContext;
-    private readonly IUserProvider _userProvider;
+    //private readonly IUserProvider _userProvider;
 
     public PermissionHandler(IServiceProvider serviceProvider, IHttpContextAccessor httpContext
-        ,IUserProvider userProvider
+        //,IUserProvider userProvider
         )
     {
 
         _serviceProvider = serviceProvider;
         _httpContext = httpContext;
-       _userProvider = userProvider;
+       //_userProvider = userProvider;
     }
 
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
@@ -41,8 +39,7 @@ public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
         var dbContext = scope.ServiceProvider.GetRequiredService<SchoolDbContext>();
         var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
-        var fdf = _userProvider.GetCurrentUser();
-        var uu = _httpContext.HttpContext.User;
+
         if (!context.User.Identity.IsAuthenticated)
         {
             return;
@@ -54,8 +51,14 @@ public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
         }
 
         var userRoles = await _userManager.GetRolesAsync(user);
-        var hasAccess = await dbContext.RolePermissions
-            .AnyAsync(rmp => userRoles.Contains(rmp.RoleId) && rmp.Permission.Name == requirement.Permission);
+
+        var hasAccess = await dbContext.Roles
+            .Where(r => userRoles.Contains(r.Name))
+            .Join(dbContext.RolePermissions,
+                role => role.Id,
+                rp => rp.RoleId,
+                (role, rp) => rp.Permission.Name)
+            .AnyAsync(permissionName => permissionName == requirement.Permission);
 
         if (hasAccess)
         {
