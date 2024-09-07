@@ -1,4 +1,5 @@
 using lovedmemory.web.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
@@ -23,14 +24,14 @@ Log.Logger = new LoggerConfiguration()
     rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
-builder.Services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddInfrastructureServices(builder.Configuration);
+//builder.Services.AddHttpContextAccessor();
+//builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+//builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+//builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplicationServices();
 
-
+builder.Services.AddControllers();
 // Swagger/OpenAPI setup
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -50,20 +51,15 @@ builder.Services.AddSwaggerGen(opt =>
         In = ParameterLocation.Header,
         Scheme = "bearer"
     });
-    opt.OperationFilter<AuthenticationRequirementsOperationFilter>();
+   // opt.OperationFilter<AuthenticationRequirementsOperationFilter>();
 });
+builder.Services.AddAuthentication();
+
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-//app.MapDefaultEndpoints();
-
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
+app.UseInfrastructure();
 app.UseCors(options => options
        .AllowAnyHeader()
        .AllowAnyMethod()
@@ -77,6 +73,7 @@ app.UseSwaggerUI();
 // Middleware Configuration
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

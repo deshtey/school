@@ -12,31 +12,31 @@ namespace schoolapp.webapi.Controllers
     [ApiController]
     public class PermissionsController : ControllerBase
     {
-        private readonly IPermissionService _roleService;
+        private readonly IPermissionService _permissionService;
 
-        public PermissionsController(IPermissionService roleService)
+        public PermissionsController(IPermissionService permissionService)
         {
-            _roleService = roleService;
+            _permissionService = permissionService;
         }
 
         // GET: api/<PermissionsController>
         [HttpGet]
         public IEnumerable<Permission> GetPermissions()
         {
-            return _roleService.GetPermissions();
+            return _permissionService.GetPermissions();
         }
 
         // GET api/<PermissionsController>/5
         [HttpGet("{userId}")]
         public async Task<IEnumerable<string>> GetUserPermissions(string userId)
         {
-            return await _roleService.GetUserPermissionsAsync(userId);
+            return await _permissionService.GetUserPermissionsAsync(userId);
         }
         // POST api/<PermissionsController>/CreatePermission
         [HttpPost("CreatePermission")]
-        public async Task<bool> CreatePermission([FromBody] string role)
+        public async Task<bool> CreatePermission([FromBody] string permission)
         {
-            return await _roleService.CreatePermissionAsync(role);
+            return await _permissionService.CreatePermissionAsync(permission);
         }
 
     

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using schoolapp.Infrastructure.Data;
 using schoolapp.Infrastructure.Identity;
+using schoolapp.Infrastructure.Security.CurrentUserProvider;
 using System.Threading.Tasks;
 
 public class PermissionRequirement : IAuthorizationRequirement
@@ -20,10 +22,17 @@ public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
 {
     
     private readonly IServiceProvider _serviceProvider;
-    public PermissionHandler( IServiceProvider serviceProvider)
+    private readonly IHttpContextAccessor _httpContext;
+    private readonly IUserProvider _userProvider;
+
+    public PermissionHandler(IServiceProvider serviceProvider, IHttpContextAccessor httpContext
+        ,IUserProvider userProvider
+        )
     {
 
         _serviceProvider = serviceProvider;
+        _httpContext = httpContext;
+       _userProvider = userProvider;
     }
 
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
@@ -32,6 +41,8 @@ public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
         var dbContext = scope.ServiceProvider.GetRequiredService<SchoolDbContext>();
         var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
+        var fdf = _userProvider.GetCurrentUser();
+        var uu = _httpContext.HttpContext.User;
         if (!context.User.Identity.IsAuthenticated)
         {
             return;
@@ -50,15 +61,7 @@ public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
         {
             context.Succeed(requirement);
         }
-        //var role = _userManager.GetRolesAsync(context.User).Result.FirstOrDefault();
-        //var userId = int.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-        //var hasPermission = await _context.UserPermissions
-        //    .AnyAsync(up => up.UserId == userId && up.Permission.Name == requirement.Permission);
 
-        //if (hasPermission)
-        //{
-        //    context.Succeed(requirement);
-        //}
     }
 }
 

@@ -25,6 +25,14 @@ namespace schoolapp.webapi.Controllers
         [Authorize(Policy = "get_schools")]
         public async Task<IEnumerable<SchoolDto>> Get()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Console.WriteLine("User is authenticated");
+            }
+            else
+            {
+                Console.WriteLine("User is not authenticated");
+            }
             return await _schoolService.GetSchools();
         }
 
