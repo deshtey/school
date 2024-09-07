@@ -1,11 +1,6 @@
-using lovedmemory.web.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using schoolapp.Infrastructure;
-using schoolapp.Infrastructure.Security.AuthorizationFilters;
-using schoolapp.Infrastructure.Security.CurrentUserProvider;
 using Serilog;
 using Serilog.Events;
 
@@ -32,6 +27,13 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers();
+//options =>
+//{
+//    var policy = new AuthorizationPolicyBuilder()
+//        .RequireAuthenticatedUser()
+//        .Build();
+//    options.Filters.Add(new AuthorizeFilter(policy));
+//});
 // Swagger/OpenAPI setup
 builder.Services.Configure<IdentityOptions>(options =>
 {

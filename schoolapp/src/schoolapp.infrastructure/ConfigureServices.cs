@@ -7,21 +7,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using schoolapp.application.Common.Interfaces;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Infrastructure.Data;
 using schoolapp.Infrastructure.Identity;
-using schoolapp.Infrastructure.Persistence.Interceptors;
 using schoolapp.Infrastructure.Security.Auth;
 using schoolapp.Infrastructure.Security.CurrentUserProvider;
 using schoolapp.Infrastructure.Security.RoleService;
 using schoolapp.Infrastructure.Security.TokenGenerator;
 using schoolapp.Infrastructure.Security.TokenValidation;
 using schoolapp.Infrastructure.Services;
-using System.Net.Mail;
-using System.Net;
-using System;
+
 
 namespace schoolapp.Infrastructure;
 
@@ -134,8 +130,21 @@ public static class DependencyInjection
 #endif
         });
 
+        services.AddDbContext<AuthDbContext>((sp, options) =>
+        {
+            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+
+#if !UseSqlServer
+                options.UseSqlServer(connectionString);
+
+#else
+            options.UseNpgsql(postgresConnectionString).UseSnakeCaseNamingConvention();
+
+#endif
+        });
         services.AddScoped<ISchoolDbContext, SchoolDbContext>();
 
+        services.AddScoped<IAuthDbContext, AuthDbContext>();
         return services;
     }
 
@@ -144,6 +153,7 @@ public static class DependencyInjection
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
         services.AddScoped<IAuthorizationHandler, PermissionHandler>();
         services.AddSingleton<IUserProvider, UserProvider>();
+        services.AddScoped<IRoleService, RoleService>();
 
         return services;
     }

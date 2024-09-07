@@ -97,11 +97,11 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<bool?> PostPermission(Permission permission, CancellationToken cancellationToken)
+        public async Task<bool> PostPermission(Permission permission, CancellationToken cancellationToken)
         {
             if (_context.Permissions == null)
             {
-                return null;
+                return false;
             }
             _context.Permissions.Add(permission);
             await _context.SaveChangesAsync(cancellationToken);

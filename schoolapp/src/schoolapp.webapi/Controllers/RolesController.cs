@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using schoolapp.application.DTOs;
 using schoolapp.Infrastructure.Security.RoleService;
@@ -7,8 +8,10 @@ using schoolapp.Infrastructure.Security.RoleService;
 
 namespace schoolapp.webapi.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
+
     public class RolesController : ControllerBase
     {
         private readonly IRoleService _roleService;
@@ -20,6 +23,7 @@ namespace schoolapp.webapi.Controllers
 
         // GET: api/<RolesController>
         [HttpGet]
+
         public IEnumerable<IdentityRole> GetRoles()
         {
             return _roleService.GetRoles();

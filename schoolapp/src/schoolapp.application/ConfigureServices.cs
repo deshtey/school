@@ -16,6 +16,7 @@ public static class ConfigureServices
         services.AddScoped<IDepartmentService, DepartmentService>();
         services.AddScoped<IGradeClassRoomService, GradeClassRoomService>();
         services.AddScoped<ISupportStaffService, SupportStaffService>();
+        services.AddScoped<IPermissionService, PermissionService>();
 
         return services;
     }

@@ -40,6 +40,7 @@ public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
 
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
     {
+
         using var scope = _serviceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<SchoolDbContext>();
         var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();

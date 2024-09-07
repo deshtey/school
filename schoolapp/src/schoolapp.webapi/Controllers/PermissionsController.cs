@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using schoolapp.application.DTOs;
+using schoolapp.Application.Contracts;
 using schoolapp.Domain.Entities.Other;
-using schoolapp.Infrastructure.Security.PermissionService;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,6 +11,7 @@ namespace schoolapp.webapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class PermissionsController : ControllerBase
     {
         private readonly IPermissionService _permissionService;
@@ -21,22 +23,17 @@ namespace schoolapp.webapi.Controllers
 
         // GET: api/<PermissionsController>
         [HttpGet]
-        public IEnumerable<Permission> GetPermissions()
+        public async Task<IEnumerable<Permission>> GetPermissions()
         {
-            return _permissionService.GetPermissions();
+            return await _permissionService.GetAllPermissions();
         }
 
-        // GET api/<PermissionsController>/5
-        [HttpGet("{userId}")]
-        public async Task<IEnumerable<string>> GetUserPermissions(string userId)
-        {
-            return await _permissionService.GetUserPermissionsAsync(userId);
-        }
+      
         // POST api/<PermissionsController>/CreatePermission
         [HttpPost("CreatePermission")]
-        public async Task<bool> CreatePermission([FromBody] string permission)
+        public async Task<bool> CreatePermission([FromBody] Permission permission)
         {
-            return await _permissionService.CreatePermissionAsync(permission);
+            return await _permissionService.PostPermission(permission,cancellationToken:default);
         }
 
     
