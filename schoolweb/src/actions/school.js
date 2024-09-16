@@ -68,51 +68,17 @@ export function usePostSchool(parameters) {
   };
 }
 
-export function usePostSchools() {
+export const createSchool = async (schoolData) => {
   const url = endpoints.school.list;
+  try {
+    const response = await axiosInstance.post(url, schoolData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating school:', error);
+    throw error;
+  }
+};
 
-  const { data, isLoading, error, isValidating } = useSWR(url, fetcherPost, swrOptions);
-
-  const createSchool = async (schoolData) => {
-    try {
-      const response = await axiosInstance.post(url, schoolData);
-      // Revalidate the cache to update the list of schools
-      //mutate(url);
-      return response.data;
-    } catch (error) {
-      console.error('Error creating school:', error);
-      throw error;
-    }
-  };
-
-  const updateSchool = async (schoolId, schoolData) => {
-    const updateUrl = `${url}/${schoolId}`;
-    try {
-      const response = await axios.put(updateUrl, schoolData);
-      // Revalidate the cache to update the list of schools
-      // mutate(url);
-      return response.data;
-    } catch (error) {
-      console.error('Error updating school:', error);
-      throw error;
-    }
-  };
-
-  const memoizedValue = useMemo(
-    () => ({
-      schools: data ?? [],
-      schoolsLoading: isLoading,
-      schoolsError: error,
-      schoolsValidating: isValidating,
-      schoolsEmpty: !isLoading && !data?.length,
-      createSchool,
-      updateSchool,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-
-  return memoizedValue;
-}
 // ----------------------------------------------------------------------
 
 export function useGetLatestSchools(title) {

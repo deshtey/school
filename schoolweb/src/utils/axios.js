@@ -38,6 +38,7 @@ export const fetcherPost = async (url, method = 'GET', data = null) => {
       method,
       url,
       headers: {
+        accept: 'text/plain',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
@@ -84,6 +85,7 @@ export const endpoints = {
   roles: {
     list: '/api/roles',
     details: '/api/roles',
+    create: '/api/roles/createrole',
   },
   permissions: {
     list: '/api/permissions',

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using schoolapp.Infrastructure.Identity;
+using System.Threading;
 
 namespace schoolapp.Infrastructure.Security.RoleService;
 
@@ -7,10 +10,12 @@ public class RoleService : IRoleService
 {
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly UserManager<AppUser> _userManager;
-    public RoleService(RoleManager<IdentityRole> roleManager, UserManager<AppUser> userManager)
+    private readonly ILogger<RoleService> _logger;
+    public RoleService(RoleManager<IdentityRole> roleManager, UserManager<AppUser> userManager, ILogger<RoleService> logger)
     {
         _roleManager = roleManager;
         _userManager = userManager;
+        _logger = logger;
     }
 
     // Methods to manage roles
@@ -49,6 +54,32 @@ public class RoleService : IRoleService
 
         var result = await _userManager.AddToRoleAsync(user, role.Name);
         return result.Succeeded;
+    }
+    public RoleService(RoleManager<IdentityRole> roleManager, UserManager<AppUser> userManager)
+    {
+        _roleManager = roleManager;
+        _userManager = userManager;
+    } 
+    public async Task<bool> DeleteRole(string roleId)
+    {
+        try
+        {
+
+ 
+        var _role = await _roleManager.FindByIdAsync(roleId);
+        if (_role == null)
+        {
+            return true;
+        }
+        await _roleManager.DeleteAsync(_role);   
+
+        return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
+        }
     }
 
 }

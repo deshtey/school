@@ -52,3 +52,29 @@ export function useGetRole(id) {
 
   return memoizedValue;
 }
+
+export const createRole = async (roleData) => {
+  const url = endpoints.roles.create;
+  try {
+    const response = await axiosInstance.post(url, roleData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error creating role:', error);
+    throw error;
+  }
+};
+
+export const deleteRole = async (roleId) => {
+  const url = endpoints.roles.list;
+  try {
+    const response = await axiosInstance.delete(`${url}/${roleId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating role:', error);
+    throw error;
+  }
+};

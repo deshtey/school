@@ -10,5 +10,6 @@ namespace schoolapp.Application.DTOs
         public string RoleName { get; set; }
         public string PermissionName { get; set; }
         public string PermissionDesc { get; set; }
+
     }
 }

@@ -28,52 +28,31 @@ import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
 import { usePostRoless } from 'src/actions/roles';
+import { createRole } from 'src/actions/roles';
+import { CardHeader, Divider } from '@mui/material';
+import { name } from 'dayjs/locale/en';
 
 // ----------------------------------------------------------------------
 
 export const NewRolesSchema = zod.object({
-  logoUrl: zod.string(),
-  rolesName: zod.string().min(1, { message: 'Name is required!' }),
-  email: zod
-    .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
-  phone: schemaHelper.phoneNumber({ isValidPhoneNumber }),
-  country: schemaHelper.objectOrNull({
-    message: { required_error: 'Country is required!' },
-  }),
-  address: zod.string().min(1, { message: 'Address is required!' }),
-  location: zod.string().min(1, { message: 'State is required!' }),
-  city: zod.string().min(1, { message: 'City is required!' }),
-  homepage: zod.string().min(1, { message: 'Role is required!' }),
-  zipCode: zod.string().min(1, { message: 'Zip code is required!' }),
+  name: zod.string().min(1, { message: 'Name is required!' }),
 });
 
 // ----------------------------------------------------------------------
 
-export function RolesEditView({ roles: currentRoles }) {
+export function RolesEditView({ roles: currentRole }) {
   const router = useRouter();
   const defaultValues = useMemo(
     () => ({
-      rolesName: currentRoles?.rolesName || '',
-      status: currentRoles?.status || '',
-      logoUrl: currentRoles?.logo || '',
-      email: currentRoles?.email || '',
-      phone: currentRoles?.phone || '',
-      country: currentRoles?.country || 'Kenya',
-      state: currentRoles?.state || '',
-      city: currentRoles?.city || '',
-      address: currentRoles?.address || '',
-      zipCode: currentRoles?.zipCode || '',
-      homePage: currentRoles?.homePage || '',
-      location: currentRoles?.location || '',
+      name: currentRole?.name || '',
+      id: currentRole?.id || '',
     }),
-    [currentRoles]
+    [currentRole]
   );
 
   const methods = useForm({
     mode: 'onSubmit',
-    // resolver: zodResolver(NewRolesSchema),
+    resolver: zodResolver(NewRolesSchema),
     defaultValues,
   });
 
@@ -88,23 +67,23 @@ export function RolesEditView({ roles: currentRoles }) {
   const values = watch();
 
   useEffect(() => {
-    if (currentRoles) {
+    if (currentRole) {
       reset(defaultValues);
     }
-  }, [currentRoles, defaultValues, reset]);
-  const { createRoles } = usePostRoless();
+  }, [currentRole, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const res = await createRoles({ ...data });
+      const res = await createRole(data.name);
       console.log(res);
-      toast.success(currentRoles ? 'Update success!' : 'Create success!');
+      toast.success(currentRole ? 'Update success!' : 'Create success!');
       router.push(paths.admin.roles.list);
     } catch (error) {
       console.error(error);
       toast.error('An error occured');
     }
   });
+
   return (
     <DashboardContent>
       <CustomBreadcrumbs
@@ -118,143 +97,23 @@ export function RolesEditView({ roles: currentRoles }) {
       />
 
       <Form methods={methods} onSubmit={onSubmit}>
-        <Grid container spacing={3}>
-          <Grid xs={12} md={4}>
-            <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-              {currentRoles && (
-                <Label
-                  color={
-                    (values.status === 'active' && 'success') ||
-                    (values.status === 'banned' && 'error') ||
-                    'warning'
-                  }
-                  sx={{ position: 'absolute', top: 24, right: 24 }}
-                >
-                  {values.status}
-                </Label>
-              )}
-              <Box sx={{ mb: 5 }}>
-                <Field.UploadAvatar
-                  name="logoUrl"
-                  maxSize={3145728}
-                  helperText={
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        mt: 3,
-                        mx: 'auto',
-                        display: 'block',
-                        textAlign: 'center',
-                        color: 'text.disabled',
-                      }}
-                    >
-                      Allowed *.jpeg, *.jpg, *.png, *.gif
-                      <br /> max size of {fData(3145728)}
-                    </Typography>
-                  }
-                />
-              </Box>
-
-              {/* {currentRoles && (
-                <FormControlLabel
-                  labelPlacement="start"
-                  control={
-                    <Controller
-                      name="status"
-                      control={control}
-                      render={({ field }) => (
-                        <Switch
-                          {...field}
-                          checked={field.value !== 'active'}
-                          onChange={(event) =>
-                            field.onChange(event.target.checked ? 'banned' : 'active')
-                          }
-                        />
-                      )}
-                    />
-                  }
-                  label={
-                    <>
-                      <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                        Banned
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Apply disable account
-                      </Typography>
-                    </>
-                  }
-                  sx={{
-                    mx: 0,
-                    mb: 3,
-                    width: 1,
-                    justifyContent: 'space-between',
-                  }}
-                />
-              )} */}
-
-              <Field.Switch
-                name="isVerified"
-                labelPlacement="start"
-                label={
-                  <>
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Email verified
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Disabling this will automatically send the roles a verification email
-                    </Typography>
-                  </>
-                }
-                sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-              />
-
-              {currentRoles && (
-                <Stack justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
-                  <Button variant="soft" color="error">
-                    Delete roles
-                  </Button>
-                </Stack>
-              )}
-            </Card>
-          </Grid>
-
-          <Grid xs={12} md={8}>
-            <Card sx={{ p: 3 }}>
-              <Box
-                rowGap={3}
-                columnGap={2}
-                display="grid"
-                gridTemplateColumns={{
-                  xs: 'repeat(1, 1fr)',
-                  sm: 'repeat(2, 1fr)',
-                }}
-              >
-                <Field.Text name="rolesName" label="Roles name" />
-                <Field.Text name="email" label="Email address" />
-                <Field.Phone name="phone" label="Phone number" />
-
-                <Field.CountrySelect
-                  fullWidth
-                  name="country"
-                  label="Country"
-                  placeholder="Choose a country"
-                />
-                <Field.Text name="homePage" label="Roles Website Url" />
-
-                <Field.Text name="location" label="County/State/region" />
-                <Field.Text name="city" label="City/Town" />
-                <Field.Text name="address" label="Address" />
-                <Field.Text name="zipCode" label="Zip/code" />
-              </Box>
-
-              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentRoles ? 'Create roles' : 'Save changes'}
-                </LoadingButton>
+        <Stack spacing={{ xs: 3, md: 5 }} sx={{ mx: 'auto', maxWidth: { xs: 720, xl: 880 } }}>
+          <Card>
+            <CardHeader title="Details" sx={{ mb: 3 }} />
+            <Divider />
+            <Stack spacing={3} sx={{ p: 3 }}>
+              <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Name</Typography>
+                <Field.Text name="name" placeholder="Role Name" />
               </Stack>
-            </Card>
-          </Grid>
-        </Grid>
+            </Stack>
+            <Stack alignItems="flex-end" sx={{ mt: 3, mr: 3 }}>
+              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                {!currentRole ? 'Create role' : 'Save changes'}
+              </LoadingButton>
+            </Stack>
+          </Card>
+        </Stack>
       </Form>
     </DashboardContent>
   );

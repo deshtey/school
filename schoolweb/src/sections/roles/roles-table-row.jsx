@@ -10,6 +10,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { Iconify } from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
+import { IconButton } from '@mui/material';
+import { deleteRole } from 'src/actions/roles';
 
 // ----------------------------------------------------------------------
 
@@ -32,6 +34,11 @@ export function RolesTableRow({ row, selected, onViewRow, onSelectRow, onDeleteR
           {row.name}
         </Link>
       </TableCell>
+      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+          <Iconify icon="eva:more-vertical-fill" />
+        </IconButton>
+      </TableCell>
     </TableRow>
   );
 
@@ -47,7 +54,7 @@ export function RolesTableRow({ row, selected, onViewRow, onSelectRow, onDeleteR
         <MenuList>
           <MenuItem
             onClick={() => {
-              confirm.onTrue();
+              deleteRole(row.id);
               popover.onClose();
             }}
             sx={{ color: 'error.main' }}

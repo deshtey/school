@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using schoolapp.application.DTOs;
 using schoolapp.Infrastructure.Security.RoleService;
+using System.Threading;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -57,8 +58,9 @@ namespace schoolapp.webapi.Controllers
 
         // DELETE api/<RolesController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task DeleteAsync(string id)
         {
+            await _roleService.DeleteRole(id);
         }
     }
 }
