@@ -1,17 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Domain.Entities;
 using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.Departments;
-using schoolapp.Domain.Entities.Other;
 using schoolapp.Domain.Entities.People;
-using schoolapp.Infrastructure.Identity;
 using schoolapp.Infrastructure.Persistence.Configurations;
 namespace schoolapp.Infrastructure.Data;
 
-public class SchoolDbContext : IdentityDbContext<AppUser>, ISchoolDbContext
+public class SchoolDbContext : DbContext, ISchoolDbContext
 {
     private IDbContextTransaction _currentTransaction;
     public SchoolDbContext(DbContextOptions<SchoolDbContext> options) : base(options) { }
@@ -23,8 +20,8 @@ public class SchoolDbContext : IdentityDbContext<AppUser>, ISchoolDbContext
     public DbSet<SupportStaff> SupportStaffs { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Department> Departments { get; set; }
-    public DbSet<Permission> Permissions { get; set; }
-    public DbSet<RolePermission> RolePermissions { get; set; }
+    //public DbSet<Permission> Permissions { get; set; }
+    //public DbSet<RolePermission> RolePermissions { get; set; }
 
     //public DbSet<ExamType> ExamTypes { get; set; }
     //public DbSet<ClassRoomStudent> ClassRoomStudents { get; set; }

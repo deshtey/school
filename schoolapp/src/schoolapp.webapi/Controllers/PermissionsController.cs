@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using schoolapp.application.DTOs;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
 using schoolapp.Domain.Entities.Other;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -31,7 +32,7 @@ namespace schoolapp.webapi.Controllers
       
         // POST api/<PermissionsController>/CreatePermission
         [HttpPost("CreatePermission")]
-        public async Task<bool> CreatePermission([FromBody] Permission permission)
+        public async Task<bool> CreatePermission([FromBody] PermissionDto permission)
         {
             return await _permissionService.PostPermission(permission,cancellationToken:default);
         }

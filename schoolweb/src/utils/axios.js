@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { STORAGE_KEY } from 'src/auth/context/jwt';
 
 import { CONFIG } from 'src/config-global';
 
@@ -7,10 +8,10 @@ import { CONFIG } from 'src/config-global';
 
 const axiosInstance = axios.create({ baseURL: CONFIG.site.serverUrl });
 
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong!')
-);
+// axiosInstance.interceptors.response.use(
+//   (response) => response,
+//   (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong!')
+// );
 
 export default axiosInstance;
 
@@ -29,10 +30,9 @@ export const fetcher = async (args) => {
   }
 };
 export const fetcherPost = async (url, method = 'GET', data = null) => {
-  const user = useSelector((state) => state.auth);
-  console.log(user);
-  const token = localStorage.getItem('authToken');
-
+  console.log(method);
+  const token = sessionStorage.getItem(STORAGE_KEY);
+  console.log(token);
   try {
     const config = {
       method,
@@ -47,8 +47,8 @@ export const fetcherPost = async (url, method = 'GET', data = null) => {
       config.data = data;
     }
 
-    const response = await axios(config);
-    return response.data;
+    const res = await axiosInstance(config);
+    res.status(200).json(result.data);
   } catch (error) {
     throw error;
   }

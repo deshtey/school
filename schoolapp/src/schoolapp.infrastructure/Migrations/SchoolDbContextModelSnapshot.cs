@@ -830,7 +830,6 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("street");
 
                     b.Property<string>("TeacherId")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("teacher_id");
 

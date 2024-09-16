@@ -16,11 +16,9 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
-import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { useRouter } from 'src/routes/hooks';
 
@@ -29,7 +27,7 @@ import { fData } from 'src/utils/format-number';
 import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
-import { usePostSchool, usePostSchools, usePostSchools1 } from 'src/actions/school';
+import { usePostSchools } from 'src/actions/school';
 
 // ----------------------------------------------------------------------
 
@@ -56,6 +54,7 @@ export const NewSchoolSchema = zod.object({
 // ----------------------------------------------------------------------
 
 export function SchoolEditView({ school: currentSchool }) {
+  console.log(currentSchool);
   const router = useRouter();
   const defaultValues = useMemo(
     () => ({
@@ -98,7 +97,8 @@ export function SchoolEditView({ school: currentSchool }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await createSchool({ ...data });
+      const res = await createSchool({ ...data });
+      console.log(res);
       toast.success(currentSchool ? 'Update success!' : 'Create success!');
       router.push(paths.admin.school.list);
     } catch (error) {

@@ -1,4 +1,3 @@
-import { _students } from 'src/_mock/_student';
 import { CONFIG } from 'src/config-global';
 
 import { StudentDetailsView } from 'src/sections/student/view';
@@ -23,14 +22,3 @@ export default function Page({ params }) {
 const dynamic = CONFIG.isStaticExport ? 'auto' : 'force-dynamic';
 
 export { dynamic };
-
-/**
- * [2] Static exports
- * https://nextjs.org/docs/app/building-your-application/deploying/static-exports
- */
-export async function generateStaticParams() {
-  if (CONFIG.isStaticExport) {
-    return _students.map((student) => ({ id: student.id }));
-  }
-  return [];
-}

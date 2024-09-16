@@ -11,6 +11,7 @@ using schoolapp.application.Common.Interfaces;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Infrastructure.Data;
 using schoolapp.Infrastructure.Identity;
+using schoolapp.Infrastructure.Persistence.Interceptors;
 using schoolapp.Infrastructure.Security.Auth;
 using schoolapp.Infrastructure.Security.CurrentUserProvider;
 using schoolapp.Infrastructure.Security.RoleService;
@@ -116,6 +117,7 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         string postgresConnectionString = configuration.GetConnectionString("PostgresConnection");
+        services.AddScoped<ISaveChangesInterceptor, AuditableEntitySaveChangesInterceptor>();
 
         services.AddDbContext<SchoolDbContext>((sp, options) =>
         {
@@ -166,7 +168,7 @@ public static class DependencyInjection
         services
             .AddDefaultIdentity<AppUser>()
             .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<SchoolDbContext>();
+            .AddEntityFrameworkStores<AuthDbContext>();
         services
             .ConfigureOptions<JwtBearerTokenValidationConfiguration>()
             .AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)

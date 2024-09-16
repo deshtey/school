@@ -1,1 +1,1 @@
-export * from './teacher-list-view';
+export * from './grade-list-view';

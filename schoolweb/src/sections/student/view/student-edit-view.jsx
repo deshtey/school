@@ -24,7 +24,8 @@ import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
-import { usePostStudents } from 'src/actions/student';
+import { usePostData, usePostStudents } from 'src/actions/student';
+import { endpoints, fetcherPost } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -110,20 +111,13 @@ export function StudentEditView({ student: currentStudent }) {
     name: 'parentsDto',
   });
   const values = watch();
-  const { createStudent } = usePostStudents();
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
     try {
-      let student = {
-        id: currentStudent?.id,
-        schoolId: currentStudent?.schoolId,
-        studentDto: data,
-        parentsDto: [],
-      };
-      //await createStudent({ ...student });
+      const url = endpoints.student.list;
+      await fetcherPost(url, 'POST', data);
       toast.success(currentStudent ? 'Update success!' : 'Create success!');
-      //router.push(paths.admin.student.list);
+      router.push(paths.admin.student.list);
     } catch (error) {
       console.error(error);
       toast.error('An error occured');

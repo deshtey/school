@@ -65,87 +65,22 @@ export function usePostStudent(parameters) {
     isLoading: !data && !error,
   };
 }
-
-export function usePostStudents1(params) {
+export const usePostData = () => {
   const url = endpoints.student.list;
 
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const { trigger, data, error, isValidating } = useSWR(url, fetcherPost, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    shouldRetryOnError: false,
+  });
 
-  const { mutate } = useSWR(
-    [url, params],
-    async () => {
-      setIsLoading(true);
-      try {
-        const result = await fetcherPost(url, 'POST', params);
-        setData(result);
-        setIsLoading(false);
-        return result;
-      } catch (err) {
-        setError(err);
-        setIsLoading(false);
-        throw err;
-      }
-    },
-    { revalidateOnFocus: false, revalidateOnReconnect: false }
-  );
-
-  const post = async () => {
-    try {
-      await mutate();
-    } catch (err) {
-      console.error('Error posting data:', err);
-    }
+  return {
+    postData: trigger,
+    data,
+    isLoading: isValidating,
+    error,
   };
-
-  return { data, error, isLoading, post };
-}
-export function usePostStudents() {
-  const url = endpoints.student.list;
-
-  const { data, isLoading, error, isValidating } = useSWR(url, fetcherPost, swrOptions);
-
-  const createStudent = async (studentData) => {
-    try {
-      const response = await axiosInstance.post(url, studentData);
-      // Revalidate the cache to update the list of students
-      mutate(url);
-      return response.data;
-    } catch (error) {
-      console.error('Error creating student:', error);
-      throw error;
-    }
-  };
-
-  const updateStudent = async (studentId, studentData) => {
-    const updateUrl = `${url}/${studentId}`;
-    try {
-      const response = await axios.put(updateUrl, studentData);
-      // Revalidate the cache to update the list of students
-      mutate(url);
-      return response.data;
-    } catch (error) {
-      console.error('Error updating student:', error);
-      throw error;
-    }
-  };
-
-  const memoizedValue = useMemo(
-    () => ({
-      students: data ?? [],
-      studentsLoading: isLoading,
-      studentsError: error,
-      studentsValidating: isValidating,
-      studentsEmpty: !isLoading && !data?.length,
-      createStudent,
-      updateStudent,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-
-  return memoizedValue;
-}
+};
 // ----------------------------------------------------------------------
 
 export function useGetLatestStudents(title) {

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
 using schoolapp.Domain.Entities.Other;
 
 namespace schoolapp.Application.Services
@@ -97,13 +98,18 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<bool> PostPermission(Permission permission, CancellationToken cancellationToken)
+        public async Task<bool> PostPermission(PermissionDto permission, CancellationToken cancellationToken)
         {
             if (_context.Permissions == null)
             {
                 return false;
             }
-            _context.Permissions.Add(permission);
+            var newPermission = new Permission
+            {
+                Name = permission.Name,
+                Desc = permission.Desc
+            };
+            _context.Permissions.Add(newPermission);
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;

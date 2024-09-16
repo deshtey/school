@@ -70,11 +70,11 @@ public class AuthDbContext : IdentityDbContext<AppUser>, IAuthDbContext
     {
 
         base.OnModelCreating(modelBuilder);
-        modelBuilder.HasDefaultSchema("school");
+        modelBuilder.HasDefaultSchema("auth");
 
-        modelBuilder.ApplyConfiguration(new SchoolEntityConfiguration());
-        modelBuilder.ApplyConfiguration(new StudentConfiguration());
-        // modelBuilder.ApplyConfiguration(new StudentParentConfiguration());
+        modelBuilder.ApplyConfiguration(new PermissionConfiguration());
+        modelBuilder.ApplyConfiguration(new RolePermissionEntityConfiguration());
+
 
 
         //convert table names to lowercase

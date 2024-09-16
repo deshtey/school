@@ -1,3 +1,4 @@
+using lovedmemory.web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using schoolapp.Infrastructure;
@@ -43,6 +44,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 });
+builder.Services.AddAuthentication();
 builder.Services.AddSwaggerGen(opt =>
 {
     //opt.SwaggerDoc("v1", new OpenApiInfo { Title = "My Api", Version = "v1" });
@@ -51,11 +53,12 @@ builder.Services.AddSwaggerGen(opt =>
         Type = SecuritySchemeType.Http,
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Scheme = "bearer"
+        Scheme = "bearer",
+        
     });
-   // opt.OperationFilter<AuthenticationRequirementsOperationFilter>();
+    opt.OperationFilter<AuthenticationRequirementsOperationFilter>();
 });
-builder.Services.AddAuthentication();
+
 
 builder.Services.AddEndpointsApiExplorer();
 

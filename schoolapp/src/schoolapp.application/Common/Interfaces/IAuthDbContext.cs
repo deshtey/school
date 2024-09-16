@@ -9,7 +9,6 @@ namespace schoolapp.Application.Common.Interfaces
         DbSet<Permission> Permissions { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
-
         //  transaction support
         Task BeginTransactionAsync(CancellationToken cancellationToken = default);
         Task CommitTransactionAsync(CancellationToken cancellationToken = default);

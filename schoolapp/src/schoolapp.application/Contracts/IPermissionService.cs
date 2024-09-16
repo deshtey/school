@@ -9,7 +9,7 @@ namespace schoolapp.Application.Contracts
         Task<bool> DeletePermission(int id, CancellationToken cancellationToken);
         Task<Permission?> GetPermission(int id);
         Task<IEnumerable<Permission>> GetAllPermissions();
-        Task<bool> PostPermission(Permission permission, CancellationToken cancellationToken);
+        Task<bool> PostPermission(PermissionDto permission, CancellationToken cancellationToken);
         Task<Permission?> PutPermission(int id, Permission permission, CancellationToken cancellationToken);
 
     }

@@ -2,8 +2,6 @@
 using schoolapp.Domain.Entities;
 using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.Departments;
-using schoolapp.Domain.Entities.Exams;
-using schoolapp.Domain.Entities.Other;
 using schoolapp.Domain.Entities.People;
 
 namespace schoolapp.Application.Common.Interfaces
@@ -23,7 +21,7 @@ namespace schoolapp.Application.Common.Interfaces
         //DbSet<ExamType> ExamTypes { get; }
         DbSet<Grade> Grades { get; }
         DbSet<Department> Departments { get; set; }
-        DbSet<RolePermission> RolePermissions { get; set; }
+        //DbSet<RolePermission> RolePermissions { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 

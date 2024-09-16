@@ -31,27 +31,14 @@ import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
 import { usePostTeacher, usePostTeachers, usePostTeachers1 } from 'src/actions/teacher';
 import { Divider, MenuItem } from '@mui/material';
+import { endpoints, fetcherPost } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
 export const NewTeacherSchema = zod.object({
-  // avatarUrl: schemaHelper.file({
-  //   message: { required_error: 'Avatar is required!' },
-  // }),
-  teacherName: zod.string().min(1, { message: 'Name is required!' }),
-  email: zod
-    .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
+  firstname: zod.string().min(1, { message: 'First Name is required!' }),
+  email: zod.string().email({ message: 'Email must be a valid email address!' }),
   phone: schemaHelper.phoneNumber({ isValidPhoneNumber }),
-  country: schemaHelper.objectOrNull({
-    message: { required_error: 'Country is required!' },
-  }),
-  address: zod.string().min(1, { message: 'Address is required!' }),
-  location: zod.string().min(1, { message: 'State is required!' }),
-  city: zod.string().min(1, { message: 'City is required!' }),
-  homepage: zod.string().min(1, { message: 'Role is required!' }),
-  zipCode: zod.string().min(1, { message: 'Zip code is required!' }),
 });
 
 // ----------------------------------------------------------------------
@@ -103,7 +90,8 @@ export function TeacherEditView({ teacher: currentTeacher }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await createTeacher({ ...data });
+      const url = endpoints.teacher.list;
+      await fetcherPost(url, 'POST', data);
       toast.success(currentTeacher ? 'Update success!' : 'Create success!');
       router.push(paths.admin.teacher.list);
     } catch (error) {

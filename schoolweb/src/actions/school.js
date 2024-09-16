@@ -68,41 +68,6 @@ export function usePostSchool(parameters) {
   };
 }
 
-export function usePostSchools1(params) {
-  const url = endpoints.school.list;
-
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const { mutate } = useSWR(
-    [url, params],
-    async () => {
-      setIsLoading(true);
-      try {
-        const result = await fetcherPost(url, 'POST', params);
-        setData(result);
-        setIsLoading(false);
-        return result;
-      } catch (err) {
-        setError(err);
-        setIsLoading(false);
-        throw err;
-      }
-    },
-    { revalidateOnFocus: false, revalidateOnReconnect: false }
-  );
-
-  const post = async () => {
-    try {
-      await mutate();
-    } catch (err) {
-      console.error('Error posting data:', err);
-    }
-  };
-
-  return { data, error, isLoading, post };
-}
 export function usePostSchools() {
   const url = endpoints.school.list;
 
@@ -112,7 +77,7 @@ export function usePostSchools() {
     try {
       const response = await axiosInstance.post(url, schoolData);
       // Revalidate the cache to update the list of schools
-      mutate(url);
+      //mutate(url);
       return response.data;
     } catch (error) {
       console.error('Error creating school:', error);
@@ -125,7 +90,7 @@ export function usePostSchools() {
     try {
       const response = await axios.put(updateUrl, schoolData);
       // Revalidate the cache to update the list of schools
-      mutate(url);
+      // mutate(url);
       return response.data;
     } catch (error) {
       console.error('Error updating school:', error);
