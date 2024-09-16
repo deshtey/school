@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using schoolapp.Application.DTOs;
-using schoolapp.Domain.Entities.Other;
-using schoolapp.Infrastructure.Data;
+using schoolapp.Infrastructure.Security.RolePermissionService;
 
 namespace schoolapp.webapi.Controllers
 {
@@ -10,32 +8,18 @@ namespace schoolapp.webapi.Controllers
     [ApiController]
     public class RolePermissionsController : ControllerBase
     {
-        private readonly AuthDbContext _context;
+        private readonly IRolePermissionService _rolePermissionService;
 
-        public RolePermissionsController(AuthDbContext context)
+        public RolePermissionsController(IRolePermissionService rolePermissionService)
         {
-            _context = context;
+            _rolePermissionService = rolePermissionService;
         }
 
         // GET: api/RolePermissions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RolePermission>>> GetRolePermissions()
+        public async Task<ActionResult<IEnumerable<RolePermissionDto>>> GetRolePermissions()
         {
-            return await _context.RolePermissions.ToListAsync();
-        }
-
-        // GET: api/RolePermissions/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<RolePermission>> GetRolePermission(int id)
-        {
-            var rolePermission = await _context.RolePermissions.FindAsync(id);
-
-            if (rolePermission == null)
-            {
-                return NotFound();
-            }
-
-            return rolePermission;
+            return await _rolePermissionService.GetRolePermissions();
         }
 
         // PUT: api/RolePermissions/5
@@ -48,23 +32,7 @@ namespace schoolapp.webapi.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(rolePermission).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RolePermissionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            
 
             return NoContent();
         }
@@ -74,13 +42,7 @@ namespace schoolapp.webapi.Controllers
         [HttpPost]
         public async Task<ActionResult<RolePermissionDto>> PostRolePermission(RolePermissionDto rolePermission)
         {
-            var newRolePermission = new RolePermission
-            {
-                RoleId = rolePermission.RoleId,
-                PermissionId = rolePermission.PermissionId
-            };
-            _context.RolePermissions.Add(newRolePermission);
-            await _context.SaveChangesAsync();
+            await _rolePermissionService.CreateRolePermissionAsync(rolePermission);
 
             return CreatedAtAction("GetRolePermission", new { id = rolePermission.Id }, rolePermission);
         }
@@ -89,21 +51,20 @@ namespace schoolapp.webapi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRolePermission(int id)
         {
-            var rolePermission = await _context.RolePermissions.FindAsync(id);
-            if (rolePermission == null)
+            try
             {
+                var res = await _rolePermissionService.DeleteRolePermissionAsync(id);
+                if (res)
+                {
+                    return Ok(res);
+                }
                 return NotFound();
+
             }
-
-            _context.RolePermissions.Remove(rolePermission);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool RolePermissionExists(int id)
-        {
-            return _context.RolePermissions.Any(e => e.Id == id);
+            catch (Exception)
+            {
+                return StatusCode(500,new { message="An error occured"});
+            }
         }
     }
 }

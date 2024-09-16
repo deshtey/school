@@ -6,5 +6,6 @@
         public string RoleId { get; set; }
         public int PermissionId { get; set; }
         public Permission Permission { get; set; }
+        public IRole Role { get; set; }
     }
 }

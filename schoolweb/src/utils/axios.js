@@ -81,4 +81,16 @@ export const endpoints = {
     details: '/api/staff',
     search: '/api/staff/search',
   },
+  roles: {
+    list: '/api/roles',
+    details: '/api/roles',
+  },
+  permissions: {
+    list: '/api/permissions',
+    details: '/api/permissions',
+  },
+  rolepermissions: {
+    list: '/api/rolepermissions',
+    details: '/api/rolepermissions',
+  },
 };

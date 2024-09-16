@@ -27,13 +27,13 @@ import { fData } from 'src/utils/format-number';
 import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
-import { usePostSchools } from 'src/actions/school';
+import { usePostPermissions } from 'src/actions/permissions';
 
 // ----------------------------------------------------------------------
 
-export const NewSchoolSchema = zod.object({
+export const NewPermissionschema = zod.object({
   logoUrl: zod.string(),
-  schoolName: zod.string().min(1, { message: 'Name is required!' }),
+  permissionsName: zod.string().min(1, { message: 'Name is required!' }),
   email: zod
     .string()
     .min(1, { message: 'Email is required!' })
@@ -51,29 +51,29 @@ export const NewSchoolSchema = zod.object({
 
 // ----------------------------------------------------------------------
 
-export function SchoolEditView({ school: currentSchool }) {
+export function PermissionsEditView({ permissions: currentPermissions }) {
   const router = useRouter();
   const defaultValues = useMemo(
     () => ({
-      schoolName: currentSchool?.schoolName || '',
-      status: currentSchool?.status || '',
-      logoUrl: currentSchool?.logo || '',
-      email: currentSchool?.email || '',
-      phone: currentSchool?.phone || '',
-      country: currentSchool?.country || 'Kenya',
-      state: currentSchool?.state || '',
-      city: currentSchool?.city || '',
-      address: currentSchool?.address || '',
-      zipCode: currentSchool?.zipCode || '',
-      homePage: currentSchool?.homePage || '',
-      location: currentSchool?.location || '',
+      permissionsName: currentPermissions?.permissionsName || '',
+      status: currentPermissions?.status || '',
+      logoUrl: currentPermissions?.logo || '',
+      email: currentPermissions?.email || '',
+      phone: currentPermissions?.phone || '',
+      country: currentPermissions?.country || 'Kenya',
+      state: currentPermissions?.state || '',
+      city: currentPermissions?.city || '',
+      address: currentPermissions?.address || '',
+      zipCode: currentPermissions?.zipCode || '',
+      homePage: currentPermissions?.homePage || '',
+      location: currentPermissions?.location || '',
     }),
-    [currentSchool]
+    [currentPermissions]
   );
 
   const methods = useForm({
     mode: 'onSubmit',
-    // resolver: zodResolver(NewSchoolSchema),
+    // resolver: zodResolver(NewPermissionschema),
     defaultValues,
   });
 
@@ -88,18 +88,18 @@ export function SchoolEditView({ school: currentSchool }) {
   const values = watch();
 
   useEffect(() => {
-    if (currentSchool) {
+    if (currentPermissions) {
       reset(defaultValues);
     }
-  }, [currentSchool, defaultValues, reset]);
-  const { createSchool } = usePostSchools();
+  }, [currentPermissions, defaultValues, reset]);
+  const { createPermissions } = usePostPermissions();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const res = await createSchool({ ...data });
+      const res = await createPermissions({ ...data });
       console.log(res);
-      toast.success(currentSchool ? 'Update success!' : 'Create success!');
-      router.push(paths.admin.school.list);
+      toast.success(currentPermissions ? 'Update success!' : 'Create success!');
+      router.push(paths.admin.permissions.list);
     } catch (error) {
       console.error(error);
       toast.error('An error occured');
@@ -108,11 +108,11 @@ export function SchoolEditView({ school: currentSchool }) {
   return (
     <DashboardContent>
       <CustomBreadcrumbs
-        heading="Create a new school"
+        heading="Create a new permissions"
         links={[
           { name: 'Dashboard', href: paths.admin.root },
-          { name: 'School', href: paths.admin.school.root },
-          { name: 'New School' },
+          { name: 'Permissions', href: paths.admin.permissions.root },
+          { name: 'New Permissions' },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
@@ -121,7 +121,7 @@ export function SchoolEditView({ school: currentSchool }) {
         <Grid container spacing={3}>
           <Grid xs={12} md={4}>
             <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-              {currentSchool && (
+              {currentPermissions && (
                 <Label
                   color={
                     (values.status === 'active' && 'success') ||
@@ -155,7 +155,7 @@ export function SchoolEditView({ school: currentSchool }) {
                 />
               </Box>
 
-              {/* {currentSchool && (
+              {/* {currentPermissions && (
                 <FormControlLabel
                   labelPlacement="start"
                   control={
@@ -201,17 +201,17 @@ export function SchoolEditView({ school: currentSchool }) {
                       Email verified
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Disabling this will automatically send the school a verification email
+                      Disabling this will automatically send the permissions a verification email
                     </Typography>
                   </>
                 }
                 sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
               />
 
-              {currentSchool && (
+              {currentPermissions && (
                 <Stack justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
                   <Button variant="soft" color="error">
-                    Delete school
+                    Delete permissions
                   </Button>
                 </Stack>
               )}
@@ -229,7 +229,7 @@ export function SchoolEditView({ school: currentSchool }) {
                   sm: 'repeat(2, 1fr)',
                 }}
               >
-                <Field.Text name="schoolName" label="School name" />
+                <Field.Text name="permissionsName" label="Permissions name" />
                 <Field.Text name="email" label="Email address" />
                 <Field.Phone name="phone" label="Phone number" />
 
@@ -239,7 +239,7 @@ export function SchoolEditView({ school: currentSchool }) {
                   label="Country"
                   placeholder="Choose a country"
                 />
-                <Field.Text name="homePage" label="School Website Url" />
+                <Field.Text name="homePage" label="Permissions Website Url" />
 
                 <Field.Text name="location" label="County/State/region" />
                 <Field.Text name="city" label="City/Town" />
@@ -249,7 +249,7 @@ export function SchoolEditView({ school: currentSchool }) {
 
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentSchool ? 'Create school' : 'Save changes'}
+                  {!currentPermissions ? 'Create permissions' : 'Save changes'}
                 </LoadingButton>
               </Stack>
             </Card>

@@ -14,6 +14,7 @@ using schoolapp.Infrastructure.Identity;
 using schoolapp.Infrastructure.Persistence.Interceptors;
 using schoolapp.Infrastructure.Security.Auth;
 using schoolapp.Infrastructure.Security.CurrentUserProvider;
+using schoolapp.Infrastructure.Security.RolePermissionService;
 using schoolapp.Infrastructure.Security.RoleService;
 using schoolapp.Infrastructure.Security.TokenGenerator;
 using schoolapp.Infrastructure.Security.TokenValidation;
@@ -156,7 +157,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthorizationHandler, PermissionHandler>();
         services.AddSingleton<IUserProvider, UserProvider>();
         services.AddScoped<IRoleService, RoleService>();
-
+        services.AddScoped<IRolePermissionService, RolePermissionService>();
         return services;
     }
     private static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)

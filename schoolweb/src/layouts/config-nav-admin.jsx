@@ -40,6 +40,21 @@ const ICONS = {
 // ----------------------------------------------------------------------
 
 export const navData = [
+  {
+    subheader: 'Management',
+    items: [
+      {
+        title: 'Roles and Permissions',
+        path: paths.dashboard.group.root,
+        icon: ICONS.user,
+        children: [
+          { title: 'Roles', path: paths.admin.roles.root },
+          { title: 'Permissions', path: paths.admin.permissions.root },
+          { title: 'RolePermissions', path: paths.admin.rolepermissions.root },
+        ],
+      },
+    ],
+  },
   /**
    * Overview
    */

@@ -78,6 +78,41 @@ export const paths = {
       details: (id) => `${ROOTS.ADMIN}/supportStaff/${id}`,
       edit: (id) => `${ROOTS.ADMIN}/supportStaff/${id}/edit`,
     },
+    department: {
+      root: `${ROOTS.ADMIN}/department`,
+      new: `${ROOTS.ADMIN}/department/new`,
+      list: `${ROOTS.ADMIN}/department/list`,
+      details: (id) => `${ROOTS.ADMIN}/department/${id}`,
+      edit: (id) => `${ROOTS.ADMIN}/department/${id}/edit`,
+    },
+    grade: {
+      root: `${ROOTS.ADMIN}/grade`,
+      new: `${ROOTS.ADMIN}/grade/new`,
+      list: `${ROOTS.ADMIN}/grade/list`,
+      details: (id) => `${ROOTS.ADMIN}/grade/${id}`,
+      edit: (id) => `${ROOTS.ADMIN}/grade/${id}/edit`,
+    },
+    permissions: {
+      root: `${ROOTS.ADMIN}/permissions`,
+      new: `${ROOTS.ADMIN}/permissions/new`,
+      list: `${ROOTS.ADMIN}/permissions/list`,
+      details: (id) => `${ROOTS.ADMIN}/permissions/${id}`,
+      edit: (id) => `${ROOTS.ADMIN}/permissions/${id}/edit`,
+    },
+    rolepermissions: {
+      root: `${ROOTS.ADMIN}/rolepermissions`,
+      new: `${ROOTS.ADMIN}/rolepermissions/new`,
+      list: `${ROOTS.ADMIN}/rolepermissions/list`,
+      details: (id) => `${ROOTS.ADMIN}/rolepermissions/${id}`,
+      edit: (id) => `${ROOTS.ADMIN}/rolepermissions/${id}/edit`,
+    },
+    roles: {
+      root: `${ROOTS.ADMIN}/roles`,
+      new: `${ROOTS.ADMIN}/roles/new`,
+      list: `${ROOTS.ADMIN}/roles/list`,
+      details: (id) => `${ROOTS.ADMIN}/roles/${id}`,
+      edit: (id) => `${ROOTS.ADMIN}/roles/${id}/edit`,
+    },
     three: `${ROOTS.ADMIN}/three`,
 
     group: {

@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using schoolapp.Domain.Entities.People;
 using schoolapp.Domain.Entities.Departments;
 using schoolapp.Domain.Entities.Other;
+using System.Reflection.Emit;
+using System.Data;
 
 namespace schoolapp.Infrastructure.Persistence.Configurations;
 class RolePermissionEntityConfiguration
@@ -11,8 +13,8 @@ class RolePermissionEntityConfiguration
     public void Configure(EntityTypeBuilder<RolePermission> rolepermissionConfiguration)
     {
         rolepermissionConfiguration.ToTable("role_permissions", "auth");
-
-        rolepermissionConfiguration.HasKey(r => r.Id);  
+        rolepermissionConfiguration.HasKey(r => r.Id);
+        rolepermissionConfiguration.Ignore(r => r.Role);
 
     }
 }
