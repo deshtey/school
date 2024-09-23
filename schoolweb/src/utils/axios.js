@@ -95,4 +95,9 @@ export const endpoints = {
     list: '/api/rolepermissions',
     details: '/api/rolepermissions',
   },
+  grade: {
+    list: '/api/grades',
+    details: '/api/grades',
+    create: '/api/grades/creategrades',
+  },
 };

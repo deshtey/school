@@ -12,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 
+import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -40,12 +41,11 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { SchoolTableRow } from '../school-table-row';
-import { SchoolTableToolbar } from '../school-table-toolbar';
-import { SchoolTableFiltersResult } from '../school-table-filters-result';
-import { useGetSchools } from 'src/actions/school';
+import { ClassroomTableRow } from '../classroom-table-row';
+import { ClassroomTableToolbar } from '../classroom-table-toolbar';
+import { ClassroomTableFiltersResult } from '../classroom-table-filters-result';
+import { useGetClassrooms } from 'src/actions/classroom';
 import { RouterLink } from 'src/routes/components';
-import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -56,8 +56,8 @@ const STATUS_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  // { id: 'schoolNumber', label: 'Id', width: 88 },
-  { id: 'name', label: 'SchoolName' },
+  // { id: 'classroomNumber', label: 'Id', width: 88 },
+  { id: 'name', label: 'ClassroomName' },
   { id: 'createdAt', label: 'Created', width: 140 },
   { id: 'location', label: 'Location', width: 140 },
   { id: 'phone', label: 'Phone', width: 140 },
@@ -67,15 +67,15 @@ const TABLE_HEAD = [
 
 // ----------------------------------------------------------------------
 
-export function SchoolListView() {
-  const table = useTable({ defaultSchoolBy: 'schoolNumber' });
-  const { schools, schoolsEmpty, schoolsError, schoolsLoading, schoolsValidating } =
-    useGetSchools();
+export function ClassroomListView() {
+  const table = useTable({ defaultClassroomBy: 'classroomNumber' });
+  const { classrooms, classroomsEmpty, classroomsError, classroomsLoading, classroomsValidating } =
+    useGetClassrooms();
   const router = useRouter();
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(schools);
+  const [tableData, setTableData] = useState(classrooms);
 
   const filters = useSetState({
     name: '',
@@ -87,8 +87,8 @@ export function SchoolListView() {
   const dateError = fIsAfter(filters.state.startDate, filters.state.endDate);
 
   const dataFiltered = applyFilter({
-    inputData: schools,
-    comparator: getComparator(table.school, table.schoolBy),
+    inputData: classrooms,
+    comparator: getComparator(table.classroom, table.classroomBy),
     filters: filters.state,
     dateError,
   });
@@ -130,7 +130,7 @@ export function SchoolListView() {
 
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.admin.school.details(id));
+      router.push(paths.admin.classroom.details(id));
     },
     [router]
   );
@@ -150,17 +150,17 @@ export function SchoolListView() {
           heading="List"
           links={[
             { name: 'Admin', href: paths.admin.root },
-            { name: 'School', href: paths.admin.school.root },
+            { name: 'Classroom', href: paths.admin.classroom.root },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.admin.school.new}
+              href={paths.admin.classroom.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New school
+              New classroom
             </Button>
           }
           sx={{ mb: { xs: 3, md: 5 } }}
@@ -203,14 +203,14 @@ export function SchoolListView() {
             ))}
           </Tabs>
 
-          <SchoolTableToolbar
+          <ClassroomTableToolbar
             filters={filters}
             onResetPage={table.onResetPage}
             dateError={dateError}
           />
 
           {canReset && (
-            <SchoolTableFiltersResult
+            <ClassroomTableFiltersResult
               filters={filters}
               totalResults={dataFiltered.length}
               onResetPage={table.onResetPage}
@@ -241,8 +241,8 @@ export function SchoolListView() {
             <Scrollbar sx={{ minHeight: 444 }}>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
                 <TableHeadCustom
-                  school={table.school}
-                  schoolBy={table.schoolBy}
+                  classroom={table.classroom}
+                  classroomBy={table.classroomBy}
                   headLabel={TABLE_HEAD}
                   rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
@@ -262,13 +262,13 @@ export function SchoolListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <SchoolTableRow
-                        key={row.schoolId}
+                      <ClassroomTableRow
+                        key={row.classroomId}
                         row={row}
-                        selected={table.selected.includes(row.schoolId)}
-                        onSelectRow={() => table.onSelectRow(row.schoolId)}
-                        onDeleteRow={() => handleDeleteRow(row.schoolId)}
-                        onViewRow={() => handleViewRow(row.schoolId)}
+                        selected={table.selected.includes(row.classroomId)}
+                        onSelectRow={() => table.onSelectRow(row.classroomId)}
+                        onDeleteRow={() => handleDeleteRow(row.classroomId)}
+                        onViewRow={() => handleViewRow(row.classroomId)}
                       />
                     ))}
 
@@ -327,8 +327,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
-    const school = comparator(a[0], b[0]);
-    if (school !== 0) return school;
+    const classroom = comparator(a[0], b[0]);
+    if (classroom !== 0) return classroom;
     return a[1] - b[1];
   });
 
@@ -336,20 +336,22 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   if (name) {
     inputData = inputData.filter(
-      (school) =>
-        school.schoolNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        school.customer.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        school.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (classroom) =>
+        classroom.classroomNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        classroom.customer.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        classroom.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((school) => school.status === status);
+    inputData = inputData.filter((classroom) => classroom.status === status);
   }
 
   if (!dateError) {
     if (startDate && endDate) {
-      inputData = inputData.filter((school) => fIsBetween(school.createdAt, startDate, endDate));
+      inputData = inputData.filter((classroom) =>
+        fIsBetween(classroom.createdAt, startDate, endDate)
+      );
     }
   }
 

@@ -92,6 +92,13 @@ export const paths = {
       details: (id) => `${ROOTS.ADMIN}/grade/${id}`,
       edit: (id) => `${ROOTS.ADMIN}/grade/${id}/edit`,
     },
+    classroom: {
+      root: `${ROOTS.ADMIN}/classroom`,
+      new: `${ROOTS.ADMIN}/classroom/new`,
+      list: `${ROOTS.ADMIN}/classroom/list`,
+      details: (id) => `${ROOTS.ADMIN}/classroom/${id}`,
+      edit: (id) => `${ROOTS.ADMIN}/classroom/${id}/edit`,
+    },
     permissions: {
       root: `${ROOTS.ADMIN}/permissions`,
       new: `${ROOTS.ADMIN}/permissions/new`,
