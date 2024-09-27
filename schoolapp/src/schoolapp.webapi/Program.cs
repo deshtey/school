@@ -5,6 +5,8 @@ using schoolapp.Application;
 using schoolapp.Infrastructure;
 using Serilog;
 using Serilog.Events;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +30,13 @@ Log.Logger = new LoggerConfiguration()
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplicationServices();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+      .AddJsonOptions(options =>
+      {
+          options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+          options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+          options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+      });
 //options =>
 //{
 //    var policy = new AuthorizationPolicyBuilder()

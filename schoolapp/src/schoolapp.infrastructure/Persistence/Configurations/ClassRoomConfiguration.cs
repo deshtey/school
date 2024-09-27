@@ -19,5 +19,11 @@ class ClassRoomEntityConfiguration
             .WithMany()
             .HasForeignKey(c=>c.TeacherId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        classRoomConfiguration
+            .HasOne(c => c.Grade)
+            .WithMany(c => c.ClassRooms)
+            .HasForeignKey(c => c.GradeId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

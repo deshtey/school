@@ -20,5 +20,11 @@ class GradeEntityConfiguration
         gradeConfiguration.Property(s => s.Desc)
          .HasColumnName("desc")
          .HasMaxLength(100);
+
+        gradeConfiguration
+            .HasMany(s => s.ClassRooms)
+            .WithOne(s => s.Grade)
+            .HasForeignKey(s => s.GradeId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

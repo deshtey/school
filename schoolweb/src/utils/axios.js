@@ -97,7 +97,7 @@ export const endpoints = {
   },
   grade: {
     list: '/api/grades',
-    details: '/api/grades',
+    details: '/api/grades/grade',
     create: '/api/grades',
   },
   classroom: {

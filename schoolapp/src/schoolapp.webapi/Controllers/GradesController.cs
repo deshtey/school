@@ -8,53 +8,48 @@ namespace schoolapp.webapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClassroomsController : ControllerBase
+    public class GradesController : ControllerBase
     {
-        private readonly IGradeClassRoomService _ClassroomService;
+        private readonly IGradeClassRoomService _GradeService;
         private readonly CancellationToken cancellationToken;
 
-        public ClassroomsController(IGradeClassRoomService ClassroomService)
+        public GradesController(IGradeClassRoomService GradeService)
         {
-            _ClassroomService = ClassroomService;
+            _GradeService = GradeService;
         }
-        // GET: api/<ClassroomsController
+        // GET: api/<GradesController
         [HttpGet("{schoolId}")]
-        public async Task<IEnumerable<ClassRoomDto>> Get(int schoolId)
+        public async Task<IEnumerable<GradeDto>> Get(int schoolId)
         {
-            return await _ClassroomService.GetSchoolClassRooms(schoolId);
+            return await _GradeService.GetSchoolClasses(schoolId);
         }
 
-        // GET api/<ClassroomsController>/5
-        [HttpGet("Classroom/{id}")]
-        public async Task<ClassRoomDto> GetClassroom(int id)
+        // GET api/<GradesController>/5
+        [HttpGet("Grade/{id}")]
+        public async Task<GradeDto> GetGrade(int id)
         {
-            return await _ClassroomService.GetClassRoom(id);
+            return await _GradeService.GetGrade(id);
         }
 
-        // POST api/<ClassroomsController>
+        // POST api/<GradesController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ClassRoomDto classroom)
-        {        
-            if(ModelState.IsValid == false)
-            {
-                return BadRequest(ModelState);
-            }
-            await _ClassroomService.PostClassroom(classroom, cancellationToken);
-            return Ok(classroom);
-        }
-
-        // PUT api/<ClassroomsController>/5
-        [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] ClassRoomDto classroom)
+        public async Task Post([FromBody] GradeDto grade)
         {
-            await _ClassroomService.PutClassroom(id, classroom, cancellationToken);
+            await _GradeService.PostGrade(grade, cancellationToken);
         }
 
-        // DELETE api/<ClassroomsController>/5
+        // PUT api/<GradesController>/5
+        [HttpPut("{id}")]
+        public async Task Put(int id, [FromBody] GradeDto grade)
+        {
+            await _GradeService.PutGrade(id, grade, cancellationToken);
+        }
+
+        // DELETE api/<GradesController>/5
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-            await _ClassroomService.DeleteClassroom(id, cancellationToken);
+            await _GradeService.DeleteGrade(id, cancellationToken);
         }
     }
 }

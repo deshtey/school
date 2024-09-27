@@ -11,7 +11,8 @@ namespace schoolapp.Domain.Entities.ClassGrades
         public int? TeacherId { get; set; }
         public int SchoolId { get; set; }
         public School School { get; set; }
-        public Teacher ClassTeacher { get; set; }
+        public Teacher? ClassTeacher { get; set; }
+        public Grade Grade { get; set; }
         public ICollection<Student> Students { get; set; }=[];
     }
 }

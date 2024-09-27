@@ -15,13 +15,12 @@ import Typography from '@mui/material/Typography';
 import { useRouter } from 'src/routes/hooks';
 
 import { useSelector } from 'react-redux';
-import { useGetGrades } from 'src/actions/grade';
 import { Avatar, CardHeader, IconButton } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
 
 export function GradeDetailView({ currentGrade: grade }) {
+  console.log(grade);
   const selectedGrade = useSelector((state) => state.grade);
-  const { grades, gradesEmpty, gradesError, gradesLoading } = useGetGrades(grade.id);
   const router = useRouter();
   const renderGrade = (
     <>

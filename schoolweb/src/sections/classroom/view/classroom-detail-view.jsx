@@ -7,46 +7,34 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
 import { z as zod } from 'zod';
-import { useEffect, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
-import { isValidPhoneNumber } from 'react-phone-number-input/input';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
-import LoadingButton from '@mui/lab/LoadingButton';
 
 import { useRouter } from 'src/routes/hooks';
 
-import { fData } from 'src/utils/format-number';
-
-import { Label } from 'src/components/label';
-import { toast } from 'src/components/snackbar';
-import { Form, Field, schemaHelper } from 'src/components/hook-form';
-import { usePostClassrooms } from 'src/actions/classroom';
 import { useSelector } from 'react-redux';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { createClassroom } from 'src/actions/classroom';
-import { useGetGrades } from 'src/actions/grade';
-import { transformArray } from 'src/utils/transformarrays';
-import { Avatar, CardHeader, IconButton, MenuItem } from '@mui/material';
+import { useGetClassRooms } from 'src/actions/classroom';
+import { Avatar, CardHeader, IconButton } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
 
 export const NewClassroomSchema = zod.object({
   classroomName: zod.string().min(1, { message: 'Name is required!' }),
   schoolId: zod.number(),
   year: zod.number(),
-  gradeId: zod.number().min(1, { message: 'Grade is required!' }),
+  classroomId: zod.number().min(1, { message: 'ClassRoom is required!' }),
 });
 
 // ----------------------------------------------------------------------
 
 export function ClassroomDetailView({ currentClassroom: classroom }) {
   const school = useSelector((state) => state.school);
-  const { grades, gradesEmpty, gradesError, gradesLoading } = useGetGrades(school.id);
+  const { classrooms, classroomsEmpty, classroomsError, classroomsLoading } = useGetClassRooms(
+    school.id
+  );
 
   const router = useRouter();
   const renderClassroom = (

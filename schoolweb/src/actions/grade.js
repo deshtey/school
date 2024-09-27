@@ -2,7 +2,6 @@ import useSWR from 'swr';
 import { useMemo, useState } from 'react';
 
 import axiosInstance, { fetcher, endpoints, fetcherPost } from 'src/utils/axios';
-import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -36,8 +35,6 @@ export function useGetGrades(schoolId) {
 
 export function useGetGrade(id) {
   const url = `${endpoints.grade.details}/${id}`;
-  // const url = [endpoints.grade.details, { params: { id } }];
-
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
 
   const memoizedValue = useMemo(

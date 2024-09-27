@@ -10,6 +10,7 @@ import { GradeDetailView } from 'src/sections/grade/view/grade-detail-view';
  */
 export default function GradeDetailPage({ params: { id } }: PageProps): JSX.Element {
   const { grade, gradeEmpty, gradeError, gradeLoading, gradeValidating } = useGetGrade(id);
+  console.log(grade);
   if (gradeLoading || gradeValidating) {
     return <div>Loading...</div>;
   }
@@ -23,8 +24,6 @@ export default function GradeDetailPage({ params: { id } }: PageProps): JSX.Elem
   }
 
   return grade ? <GradeDetailView currentGrade={grade} /> : null;
-
-  // return <GradeEditView grade={grade} />;
 }
 
 interface PageProps {

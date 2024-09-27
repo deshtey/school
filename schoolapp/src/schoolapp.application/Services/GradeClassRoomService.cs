@@ -23,6 +23,7 @@ namespace schoolapp.Application.Services
                 return null;
             }
             return await _context.Grades
+                .Include(g => g.ClassRooms)
                 .Where(s => s.SchoolId == schoolId)
                 .Select(g => new GradeDto
                 {
@@ -30,6 +31,7 @@ namespace schoolapp.Application.Services
                     Name = g.Name,
                     Desc = g.Desc,
                     SchoolId = g.SchoolId,
+                    Classrooms = g.ClassRooms.Select(c => new ClassRoomDto { ClassRoomId = c.ClassRoomId, ClassroomName = c.ClassroomName, Year = c.Year }).ToList(),
                 })
                 .ToListAsync();
         }
@@ -47,6 +49,8 @@ namespace schoolapp.Application.Services
                     Name = g.Name,
                     Desc = g.Desc,
                     SchoolId = g.SchoolId,
+                    Classrooms = g.ClassRooms.Select(c => new ClassRoomDto { GradeId=c.GradeId, ClassRoomId = c.ClassRoomId, ClassroomName = c.ClassroomName, Year = c.Year }).ToList(),
+
                 }).FirstOrDefaultAsync(g => g.Id == id);
 
             if (Grade == null)
@@ -71,7 +75,7 @@ namespace schoolapp.Application.Services
                     GradeId = g.GradeId,
                     Year = g.Year,
                     SchoolId = g.SchoolId,
-                    ClassTeacherName = g.ClassTeacher.GetFullName(),
+                    ClassTeacherName = g.ClassTeacher != null ? g.ClassTeacher.GetFullName() : "No teacher assigned",
                     Students = g.Students.Select(s => new StudentDto
                     {
                         FullName = s.GetFullName(),
