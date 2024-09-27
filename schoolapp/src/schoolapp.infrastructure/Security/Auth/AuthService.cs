@@ -60,7 +60,11 @@ public class AuthService : IAuthService
 
         var token = _tokenGenerator.GenerateToken(user.Id, user.FirstName, user.LastName, user.Email);
 
-        return new UserDto { AccessToken = token, User= new Identity.AppUserDto { Email= user.Email,FirstName=user.FirstName,LastName=user.LastName,OtherName=user.OtherName,PhoneNumber=user.PhoneNumber,Id=user.Id } };
+        return new UserDto
+        {
+            AccessToken = token,
+            User = new AppUserDto { Email = user.Email, FirstName = user.FirstName, LastName = user.LastName, OtherName = user.OtherName, FullName=user.FullName, PhoneNumber = user.PhoneNumber, Id = user.Id, Avatar = user.Avatar, CountryCode = user.CountryCode }
+        };
     }
 
     public string GetTokenFromRequest(HttpRequest request)

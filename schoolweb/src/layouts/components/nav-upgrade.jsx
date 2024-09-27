@@ -14,20 +14,23 @@ import { varAlpha, bgGradient } from 'src/theme/styles';
 
 import { Label } from 'src/components/label';
 
-import { useMockedUser } from 'src/auth/hooks';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
 export function NavUpgrade({ sx, ...other }) {
-  const { user } = useMockedUser();
+  const user = useSelector((state) => state.auth.user);
+  console.log(user);
 
   return (
     <Stack sx={{ px: 2, py: 5, textAlign: 'center', ...sx }} {...other}>
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
-          <Avatar src={user?.photoURL} alt={user?.displayName} sx={{ width: 48, height: 48 }}>
-            {user?.displayName?.charAt(0).toUpperCase()}
-          </Avatar>
+          {user?.avatar ? (
+            <Avatar src={user?.avatar} alt={user?.name} sx={{ width: 48, height: 48 }}></Avatar>
+          ) : (
+            <Avatar alt={user.fullName} src={user.fullName} />
+          )}
 
           <Label
             color="success"

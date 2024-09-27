@@ -40,12 +40,6 @@ export function ClassroomTableRow({ row, selected, onViewRow, onSelectRow, onDel
         />
       </TableCell>
 
-      {/* <TableCell hidden>
-        <Link color="inherit" onClick={onViewRow} underline="always" sx={{ cursor: 'pointer' }}>
-          {row.classroomId}
-        </Link>
-      </TableCell> */}
-
       <TableCell>
         <Stack spacing={2} direction="row" alignItems="center">
           <Avatar alt={row.classroomName} src={row.classroomName} />

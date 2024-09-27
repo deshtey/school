@@ -40,15 +40,8 @@ export function GradeTableRow({ row, selected, onViewRow, onSelectRow, onDeleteR
         />
       </TableCell>
 
-      {/* <TableCell hidden>
-        <Link color="inherit" onClick={onViewRow} underline="always" sx={{ cursor: 'pointer' }}>
-          {row.gradeId}
-        </Link>
-      </TableCell> */}
-
       <TableCell>
         <Stack spacing={2} direction="row" alignItems="center">
-          <Avatar alt={row.gradeName} src={row.gradeName} />
           <Link color="inherit" onClick={onViewRow} underline="always" sx={{ cursor: 'pointer' }}>
             <Stack
               sx={{
@@ -57,30 +50,14 @@ export function GradeTableRow({ row, selected, onViewRow, onSelectRow, onDeleteR
                 alignItems: 'flex-start',
               }}
             >
-              <Box component="span">{row.gradeName}</Box>
-              <Box component="span" sx={{ color: 'text.disabled' }}>
-                {row.location}
-              </Box>
+              <Box component="span">{row.name}</Box>
             </Stack>
           </Link>
         </Stack>
       </TableCell>
 
-      <TableCell>
-        <ListItemText
-          primary={fDate(row.createdAt)}
-          secondary={fTime(row.createdAt)}
-          primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-          secondaryTypographyProps={{
-            mt: 0.5,
-            component: 'span',
-            typography: 'caption',
-          }}
-        />
-      </TableCell>
-      <TableCell>{row.location}</TableCell>
-      <TableCell>{row.phone}</TableCell>
-      <TableCell>{row.city}</TableCell>
+      <TableCell>{row.desc}</TableCell>
+
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />

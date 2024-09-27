@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using schoolapp.application.Common.Interfaces;
-using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Common.Models;
 
 namespace schoolapp.Infrastructure.Identity;

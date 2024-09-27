@@ -27,12 +27,14 @@ import { fData } from 'src/utils/format-number';
 import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
-import { usePostSchools } from 'src/actions/school';
+import { createSchool, usePostSchools } from 'src/actions/school';
+import { FormControlLabel, Switch } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 export const NewSchoolSchema = zod.object({
   logoUrl: zod.string(),
+  active: zod.boolean(),
   schoolName: zod.string().min(1, { message: 'Name is required!' }),
   email: zod
     .string()
@@ -51,29 +53,29 @@ export const NewSchoolSchema = zod.object({
 
 // ----------------------------------------------------------------------
 
-export function SchoolEditView({ school: currentSchool }) {
+export function SchoolEditView({ currentSchool: school }) {
   const router = useRouter();
   const defaultValues = useMemo(
     () => ({
-      schoolName: currentSchool?.schoolName || '',
-      status: currentSchool?.status || '',
-      logoUrl: currentSchool?.logo || '',
-      email: currentSchool?.email || '',
-      phone: currentSchool?.phone || '',
-      country: currentSchool?.country || 'Kenya',
-      state: currentSchool?.state || '',
-      city: currentSchool?.city || '',
-      address: currentSchool?.address || '',
-      zipCode: currentSchool?.zipCode || '',
-      homePage: currentSchool?.homePage || '',
-      location: currentSchool?.location || '',
+      schoolName: school?.schoolName || '',
+      active: school?.active || false,
+      logoUrl: school?.logo || '',
+      email: school?.email || '',
+      phone: school?.phone || '',
+      country: school?.country || 'Kenya',
+      state: school?.state || '',
+      city: school?.city || '',
+      address: school?.address || '',
+      zipCode: school?.zipCode || '',
+      homePage: school?.homePage || '',
+      location: school?.location || '',
     }),
-    [currentSchool]
+    [school]
   );
 
   const methods = useForm({
     mode: 'onSubmit',
-    // resolver: zodResolver(NewSchoolSchema),
+    resolver: zodResolver(NewSchoolSchema),
     defaultValues,
   });
 
@@ -88,17 +90,15 @@ export function SchoolEditView({ school: currentSchool }) {
   const values = watch();
 
   useEffect(() => {
-    if (currentSchool) {
+    if (school) {
       reset(defaultValues);
     }
-  }, [currentSchool, defaultValues, reset]);
-  const { createSchool } = usePostSchools();
+  }, [school, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       const res = await createSchool({ ...data });
-      console.log(res);
-      toast.success(currentSchool ? 'Update success!' : 'Create success!');
+      toast.success(school ? 'Update success!' : 'Create success!');
       router.push(paths.admin.school.list);
     } catch (error) {
       console.error(error);
@@ -108,7 +108,7 @@ export function SchoolEditView({ school: currentSchool }) {
   return (
     <DashboardContent>
       <CustomBreadcrumbs
-        heading="Create a new school"
+        heading="Edit"
         links={[
           { name: 'Dashboard', href: paths.admin.root },
           { name: 'School', href: paths.admin.school.root },
@@ -121,7 +121,7 @@ export function SchoolEditView({ school: currentSchool }) {
         <Grid container spacing={3}>
           <Grid xs={12} md={4}>
             <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-              {currentSchool && (
+              {school && (
                 <Label
                   color={
                     (values.status === 'active' && 'success') ||
@@ -155,44 +155,41 @@ export function SchoolEditView({ school: currentSchool }) {
                 />
               </Box>
 
-              {/* {currentSchool && (
-                <FormControlLabel
-                  labelPlacement="start"
-                  control={
-                    <Controller
-                      name="status"
-                      control={control}
-                      render={({ field }) => (
-                        <Switch
-                          {...field}
-                          checked={field.value !== 'active'}
-                          onChange={(event) =>
-                            field.onChange(event.target.checked ? 'banned' : 'active')
-                          }
-                        />
-                      )}
-                    />
-                  }
-                  label={
-                    <>
-                      <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                        Banned
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Apply disable account
-                      </Typography>
-                    </>
-                  }
-                  sx={{
-                    mx: 0,
-                    mb: 3,
-                    width: 1,
-                    justifyContent: 'space-between',
-                  }}
-                />
-              )} */}
+              <FormControlLabel
+                labelPlacement="start"
+                control={
+                  <Controller
+                    name="status"
+                    render={({ field }) => (
+                      <Switch
+                        {...field}
+                        checked={field.value !== 'active'}
+                        onChange={(event) =>
+                          field.onChange(event.target.checked ? 'banned' : 'active')
+                        }
+                      />
+                    )}
+                  />
+                }
+                label={
+                  <>
+                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                      Active
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      School Active
+                    </Typography>
+                  </>
+                }
+                sx={{
+                  mx: 0,
+                  mb: 3,
+                  width: 1,
+                  justifyContent: 'space-between',
+                }}
+              />
 
-              <Field.Switch
+              {/* <Field.Switch
                 name="isVerified"
                 labelPlacement="start"
                 label={
@@ -206,9 +203,9 @@ export function SchoolEditView({ school: currentSchool }) {
                   </>
                 }
                 sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-              />
+              /> */}
 
-              {currentSchool && (
+              {school && (
                 <Stack justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
                   <Button variant="soft" color="error">
                     Delete school
@@ -249,7 +246,7 @@ export function SchoolEditView({ school: currentSchool }) {
 
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentSchool ? 'Create school' : 'Save changes'}
+                  {!school ? 'Create school' : 'Save changes'}
                 </LoadingButton>
               </Stack>
             </Card>

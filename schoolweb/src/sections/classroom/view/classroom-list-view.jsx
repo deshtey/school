@@ -129,8 +129,8 @@ export function ClassroomListView() {
   }, [dataFiltered.length, dataInPage.length, table, tableData]);
 
   const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.admin.classroom.details(id));
+    (classRoomId) => {
+      router.push(paths.admin.classroom.details(classRoomId));
     },
     [router]
   );
@@ -256,6 +256,7 @@ export function ClassroomListView() {
                 />
 
                 <TableBody>
+                  {console.log(dataFiltered)}
                   {dataFiltered
                     .slice(
                       table.page * table.rowsPerPage,
@@ -268,7 +269,7 @@ export function ClassroomListView() {
                         selected={table.selected.includes(row.classroomId)}
                         onSelectRow={() => table.onSelectRow(row.classroomId)}
                         onDeleteRow={() => handleDeleteRow(row.classroomId)}
-                        onViewRow={() => handleViewRow(row.classroomId)}
+                        onViewRow={() => handleViewRow(row.classRoomId)}
                       />
                     ))}
 

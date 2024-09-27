@@ -1,20 +1,30 @@
 'use client';
 import React from 'react';
 import { useGetSchool } from 'src/actions/school';
-
-import { SchoolEditView } from 'src/sections/school/view/school-edit-view';
-
-// ----------------------------------------------------------------------
+import { SchoolDetailView } from 'src/sections/school/view/school-detail-view';
 
 /**
  * Page for editing a school, given an ID.
  * @param {PageProps} props - Props for the page, including the ID of the school to edit.
  * @returns {JSX.Element} The page component.
  */
-export default function SchoolEditPage({ params: { id } }: PageProps): JSX.Element {
+export default function SchoolDetailPage({ params: { id } }: PageProps): JSX.Element {
   const { school, schoolEmpty, schoolError, schoolLoading, schoolValidating } = useGetSchool(id);
+  if (schoolLoading || schoolValidating) {
+    return <div>Loading...</div>;
+  }
 
-  return <SchoolEditView school={school} />;
+  if (schoolError) {
+    return <div>Error: {schoolError.message}</div>;
+  }
+
+  if (schoolEmpty) {
+    return <div>No school data available.</div>;
+  }
+
+  return school ? <SchoolDetailView currentSchool={school} /> : null;
+
+  // return <SchoolEditView school={school} />;
 }
 
 interface PageProps {

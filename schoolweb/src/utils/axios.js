@@ -69,7 +69,7 @@ export const endpoints = {
   },
   student: {
     list: '/api/students',
-    details: '/api/students/details',
+    details: '/api/students',
     search: '/api/student/search',
   },
   teacher: {
@@ -98,6 +98,11 @@ export const endpoints = {
   grade: {
     list: '/api/grades',
     details: '/api/grades',
-    create: '/api/grades/creategrades',
+    create: '/api/grades',
+  },
+  classroom: {
+    list: '/api/classrooms',
+    details: '/api/classrooms',
+    create: '/api/classrooms',
   },
 };

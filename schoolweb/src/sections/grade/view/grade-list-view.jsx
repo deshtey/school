@@ -46,6 +46,7 @@ import { GradeTableToolbar } from '../grade-table-toolbar';
 import { GradeTableFiltersResult } from '../grade-table-filters-result';
 import { useGetGrades } from 'src/actions/grade';
 import { RouterLink } from 'src/routes/components';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -56,20 +57,21 @@ const STATUS_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  // { id: 'gradeNumber', label: 'Id', width: 88 },
   { id: 'name', label: 'GradeName' },
   { id: 'createdAt', label: 'Created', width: 140 },
-  { id: 'location', label: 'Location', width: 140 },
-  { id: 'phone', label: 'Phone', width: 140 },
-  { id: 'city', label: 'City', width: 110 },
+  { id: 'desc', label: 'Description', width: 140 },
   { id: '', width: 88 },
 ];
 
 // ----------------------------------------------------------------------
 
 export function GradeListView() {
-  const table = useTable({ defaultGradeBy: 'gradeNumber' });
-  const { grades, gradesEmpty, gradesError, gradesLoading, gradesValidating } = useGetGrades();
+  const school = useSelector((state) => state.school);
+
+  const table = useTable({ defaultGradeBy: 'id' });
+  const { grades, gradesEmpty, gradesError, gradesLoading, gradesValidating } = useGetGrades(
+    school.id
+  );
   const router = useRouter();
 
   const confirm = useBoolean();
@@ -262,12 +264,12 @@ export function GradeListView() {
                     )
                     .map((row) => (
                       <GradeTableRow
-                        key={row.gradeId}
+                        key={row.id}
                         row={row}
-                        selected={table.selected.includes(row.gradeId)}
-                        onSelectRow={() => table.onSelectRow(row.gradeId)}
-                        onDeleteRow={() => handleDeleteRow(row.gradeId)}
-                        onViewRow={() => handleViewRow(row.gradeId)}
+                        selected={table.selected.includes(row.id)}
+                        onSelectRow={() => table.onSelectRow(row.id)}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                        onViewRow={() => handleViewRow(row.id)}
                       />
                     ))}
 

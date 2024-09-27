@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import axiosInstance, { fetcher, endpoints, fetcherPost } from 'src/utils/axios';
 
@@ -30,8 +30,6 @@ export function useGetSchools() {
 
   return memoizedValue;
 }
-
-// ----------------------------------------------------------------------
 
 export function useGetSchool(id) {
   const url = `${endpoints.school.details}/${id}`;
@@ -80,46 +78,3 @@ export const createSchool = async (schoolData) => {
 };
 
 // ----------------------------------------------------------------------
-
-export function useGetLatestSchools(title) {
-  const url = title ? [endpoints.school.latest, { params: { title } }] : '';
-
-  const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
-
-  const memoizedValue = useMemo(
-    () => ({
-      latestSchools: data?.latestSchools || [],
-      latestSchoolsLoading: isLoading,
-      latestSchoolsError: error,
-      latestSchoolsValidating: isValidating,
-      latestSchoolsEmpty: !isLoading && !data?.latestSchools.length,
-    }),
-    [data?.latestSchools, error, isLoading, isValidating]
-  );
-
-  return memoizedValue;
-}
-
-// ----------------------------------------------------------------------
-
-export function useSearchSchools(query) {
-  const url = query ? [endpoints.school.search, { params: { query } }] : '';
-
-  const { data, isLoading, error, isValidating } = useSWR(url, fetcher, {
-    ...swrOptions,
-    keepPreviousData: true,
-  });
-
-  const memoizedValue = useMemo(
-    () => ({
-      searchResults: data?.results || [],
-      searchLoading: isLoading,
-      searchError: error,
-      searchValidating: isValidating,
-      searchEmpty: !isLoading && !data?.results.length,
-    }),
-    [data?.results, error, isLoading, isValidating]
-  );
-
-  return memoizedValue;
-}

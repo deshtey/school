@@ -67,6 +67,7 @@ export function JwtSignInView() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const authResponse = await dispatch(signIn(data)).unwrap();
+      console.log(authResponse);
       localStorage.setItem('token', authResponse.accessToken);
       localStorage.setItem('user', JSON.stringify(authResponse.user));
       router.refresh();

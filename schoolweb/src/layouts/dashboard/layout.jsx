@@ -75,7 +75,7 @@ export function DashboardLayout({ sx, children, data }) {
               ],
               account: _account,
               contacts: _contacts,
-              workspaces: _workspaces,
+
               notifications: _notifications,
             }}
             slotsDisplay={{

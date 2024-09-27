@@ -13,6 +13,7 @@ namespace schoolapp.Application.DTOs
     }
     public class StudentDto
     {
+        public int? Id { get; set; }
         public string RegNumber { get; set; }
         public int? ClassroomId { get; set; }
         public string? StudentClass { get; set; }

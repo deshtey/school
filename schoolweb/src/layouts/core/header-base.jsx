@@ -16,7 +16,6 @@ import { AccountDrawer } from '../components/account-drawer';
 import { SettingsButton } from '../components/settings-button';
 import { LanguagePopover } from '../components/language-popover';
 import { ContactsPopover } from '../components/contacts-popover';
-import { WorkspacesPopover } from '../components/workspaces-popover';
 import { NotificationsDrawer } from '../components/notifications-drawer';
 
 // ----------------------------------------------------------------------
@@ -29,8 +28,8 @@ const StyledDivider = styled('span')(({ theme }) => ({
   position: 'relative',
   alignItems: 'center',
   flexDirection: 'column',
-  marginLeft: theme.spacing(2.5),
-  marginRight: theme.spacing(2.5),
+  marginLeft: theme.spacing(0.5),
+  marginRight: theme.spacing(0.5),
   backgroundColor: 'currentColor',
   color: theme.vars.palette.divider,
   '&::before, &::after': {
@@ -105,7 +104,6 @@ export function HeaderBase({
             <StyledDivider data-slot="divider" />
 
             {/* -- Workspace popover -- */}
-            {workspaces && <WorkspacesPopover data-slot="workspaces" data={data?.workspaces} />}
 
             {slots?.leftAreaEnd}
           </>

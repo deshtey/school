@@ -21,7 +21,7 @@ export function CustomBreadcrumbs({
   const lastLink = links[links.length - 1].name;
 
   const renderHeading = (
-    <Typography variant="h4" sx={{ mb: 2, ...slotProps?.heading }}>
+    <Typography variant="subtitle2" sx={{ mb: 2, ...slotProps?.heading }}>
       {heading}
     </Typography>
   );

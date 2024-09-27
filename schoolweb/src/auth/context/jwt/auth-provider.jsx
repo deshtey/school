@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'src/utils/axios';
 import { STORAGE_KEY } from './constant';
 import { isValidToken, setSession } from './utils';
 import { AuthContext } from '../auth-context';
@@ -23,7 +22,7 @@ export function AuthProvider({ children }) {
         try {
           user = JSON.parse(userData);
           //const res = await axios.get(endpoints.auth.me);
-          //dispatch(setUser({ ...user, accessToken }));
+          dispatch(setUser({ ...user, accessToken }));
         } catch (error) {
           console.log(error);
         }
@@ -46,7 +45,6 @@ export function AuthProvider({ children }) {
   }, [checkUserSession]);
 
   const status = loading ? 'loading' : isAuthenticated ? 'authenticated' : 'unauthenticated';
-  console.log(status);
   const memoizedValue = useMemo(
     () => ({
       user: user ? { ...user, role: user?.role ?? 'admin' } : null,

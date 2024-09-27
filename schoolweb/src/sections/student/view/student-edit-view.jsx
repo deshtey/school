@@ -58,39 +58,39 @@ export const NewStudentSchema = zod.object({
 
 // ----------------------------------------------------------------------
 
-export function StudentEditView({ student: currentStudent }) {
+export function StudentEditView({ currentStudent: student }) {
   const router = useRouter();
 
   const defaultValues = useMemo(
     () => ({
-      id: currentStudent?.id ?? null,
-      schoolId: currentStudent?.id ?? 2,
+      id: student?.id ?? null,
+      schoolId: student?.id ?? 2,
       studentDto: {
-        status: currentStudent?.studentDto?.status || '',
-        imageUrl: currentStudent?.studentDto?.imageUrl || null,
-        regNumber: currentStudent?.studentDto?.regNumber || null,
-        firstName: currentStudent?.studentDto?.firstName || '',
-        lastName: currentStudent?.studentDto?.lastName || '',
-        otherNames: currentStudent?.studentDto?.otherNames || '',
-        email: currentStudent?.studentDto?.email || '',
-        phoneNumber: currentStudent?.studentDto?.phoneNumber || '',
-        country: currentStudent?.studentDto?.country || '',
-        gender: currentStudent?.studentDto?.gender || null,
-        dob: currentStudent?.studentDto?.dob || null,
-        address: currentStudent?.studentDto?.address || '',
+        status: student?.studentDto?.status || '',
+        imageUrl: student?.studentDto?.imageUrl || null,
+        regNumber: student?.studentDto?.regNumber || null,
+        firstName: student?.studentDto?.firstName || '',
+        lastName: student?.studentDto?.lastName || '',
+        otherNames: student?.studentDto?.otherNames || '',
+        email: student?.studentDto?.email || '',
+        phoneNumber: student?.studentDto?.phoneNumber || '',
+        country: student?.studentDto?.country || '',
+        gender: student?.studentDto?.gender || null,
+        dob: student?.studentDto?.dob || null,
+        address: student?.studentDto?.address || '',
       },
       parentsDto: [
         {
-          id: currentStudent?.parentDto?.id || null,
-          firstName: currentStudent?.parentDto?.firstName || '',
-          lastName: currentStudent?.parentDto?.lastName || '',
-          otherNames: currentStudent?.parentDto?.otherNames || '',
-          phone: currentStudent?.parentDto?.phone || '',
-          email: currentStudent?.parentDto?.email || '',
+          id: student?.parentDto?.id || null,
+          firstName: student?.parentDto?.firstName || '',
+          lastName: student?.parentDto?.lastName || '',
+          otherNames: student?.parentDto?.otherNames || '',
+          phone: student?.parentDto?.phone || '',
+          email: student?.parentDto?.email || '',
         },
       ],
     }),
-    [currentStudent]
+    [student]
   );
 
   const methods = useForm({
@@ -116,7 +116,7 @@ export function StudentEditView({ student: currentStudent }) {
     try {
       const url = endpoints.student.list;
       await fetcherPost(url, 'POST', data);
-      toast.success(currentStudent ? 'Update success!' : 'Create success!');
+      toast.success(student ? 'Update success!' : 'Create success!');
       router.push(paths.admin.student.list);
     } catch (error) {
       console.error(error);
@@ -131,7 +131,7 @@ export function StudentEditView({ student: currentStudent }) {
         links={[
           { name: 'Dashboard', href: paths.admin.root },
           { name: 'Student', href: paths.admin.student.root },
-          { name: currentStudent?.name },
+          { name: student?.name },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
@@ -140,7 +140,7 @@ export function StudentEditView({ student: currentStudent }) {
         <Grid container spacing={3}>
           <Grid xs={12} md={4}>
             <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-              {currentStudent && (
+              {student && (
                 <Label
                   color={
                     (values.status === 'active' && 'success') ||
@@ -175,7 +175,7 @@ export function StudentEditView({ student: currentStudent }) {
                 />
               </Box>
 
-              {currentStudent && (
+              {student && (
                 <FormControlLabel
                   labelPlacement="start"
                   control={
@@ -228,7 +228,7 @@ export function StudentEditView({ student: currentStudent }) {
                 sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
               /> */}
 
-              {currentStudent && (
+              {student && (
                 <Stack justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
                   <Button variant="soft" color="error">
                     Delete student
@@ -314,7 +314,7 @@ export function StudentEditView({ student: currentStudent }) {
               </Box>
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentStudent ? 'Create student' : 'Save changes'}
+                  {!student ? 'Create student' : 'Save changes'}
                 </LoadingButton>
               </Stack>
             </Card>

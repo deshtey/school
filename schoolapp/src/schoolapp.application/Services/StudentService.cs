@@ -24,6 +24,7 @@ namespace schoolapp.Application.Services
                .Where(s => s.SchoolId == schoolId)
                 .Select(s => new StudentDto
                 {
+                    Id = s.Id,
                     Status = s.Status,
                     FullName = s.GetFullName(),
                     FirstName = s.FirstName,

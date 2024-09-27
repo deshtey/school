@@ -58,6 +58,9 @@ export const signUp = async ({ email, password, firstName, lastName }) => {
 export const signOut = async () => {
   try {
     await setSession(null);
+    localStorage.removeItem('user');
+    sessionStorage.removeItem(STORAGE_KEY);
+    console.log('signed out');
   } catch (error) {
     console.error('Error during sign out:', error);
     throw error;

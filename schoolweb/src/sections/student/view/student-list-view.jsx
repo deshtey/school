@@ -261,12 +261,12 @@ export function StudentListView() {
                     )
                     .map((row) => (
                       <StudentTableRow
-                        key={row.studentId}
+                        key={row.id}
                         row={row}
-                        selected={table.selected.includes(row.studentId)}
-                        onSelectRow={() => table.onSelectRow(row.studentId)}
-                        onDeleteRow={() => handleDeleteRow(row.studentId)}
-                        onViewRow={() => handleViewRow(row.studentId)}
+                        selected={table.selected.includes(row.id)}
+                        onSelectRow={() => table.onSelectRow(row.id)}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                        onViewRow={() => handleViewRow(row.id)}
                       />
                     ))}
 

@@ -1,6 +1,7 @@
 // authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { setSession } from 'src/auth/context/jwt';
+import { STORAGE_KEY } from 'src/components/settings';
 import axios, { endpoints } from 'src/utils/axios';
 
 const initialState = {
@@ -26,16 +27,17 @@ export const signIn = createAsyncThunk('auth/signIn', async (credentials, { reje
     setSession(response.data.accessToken, response.data.user);
     return response.data;
   } catch (error) {
-    return rejectWithValue(error);
+    console.log(error.message);
+    return rejectWithValue(error.message);
   }
 });
 export const setAuthState = createAsyncThunk(
   'auth/setAuthState',
   async (authData, { rejectWithValue }) => {
     try {
-      // You might want to fetch user data here using the token
       return authData;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error.response.data);
     }
   }
@@ -44,9 +46,12 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: (state) => {
+    logout: async (state) => {
       state.user = null;
       state.isAuthenticated = false;
+      await setSession(null);
+      localStorage.removeItem('user');
+      sessionStorage.removeItem(STORAGE_KEY);
     },
     setUser: (state, action) => {
       state.user = action.payload;
@@ -70,7 +75,7 @@ const authSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.error.message;
       })
       .addCase(signIn.pending, (state) => {
         state.loading = true;
@@ -82,9 +87,11 @@ const authSlice = createSlice({
         state.user = action.payload.user;
       })
       .addCase(signIn.rejected, (state, action) => {
+        console.log(action);
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.error.message;
       })
+
       .addCase(setAuthState.fulfilled, (state, action) => {
         state.isAuthenticated = true;
         state.token = action.payload.token;

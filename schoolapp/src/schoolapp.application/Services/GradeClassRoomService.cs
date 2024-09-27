@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
 using schoolapp.Domain.Entities.ClassGrades;
 
 namespace schoolapp.Application.Services
@@ -15,22 +16,38 @@ namespace schoolapp.Application.Services
             _context = context;
             _logger = logger;
         }
-        public async Task<IEnumerable<Grade>?> GetSchoolClasses(int schoolId)
+        public async Task<IEnumerable<GradeDto>?> GetSchoolClasses(int schoolId)
         {
             if (_context.Grades == null)
             {
                 return null;
             }
-            return await _context.Grades.Where(s => s.SchoolId == schoolId).ToListAsync();
+            return await _context.Grades
+                .Where(s => s.SchoolId == schoolId)
+                .Select(g => new GradeDto
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    Desc = g.Desc,
+                    SchoolId = g.SchoolId,
+                })
+                .ToListAsync();
         }
 
-        public async Task<Grade?> GetGrade(int id)
+        public async Task<GradeDto?> GetGrade(int id)
         {
             if (_context.Grades == null)
             {
                 return null;
             }
-            var Grade = await _context.Grades.FindAsync(id);
+            var Grade = await _context.Grades
+                .Select(g => new GradeDto
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    Desc = g.Desc,
+                    SchoolId = g.SchoolId,
+                }).FirstOrDefaultAsync(g => g.Id == id);
 
             if (Grade == null)
             {
@@ -38,25 +55,63 @@ namespace schoolapp.Application.Services
             }
             return Grade;
         }
-        public async Task<List<ClassRoom>?> GetSchoolClassRooms(int SchoolId)
+        public async Task<ClassRoomDto?> GetClassRoom(int id)
         {
             if (_context.ClassRooms == null)
             {
                 return null;
             }
-            var classRooms = await _context.ClassRooms.Where(c => c.SchoolId == SchoolId).ToListAsync();
-            return classRooms;
+            var classroom  = await _context.ClassRooms
+          
+                .Select(g => new ClassRoomDto
+                {
+                    TeacherId = g.TeacherId,
+                    ClassRoomId = g.ClassRoomId,
+                    ClassroomName = g.ClassroomName,
+                    GradeId = g.GradeId,
+                    Year = g.Year,
+                    SchoolId = g.SchoolId,
+                    ClassTeacherName = g.ClassTeacher.GetFullName(),
+                    Students = g.Students.Select(s => new StudentDto
+                    {
+                        FullName = s.GetFullName(),
+                    }).ToList()
+
+                }).AsNoTracking()
+                .FirstOrDefaultAsync(g => g.ClassRoomId == id);
+
+            return classroom ?? null;
         }
-        public async Task<List<ClassRoom>?> GetGradeClassRooms(int GradeId)
+        public async Task<List<ClassRoomDto>?> GetSchoolClassRooms(int SchoolId)
         {
             if (_context.ClassRooms == null)
             {
                 return null;
             }
-            var classRooms = await _context.ClassRooms.Where(c=>c.GradeId == GradeId).ToListAsync();      
+            var classRooms = await _context.ClassRooms
+                .Select(c => new ClassRoomDto
+                {
+                    SchoolId=c.SchoolId,
+                    ClassRoomId = c.ClassRoomId,
+                    ClassroomName = c.ClassroomName,
+                    GradeId = c.GradeId,
+                    TeacherId = c.TeacherId,
+                    Year = c.Year   
+                })
+                .Where(c => c.SchoolId == SchoolId)
+                .ToListAsync();
             return classRooms;
         }
-        public async Task<Grade?> PutGrade(int id, Grade grade, CancellationToken cancellationToken)
+        public async Task<List<ClassRoomDto>?> GetGradeClassRooms(int GradeId)
+        {
+            if (_context.ClassRooms == null)
+            {
+                return null;
+            }
+            var classRooms = await _context.ClassRooms.Select(c => new ClassRoomDto { SchoolId = c.SchoolId, ClassRoomId = c.ClassRoomId, ClassroomName = c.ClassroomName, GradeId = c.GradeId, TeacherId = c.TeacherId, Year = c.Year }).Where(c=>c.GradeId == GradeId).ToListAsync();      
+            return classRooms;
+        }
+        public async Task<GradeDto?> PutGrade(int id, GradeDto grade, CancellationToken cancellationToken)
         {
             if (grade== null || id != grade.Id)
             {
@@ -76,7 +131,7 @@ namespace schoolapp.Application.Services
 
                 await _context.SaveChangesAsync(cancellationToken);
 
-                return existingGrade;
+                return grade;
             }
             catch (Exception ex)
             {
@@ -85,18 +140,71 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<bool?> PostGrade(Grade Grade, CancellationToken cancellationToken)
+        public async Task<bool?> PostGrade(GradeDto grade, CancellationToken cancellationToken)
         {
             if (_context.Grades == null)
             {
                 return null;
             }
-            _context.Grades.Add(Grade);
+            var newGrade = new Grade
+            {
+                Name = grade.Name,
+                Desc = grade.Desc,
+                SchoolId = grade.SchoolId,
+            };
+            _context.Grades.Add(newGrade);
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;
         }
 
+        public async Task<bool?> PostClassroom(ClassRoomDto  classRoom, CancellationToken cancellationToken)
+        {
+            if (_context.ClassRooms == null)
+            {
+                return null;
+            }
+            var newclassroom = new ClassRoom
+            {
+                ClassroomName = classRoom.ClassroomName,
+                GradeId = classRoom.GradeId,
+                SchoolId = classRoom.SchoolId,
+                Year = classRoom.Year              
+            };
+            _context.ClassRooms.Add(newclassroom);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return true;
+        }
+        public async Task<ClassRoomDto?> PutClassroom(int id, ClassRoomDto classRoom, CancellationToken cancellationToken)
+        {
+            if (_context.ClassRooms == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                var existingClassRoom = await _context.ClassRooms.FindAsync(new object[] { id }, cancellationToken);
+
+                if (existingClassRoom == null)
+                {
+                    return null; // Grade with the given ID not found.
+                }
+
+                _context.ClassRooms.Entry(existingClassRoom).CurrentValues.SetValues(classRoom);
+
+                await _context.SaveChangesAsync(cancellationToken);
+
+                return classRoom;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating school");
+                return null;
+            }
+
+        }
         public async Task<bool> DeleteGrade(int id, CancellationToken cancellationToken)
         {
             if (_context.Grades == null)
@@ -114,5 +222,22 @@ namespace schoolapp.Application.Services
 
             return true;
         }
-     }
+        public async Task<bool> DeleteClassroom(int id, CancellationToken cancellationToken)
+        {
+            if (_context.ClassRooms == null)
+            {
+                return false;
+            }
+            var classroom = await _context.ClassRooms.FindAsync(id);
+            if (classroom == null)
+            {
+                return true;
+            }
+
+            _context.ClassRooms.Remove(classroom);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return true;
+        }
+    }
 }

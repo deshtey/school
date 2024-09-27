@@ -1,6 +1,7 @@
 using lovedmemory.web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
+using schoolapp.Application;
 using schoolapp.Infrastructure;
 using Serilog;
 using Serilog.Events;

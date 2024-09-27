@@ -1,9 +1,10 @@
 ﻿using System.Reflection;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using schoolapp.Application.Contracts;
 using schoolapp.Application.Services;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace schoolapp.Application;
 
 public static class ConfigureServices
 {
