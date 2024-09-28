@@ -17,26 +17,41 @@ import Typography from '@mui/material/Typography';
 import { useRouter } from 'src/routes/hooks';
 
 import { useSelector } from 'react-redux';
-import { useGetClassRooms } from 'src/actions/classroom';
-import { Avatar, CardHeader, IconButton } from '@mui/material';
+import { Avatar, CardHeader, IconButton, Table, TableBody } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
-
-export const NewClassroomSchema = zod.object({
-  classroomName: zod.string().min(1, { message: 'Name is required!' }),
-  schoolId: zod.number(),
-  year: zod.number(),
-  classroomId: zod.number().min(1, { message: 'ClassRoom is required!' }),
-});
+import { Scrollbar } from 'src/components/scrollbar';
+import {
+  emptyRows,
+  TableNoData,
+  TableEmptyRows,
+  TableHeadCustom,
+  useTable,
+} from 'src/components/table';
+import { StudentTableRow } from 'src/sections/student/student-table-row';
+import { useCallback } from 'react';
+const TABLE_HEAD = [
+  // { id: 'classroomNumber', label: 'Id', width: 88 },
+  { id: 'name', label: 'Student Name' },
+  { id: 'regNumber', label: 'Reg Number', width: 140 },
+  { id: 'gender', label: 'Gender', width: 140 },
+  { id: 'status', label: 'Status', width: 140 },
+  { id: '', width: 88 },
+];
 
 // ----------------------------------------------------------------------
 
 export function ClassroomDetailView({ currentClassroom: classroom }) {
   const school = useSelector((state) => state.school);
-  const { classrooms, classroomsEmpty, classroomsError, classroomsLoading } = useGetClassRooms(
-    school.id
-  );
+  const table = useTable({ defaultClassroomBy: 'classroomNumber' });
+  const notFound = !classroom.students.length;
 
   const router = useRouter();
+  const handleViewRow = useCallback(
+    (studentId) => {
+      router.push(paths.admin.student.details(studentId));
+    },
+    [router]
+  );
   const renderClassroom = (
     <>
       <CardHeader
@@ -47,38 +62,8 @@ export function ClassroomDetailView({ currentClassroom: classroom }) {
           </IconButton>
         }
       />
-      <Stack direction="row" sx={{ p: 3 }}>
-        <Avatar
-          alt={classroom?.name}
-          src={classroom?.avatarUrl}
-          sx={{ width: 48, height: 48, mr: 2 }}
-        />
-
-        <Stack spacing={0.5} alignItems="flex-start" sx={{ typography: 'body2' }}>
-          <Typography variant="subtitle2">{classroom?.name}</Typography>
-
-          <Box sx={{ color: 'text.secondary' }}>{classroom?.email}</Box>
-
-          <div>
-            IP address:
-            <Box component="span" sx={{ color: 'text.secondary', ml: 0.25 }}>
-              {classroom?.ipAddress}
-            </Box>
-          </div>
-
-          <Button
-            size="small"
-            color="error"
-            startIcon={<Iconify icon="mingcute:add-line" />}
-            sx={{ mt: 1 }}
-          >
-            Add to Blacklist
-          </Button>
-        </Stack>
-      </Stack>
     </>
   );
-  // const renderStudents = (
   //   <>
   //     <CardHeader
   //       title="Delivery"
@@ -175,17 +160,44 @@ export function ClassroomDetailView({ currentClassroom: classroom }) {
       <Card>
         {renderClassroom}
 
-        {/* <Divider sx={{ borderStyle: 'dashed' }} />
+        <Scrollbar sx={{ minHeight: 444 }}>
+          <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+            <TableHeadCustom
+              classroom={table.classroom}
+              classroomBy={table.classroomBy}
+              headLabel={TABLE_HEAD}
+              rowCount={classroom.students.length}
+              numSelected={table.selected.length}
+              onSort={table.onSort}
+              onSelectAllRows={(checked) =>
+                table.onSelectAllRows(
+                  checked,
+                  classroom.students.map((row) => row.id)
+                )
+              }
+            />
 
-        {renderDelivery}
+            <TableBody>
+              {classroom.students.map((row) => (
+                <StudentTableRow
+                  key={row.id}
+                  row={row}
+                  selected={table.selected.includes(row.id)}
+                  onSelectRow={() => table.onSelectRow(row.id)}
+                  onDeleteRow={() => handleDeleteRow(row.id)}
+                  onViewRow={() => handleViewRow(row.id)}
+                />
+              ))}
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+              <TableEmptyRows
+                height={table.dense ? 56 : 56 + 20}
+                emptyRows={emptyRows(table.page, table.rowsPerPage, classroom.students.length)}
+              />
 
-        {renderShipping}
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        {renderPayment} */}
+              <TableNoData notFound={notFound} />
+            </TableBody>
+          </Table>
+        </Scrollbar>
       </Card>
     </DashboardContent>
   );

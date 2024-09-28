@@ -256,7 +256,6 @@ export function ClassroomListView() {
                 />
 
                 <TableBody>
-                  {console.log(dataFiltered)}
                   {dataFiltered
                     .slice(
                       table.page * table.rowsPerPage,

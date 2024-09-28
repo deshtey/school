@@ -78,6 +78,11 @@ namespace schoolapp.Application.Services
                     ClassTeacherName = g.ClassTeacher != null ? g.ClassTeacher.GetFullName() : "No teacher assigned",
                     Students = g.Students.Select(s => new StudentDto
                     {
+                        Id  = s.Id,
+                        Status = s.Status,
+                        Gender = s.Gender,
+                        RegNumber = s.RegNumber,                        
+                        ImageUrl = s.Image,
                         FullName = s.GetFullName(),
                     }).ToList()
 

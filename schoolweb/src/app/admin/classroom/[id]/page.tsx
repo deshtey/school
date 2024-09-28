@@ -2,11 +2,9 @@
 import { useGetClassroom } from 'src/actions/classroom';
 import { ClassroomDetailView } from 'src/sections/classroom/view/classroom-detail-view';
 
-export default function Page({ params }) {
-  const { id } = params;
+export default function ClassroomDetailPage({ params: { id } }: PageProps): JSX.Element {
   const { classroom, classroomEmpty, classroomError, classroomLoading, classroomValidating } =
     useGetClassroom(id);
-
   if (classroomLoading || classroomValidating) {
     return <div>Loading...</div>;
   }
@@ -20,4 +18,10 @@ export default function Page({ params }) {
   }
 
   return classroom ? <ClassroomDetailView currentClassroom={classroom} /> : null;
+}
+
+interface PageProps {
+  params: {
+    id: number;
+  };
 }

@@ -15,13 +15,50 @@ import Typography from '@mui/material/Typography';
 import { useRouter } from 'src/routes/hooks';
 
 import { useSelector } from 'react-redux';
-import { Avatar, CardHeader, IconButton } from '@mui/material';
+import {
+  Avatar,
+  CardHeader,
+  IconButton,
+  ListItemText,
+  MenuItem,
+  Table,
+  TableBody,
+} from '@mui/material';
 import { Iconify } from 'src/components/iconify';
-
+import { Scrollbar } from 'src/components/scrollbar';
+import {
+  useTable,
+  emptyRows,
+  rowInPage,
+  TableNoData,
+  getComparator,
+  TableEmptyRows,
+  TableHeadCustom,
+  TableSelectedAction,
+  TablePaginationCustom,
+} from 'src/components/table';
+import { ClassroomTableRow } from 'src/sections/classroom/classroom-table-row';
+import { useCallback } from 'react';
+const TABLE_HEAD = [
+  // { id: 'classroomNumber', label: 'Id', width: 88 },
+  { id: 'name', label: 'ClassroomName' },
+  { id: 'createdAt', label: 'Created', width: 140 },
+  { id: 'location', label: 'Location', width: 140 },
+  { id: 'phone', label: 'Phone', width: 140 },
+  { id: 'city', label: 'City', width: 110 },
+  { id: '', width: 88 },
+];
 export function GradeDetailView({ currentGrade: grade }) {
-  console.log(grade);
+  const table = useTable({ defaultClassroomBy: 'classroomNumber' });
   const selectedGrade = useSelector((state) => state.grade);
   const router = useRouter();
+  const notFound = !grade.classrooms.length;
+  const handleViewRow = useCallback(
+    (classRoomId) => {
+      router.push(paths.admin.classroom.details(classRoomId));
+    },
+    [router]
+  );
   const renderGrade = (
     <>
       <CardHeader
@@ -43,40 +80,6 @@ export function GradeDetailView({ currentGrade: grade }) {
       </Stack>
     </>
   );
-  // const renderStudents = (
-  //   <>
-  //     <CardHeader
-  //       title="Delivery"
-  //       action={
-  //         <IconButton>
-  //           <Iconify icon="solar:pen-bold" />
-  //         </IconButton>
-  //       }
-  //     />
-  //     <Stack spacing={1.5} sx={{ p: 3, typography: 'body2' }}>
-  //       <Stack direction="row" alignItems="center">
-  //         <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
-  //           Ship by
-  //         </Box>
-  //         {delivery?.shipBy}
-  //       </Stack>
-  //       <Stack direction="row" alignItems="center">
-  //         <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
-  //           Speedy
-  //         </Box>
-  //         {delivery?.speedy}
-  //       </Stack>
-  //       <Stack direction="row" alignItems="center">
-  //         <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
-  //           Tracking No.
-  //         </Box>
-  //         <Link underline="always" color="inherit">
-  //           {delivery?.trackingNumber}
-  //         </Link>
-  //       </Stack>
-  //     </Stack>
-  //   </>
-  // );
 
   // const renderSubjects = (
   //   <>
@@ -139,18 +142,44 @@ export function GradeDetailView({ currentGrade: grade }) {
       />
       <Card>
         {renderGrade}
+        <Scrollbar sx={{ minHeight: 444 }}>
+          <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+            <TableHeadCustom
+              classroom={table.classroom}
+              classroomBy={table.classroomBy}
+              headLabel={TABLE_HEAD}
+              rowCount={grade.classrooms.length}
+              numSelected={table.selected.length}
+              onSort={table.onSort}
+              onSelectAllRows={(checked) =>
+                table.onSelectAllRows(
+                  checked,
+                  grade.classrooms.map((row) => row.id)
+                )
+              }
+            />
 
-        {/* <Divider sx={{ borderStyle: 'dashed' }} />
+            <TableBody>
+              {grade.classrooms.map((row) => (
+                <ClassroomTableRow
+                  key={row.classroomId}
+                  row={row}
+                  selected={table.selected.includes(row.classroomId)}
+                  onSelectRow={() => table.onSelectRow(row.classroomId)}
+                  onDeleteRow={() => handleDeleteRow(row.classroomId)}
+                  onViewRow={() => handleViewRow(row.classRoomId)}
+                />
+              ))}
 
-        {renderDelivery}
+              <TableEmptyRows
+                height={table.dense ? 56 : 56 + 20}
+                emptyRows={emptyRows(table.page, table.rowsPerPage, grade.classrooms.length)}
+              />
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        {renderShipping}
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        {renderPayment} */}
+              <TableNoData notFound={notFound} />
+            </TableBody>
+          </Table>
+        </Scrollbar>
       </Card>
     </DashboardContent>
   );

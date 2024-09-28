@@ -102,7 +102,7 @@ export const endpoints = {
   },
   classroom: {
     list: '/api/classrooms',
-    details: '/api/classrooms',
+    details: '/api/classrooms/classroom',
     create: '/api/classrooms',
   },
 };

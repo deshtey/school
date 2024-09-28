@@ -23,8 +23,6 @@ export default function SchoolDetailPage({ params: { id } }: PageProps): JSX.Ele
   }
 
   return school ? <SchoolDetailView currentSchool={school} /> : null;
-
-  // return <SchoolEditView school={school} />;
 }
 
 interface PageProps {

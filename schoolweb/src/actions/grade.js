@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import axiosInstance, { fetcher, endpoints, fetcherPost } from 'src/utils/axios';
 

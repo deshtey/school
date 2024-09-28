@@ -1,9 +1,6 @@
 import useSWR from 'swr';
-import { useMemo, useState } from 'react';
-
-import axiosInstance, { fetcher, endpoints, fetcherPost } from 'src/utils/axios';
-
-// ----------------------------------------------------------------------
+import { useMemo } from 'react';
+import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
 const swrOptions = {
   revalidateIfStale: false,
@@ -11,10 +8,8 @@ const swrOptions = {
   revalidateOnReconnect: false,
 };
 
-// ----------------------------------------------------------------------
-
-export function useGetClassrooms(schoolId = 2) {
-  const url = `${endpoints.classroom.list}/${schoolId}`;
+export function useGetClassrooms(gradeid) {
+  const url = `${endpoints.classroom.list}/${gradeid}`;
 
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
   const memoizedValue = useMemo(
@@ -35,8 +30,8 @@ export function useGetClassrooms(schoolId = 2) {
 
 export function useGetClassroom(id) {
   const url = `${endpoints.classroom.details}/${id}`;
-  // const url = [endpoints.classroom.details, { params: { id } }];
-
+  console.log(id);
+  console.log(url);
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
 
   const memoizedValue = useMemo(
