@@ -33,7 +33,6 @@ export function useGetStudents(studentId = 2) {
 
 export function useGetStudent(schoolId, id) {
   const url = `${endpoints.student.details}/${schoolId}/${id}`;
-  debugger;
   const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
 
   const memoizedValue = useMemo(

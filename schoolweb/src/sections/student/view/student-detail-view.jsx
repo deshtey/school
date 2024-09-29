@@ -1,158 +1,62 @@
 'use client';
 
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+
 import { paths } from 'src/routes/paths';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import { useTabs } from 'src/hooks/use-tabs';
 
-import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
+import { AdminContent } from 'src/layouts/admin';
 
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-
-import { useRouter } from 'src/routes/hooks';
-
-import { useSelector } from 'react-redux';
-import { useGetGrades } from 'src/actions/grade';
-import { Avatar, CardHeader, IconButton } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
+import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
+import { Button, Grid } from '@mui/material';
+
+const TABS = [
+  { value: 'profile', label: 'Profile', icon: <Iconify icon="solar:student-id-bold" width={24} /> },
+  { value: 'address', label: 'Address', icon: <Iconify icon="solar:bill-list-bold" width={24} /> },
+  {
+    value: 'notifications',
+    label: 'Notifications',
+    icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
+  },
+  { value: 'social', label: 'Social links', icon: <Iconify icon="solar:share-bold" width={24} /> },
+  { value: 'security', label: 'Security', icon: <Iconify icon="ic:round-vpn-key" width={24} /> },
+];
 
 export function StudentDetailView({ currentStudent: student }) {
-  const selectedStudent = useSelector((state) => state.student);
-  const { grades, gradesEmpty, gradesError, gradesLoading } = useGetGrades(student.id);
-  const router = useRouter();
-  const renderStudent = (
-    <>
-      <CardHeader
-        title="Student info"
-        action={
-          <IconButton onClick={() => router.push(paths.admin.student.edit(student.id))}>
-            <Iconify icon="solar:pen-bold" />
-          </IconButton>
-        }
-      />
-      <Stack direction="row" sx={{ p: 3 }}>
-        <Avatar alt={student?.name} src={student?.logo} sx={{ width: 48, height: 48, mr: 2 }} />
+  const tabs = useTabs('profile');
 
-        <Stack spacing={0.5} alignItems="flex-start" sx={{ typography: 'body2' }}>
-          <Typography variant="subtitle2">{student?.name}</Typography>
-
-          <Box sx={{ color: 'text.secondary' }}>{student?.email}</Box>
-        </Stack>
-      </Stack>
-    </>
-  );
-  // const renderStudents = (
-  //   <>
-  //     <CardHeader
-  //       title="Delivery"
-  //       action={
-  //         <IconButton>
-  //           <Iconify icon="solar:pen-bold" />
-  //         </IconButton>
-  //       }
-  //     />
-  //     <Stack spacing={1.5} sx={{ p: 3, typography: 'body2' }}>
-  //       <Stack direction="row" alignItems="center">
-  //         <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
-  //           Ship by
-  //         </Box>
-  //         {delivery?.shipBy}
-  //       </Stack>
-  //       <Stack direction="row" alignItems="center">
-  //         <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
-  //           Speedy
-  //         </Box>
-  //         {delivery?.speedy}
-  //       </Stack>
-  //       <Stack direction="row" alignItems="center">
-  //         <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
-  //           Tracking No.
-  //         </Box>
-  //         <Link underline="always" color="inherit">
-  //           {delivery?.trackingNumber}
-  //         </Link>
-  //       </Stack>
-  //     </Stack>
-  //   </>
-  // );
-
-  // const renderSubjects = (
-  //   <>
-  //     <CardHeader
-  //       title="Shipping"
-  //       action={
-  //         <IconButton>
-  //           <Iconify icon="solar:pen-bold" />
-  //         </IconButton>
-  //       }
-  //     />
-  //     <Stack spacing={1.5} sx={{ p: 3, typography: 'body2' }}>
-  //       <Stack direction="row">
-  //         <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
-  //           Address
-  //         </Box>
-  //         {shippingAddress?.fullAddress}
-  //       </Stack>
-
-  //       <Stack direction="row">
-  //         <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
-  //           Phone number
-  //         </Box>
-  //         {shippingAddress?.phoneNumber}
-  //       </Stack>
-  //     </Stack>
-  //   </>
-  // );
-  // const renderTimetable = (
-  //   <>
-  //     <CardHeader
-  //       title="Payment"
-  //       action={
-  //         <IconButton>
-  //           <Iconify icon="solar:pen-bold" />
-  //         </IconButton>
-  //       }
-  //     />
-  //     <Box
-  //       display="flex"
-  //       alignItems="center"
-  //       justifyContent="flex-end"
-  //       sx={{ p: 3, gap: 0.5, typography: 'body2' }}
-  //     >
-  //       {payment?.cardNumber}
-  //       <Iconify icon="logos:mastercard" width={24} />
-  //     </Box>
-  //   </>
-  // );
   return (
-    <DashboardContent>
+    <AdminContent>
       <CustomBreadcrumbs
-        heading="Details"
+        heading="Student"
         links={[
-          { name: 'Dashboard', href: paths.admin.root },
+          { name: 'Admin', href: paths.admin.root },
           { name: 'Student', href: paths.admin.student.root },
-          { name: 'New Student' },
+          { name: 'Details' },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
-      <Card>
-        {renderStudent}
 
-        {/* <Divider sx={{ borderStyle: 'dashed' }} />
-
-        {renderDelivery}
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        {renderShipping}
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        {renderPayment} */}
-      </Card>
-    </DashboardContent>
+      <Tabs value={tabs.value} onChange={tabs.onChange} sx={{ mb: { xs: 3, md: 5 } }}>
+        {TABS.map((tab) => (
+          <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
+        ))}
+      </Tabs>
+      {tabs.value === 'profile' && (
+        <>
+          <Grid container spacing={{ xs: 0.5, md: 2 }}>
+            <Grid xs={12} md={4} sx={{ color: 'text.secondary' }}>
+              Name
+            </Grid>
+            <Grid xs={12} md={8} sx={{ color: 'text.secondary' }}>
+              {student.studentDto.fullName}
+            </Grid>
+          </Grid>
+        </>
+      )}
+    </AdminContent>
   );
 }
