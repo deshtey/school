@@ -2,9 +2,10 @@
 using schoolapp.Application.Contracts;
 using schoolapp.Application.DTOs;
 
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace schoolapp.webapi.Controllers
+namespace classroomapp.webapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -13,15 +14,15 @@ namespace schoolapp.webapi.Controllers
         private readonly IClassRoomSubjectService _ClassRoomSubjectservice;
         private readonly CancellationToken cancellationToken;
 
-        public ClassRoomSubjectsController(IClassRoomSubjectService schoolSubjectservice)
+        public ClassRoomSubjectsController(IClassRoomSubjectService classroomSubjectservice)
         {
-            _ClassRoomSubjectservice = schoolSubjectservice;
+            _ClassRoomSubjectservice = classroomSubjectservice;
         }
         // GET: api/<ClassRoomSubjectsController
-        [HttpGet("{schoolId}")]
-        public async Task<IEnumerable<ClassRoomSubjectDto>> Get(int schoolId)
+        [HttpGet("{classroomId}")]
+        public async Task<IEnumerable<ClassRoomSubjectDto>> Get(int classroomId)
         {
-            return await _ClassRoomSubjectservice.GetClassRoomSubjects(schoolId);
+            return await _ClassRoomSubjectservice.GetClassRoomSubjects(classroomId);
         }
 
         // GET api/<ClassRoomSubjectsController>/5
@@ -33,21 +34,21 @@ namespace schoolapp.webapi.Controllers
 
         // POST api/<ClassRoomSubjectsController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ClassRoomSubjectDto schoolsubject)
+        public async Task<IActionResult> Post([FromBody] ClassRoomSubjectDto classroomsubject)
         {
             if (ModelState.IsValid == false)
             {
                 return BadRequest(ModelState);
             }
-            await _ClassRoomSubjectservice.PostClassRoomSubject(schoolsubject, cancellationToken);
-            return Ok(schoolsubject);
+            await _ClassRoomSubjectservice.PostClassRoomSubject(classroomsubject, cancellationToken);
+            return Ok(classroomsubject);
         }
 
         // PUT api/<ClassRoomSubjectsController>/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] ClassRoomSubjectDto schoolsubject)
+        public async Task Put(int id, [FromBody] ClassRoomSubjectDto classroomsubject)
         {
-            await _ClassRoomSubjectservice.PutClassRoomSubject(id, schoolsubject, cancellationToken);
+            await _ClassRoomSubjectservice.PutClassRoomSubject(id, classroomsubject, cancellationToken);
         }
 
         // DELETE api/<ClassRoomSubjectsController>/5
