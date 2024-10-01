@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using schoolapp.Application.Common.Interfaces;
 using schoolapp.Domain.Entities;
+using schoolapp.Domain.Entities.Academics;
 using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.Departments;
 using schoolapp.Domain.Entities.People;
@@ -20,12 +21,12 @@ public class SchoolDbContext : DbContext, ISchoolDbContext
     public DbSet<SupportStaff> SupportStaffs { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Department> Departments { get; set; }
-    //public DbSet<Permission> Permissions { get; set; }
-    //public DbSet<RolePermission> RolePermissions { get; set; }
-
-    //public DbSet<ExamType> ExamTypes { get; set; }
-    //public DbSet<ClassRoomStudent> ClassRoomStudents { get; set; }
+    public DbSet<SchoolSetting> SchoolSettings { get; set; }
     public DbSet<Grade> Grades { get; set; }
+    public DbSet<SchoolSubject> SchoolSubjects { get; set; }
+    public DbSet<ClassRoomSubject> ClassRoomSubjects { get; set; }
+    public DbSet<StudentSubject> StudentSubjects { get; set; }
+
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
         if (_currentTransaction != null)
@@ -86,9 +87,12 @@ public class SchoolDbContext : DbContext, ISchoolDbContext
         modelBuilder.HasDefaultSchema("school");
 
         modelBuilder.ApplyConfiguration(new SchoolEntityConfiguration());
-        modelBuilder.ApplyConfiguration(new StudentConfiguration());
-        // modelBuilder.ApplyConfiguration(new StudentParentConfiguration());
+        modelBuilder.ApplyConfiguration(new SchoolSettingConfiguration());
 
+        modelBuilder.ApplyConfiguration(new StudentConfiguration());
+        modelBuilder.ApplyConfiguration(new SchoolSubjectConfiguration());
+        modelBuilder.ApplyConfiguration(new ClassroomSubjectConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentSubjectConfiguration());
 
         //convert table names to lowercase
         foreach (var entity in modelBuilder.Model.GetEntityTypes())

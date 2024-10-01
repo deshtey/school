@@ -8,7 +8,7 @@ class GradeEntityConfiguration
 {
     public void Configure(EntityTypeBuilder<Grade> gradeConfiguration)
     {
-        gradeConfiguration.ToTable("grades");
+        gradeConfiguration.ToTable("grades", "academics");
 
         //gradeConfiguration
         //    .OwnsOne(o => o.GradeAddress);

@@ -105,4 +105,19 @@ export const endpoints = {
     details: '/api/classrooms/classroom',
     create: '/api/classrooms',
   },
+  classroomsubject: {
+    list: '/api/classroomsubjects',
+    details: '/api/classroomsubjects/classroomsubject',
+    create: '/api/classroomsubject',
+  },
+  studentsubject: {
+    list: '/api/studentsubjects',
+    details: '/api/studentsubjects/studentsubject',
+    create: '/api/studentsubjects',
+  },
+  schoolsubject: {
+    list: '/api/schoolsubjects',
+    details: '/api/schoolsubjects/schoolsubject',
+    create: '/api/schoolsubjects',
+  },
 };

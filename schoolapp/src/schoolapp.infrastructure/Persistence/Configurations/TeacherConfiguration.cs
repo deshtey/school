@@ -9,34 +9,34 @@ class TeacherEntityConfiguration
 {
     public void Configure(EntityTypeBuilder<Teacher> teacherConfiguration)
     {
-        teacherConfiguration.ToTable("teachers");
+        teacherConfiguration.ToTable("teachers","people");
 
         teacherConfiguration.Property(s => s.FirstName)
             .HasColumnName("first_name")
             .HasMaxLength(100);
         teacherConfiguration.Property(s => s.LastName)
-    .HasColumnName("last_name")
-    .HasMaxLength(100);
+            .HasColumnName("last_name")
+            .HasMaxLength(100);
         teacherConfiguration.Property(s => s.OtherNames)
-    .HasColumnName("other_names")
-    .HasMaxLength(100);
+            .HasColumnName("other_names")
+            .HasMaxLength(100);
 
         teacherConfiguration.Property(s => s.Email)
-         .HasColumnName("email")
-         .HasMaxLength(100);
+            .HasColumnName("email")
+            .HasMaxLength(100);
 
         teacherConfiguration.Property(s => s.Phone)
-         .HasColumnName("phone")
-         .HasMaxLength(20);
+            .HasColumnName("phone")
+            .HasMaxLength(20);
 
         teacherConfiguration.Property(s => s.RegNo)
-         .HasColumnName("regno")
-         .HasMaxLength(20);
+            .HasColumnName("regno")
+            .HasMaxLength(20);
 
         teacherConfiguration
-        .HasMany(s => s.Departments)
-         .WithMany(s => s.Teachers)
-         .UsingEntity<StaffDepartment>(
+            .HasMany(s => s.Departments)
+            .WithMany(s => s.Teachers)
+            .UsingEntity<StaffDepartment>(
              s => s.ToTable("staff_department"));
    
 

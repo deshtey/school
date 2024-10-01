@@ -8,7 +8,7 @@ class ClassRoomEntityConfiguration
 {
     public void Configure(EntityTypeBuilder<ClassRoom> classRoomConfiguration)
     {
-        classRoomConfiguration.ToTable("classrooms");
+        classRoomConfiguration.ToTable("classrooms", "academics");
 
         classRoomConfiguration.Property(s => s.ClassroomName)
             .HasColumnName("classroomname")

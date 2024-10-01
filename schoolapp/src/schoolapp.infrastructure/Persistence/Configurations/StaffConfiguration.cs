@@ -9,7 +9,7 @@ class SupportStaffEntityConfiguration
 {
     public void Configure(EntityTypeBuilder<SupportStaff> supportStaffConfiguration)
     {
-        supportStaffConfiguration.ToTable("supportstaffs");
+        supportStaffConfiguration.ToTable("supportstaffs", "people");
 
         supportStaffConfiguration.Property(s => s.FirstName)
             .HasColumnName("first_name")

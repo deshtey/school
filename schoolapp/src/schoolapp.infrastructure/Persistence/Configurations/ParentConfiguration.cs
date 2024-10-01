@@ -8,7 +8,7 @@ class ParentEntityConfiguration
 {
     public void Configure(EntityTypeBuilder<Parent> parentConfiguration)
     {
-        parentConfiguration.ToTable("parents");
+        parentConfiguration.ToTable("parents", "people");
 
         //parentConfiguration
         //    .OwnsOne(o => o.ParentAddress);

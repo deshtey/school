@@ -7,7 +7,7 @@ class HeadTeacherEntityConfiguration
 {
     public void Configure(EntityTypeBuilder<HeadTeacher> headteacherConfiguration)
     {
-        headteacherConfiguration.ToTable("headteachers");
+        headteacherConfiguration.ToTable("headteachers", "academics");
 
         headteacherConfiguration
           .HasOne(h => h.Teacher)  

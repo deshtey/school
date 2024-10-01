@@ -8,7 +8,7 @@ namespace schoolapp.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Student> studentConfiguration)
         {
-            studentConfiguration.ToTable("students");
+            studentConfiguration.ToTable("students", "people");
 
             //studentConfiguration
             //    .OwnsOne(o => o.StudentAddress);

@@ -61,6 +61,121 @@ namespace schoolapp.Infrastructure.Migrations
                     b.ToTable("department_teacher", "school");
                 });
 
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.ClassRoomSubject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClassRoomId")
+                        .HasColumnType("integer")
+                        .HasColumnName("class_room_id");
+
+                    b.Property<bool>("Elective")
+                        .HasColumnType("boolean")
+                        .HasColumnName("elective");
+
+                    b.Property<int>("SchoolSubjectId")
+                        .HasColumnType("integer")
+                        .HasColumnName("school_subject_id");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("subject_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_classroom_subjects");
+
+                    b.HasIndex("ClassRoomId")
+                        .HasDatabaseName("ix_classroom_subjects_class_room_id");
+
+                    b.HasIndex("SchoolSubjectId")
+                        .HasDatabaseName("ix_classroom_subjects_school_subject_id");
+
+                    b.ToTable("classroom_subjects", "academics");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.SchoolSubject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Desc")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("desc");
+
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("integer")
+                        .HasColumnName("school_id");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("subject_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_school_subjects");
+
+                    b.HasIndex("SchoolId")
+                        .HasDatabaseName("ix_school_subjects_school_id");
+
+                    b.ToTable("school_subjects", "academics");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.StudentSubject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClassroomSubjectId")
+                        .HasColumnType("integer")
+                        .HasColumnName("classroom_subject_id");
+
+                    b.Property<bool>("Elective")
+                        .HasColumnType("boolean")
+                        .HasColumnName("elective");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("student_id");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("integer")
+                        .HasColumnName("subject_id");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("subject_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_student_subjects");
+
+                    b.HasIndex("ClassroomSubjectId")
+                        .HasDatabaseName("ix_student_subjects_classroom_subject_id");
+
+                    b.HasIndex("StudentId")
+                        .HasDatabaseName("ix_student_subjects_student_id");
+
+                    b.ToTable("student_subjects", "academics");
+                });
+
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.ClassRoom", b =>
                 {
                     b.Property<int>("ClassRoomId")
@@ -381,7 +496,7 @@ namespace schoolapp.Infrastructure.Migrations
                     b.HasIndex("SchoolId")
                         .HasDatabaseName("ix_students_school_id");
 
-                    b.ToTable("students", "school");
+                    b.ToTable("students", "people");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.StudentParent", b =>
@@ -722,6 +837,41 @@ namespace schoolapp.Infrastructure.Migrations
                     b.ToTable("schools", "school");
                 });
 
+            modelBuilder.Entity("schoolapp.Domain.Entities.SchoolSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsGroupOfSchools")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_group_of_schools");
+
+                    b.Property<int>("ParentSchoolId")
+                        .HasColumnType("integer")
+                        .HasColumnName("parent_school_id");
+
+                    b.Property<int>("SchoolType")
+                        .HasColumnType("integer")
+                        .HasColumnName("school_type");
+
+                    b.Property<bool>("UseSingleName")
+                        .HasColumnType("boolean")
+                        .HasColumnName("use_single_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_school_settings");
+
+                    b.HasIndex("ParentSchoolId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_school_settings_parent_school_id");
+
+                    b.ToTable("school_settings", "school");
+                });
+
             modelBuilder.Entity("DepartmentSupportStaff", b =>
                 {
                     b.HasOne("schoolapp.Domain.Entities.Departments.Department", null)
@@ -754,6 +904,60 @@ namespace schoolapp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_department_teacher_teachers_teachers_id");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.ClassRoomSubject", b =>
+                {
+                    b.HasOne("schoolapp.Domain.Entities.ClassGrades.ClassRoom", "ClassRoom")
+                        .WithMany()
+                        .HasForeignKey("ClassRoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_classroom_subjects_class_rooms_class_room_id");
+
+                    b.HasOne("schoolapp.Domain.Entities.Academics.SchoolSubject", "SchoolSubject")
+                        .WithMany()
+                        .HasForeignKey("SchoolSubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_classroom_subjects_school_subjects_school_subject_id");
+
+                    b.Navigation("ClassRoom");
+
+                    b.Navigation("SchoolSubject");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.SchoolSubject", b =>
+                {
+                    b.HasOne("schoolapp.Domain.Entities.School", "School")
+                        .WithMany()
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_school_subjects_schools_school_id");
+
+                    b.Navigation("School");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.StudentSubject", b =>
+                {
+                    b.HasOne("schoolapp.Domain.Entities.Academics.ClassRoomSubject", "ClassRoomSubject")
+                        .WithMany()
+                        .HasForeignKey("ClassroomSubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_student_subjects_class_room_subjects_classroom_subject_id");
+
+                    b.HasOne("schoolapp.Domain.Entities.People.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_student_subjects_students_student_id");
+
+                    b.Navigation("ClassRoomSubject");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.ClassRoom", b =>
@@ -869,6 +1073,18 @@ namespace schoolapp.Infrastructure.Migrations
                     b.Navigation("School");
                 });
 
+            modelBuilder.Entity("schoolapp.Domain.Entities.SchoolSetting", b =>
+                {
+                    b.HasOne("schoolapp.Domain.Entities.School", "School")
+                        .WithOne("ExtraSettings")
+                        .HasForeignKey("schoolapp.Domain.Entities.SchoolSetting", "ParentSchoolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_school_settings_schools_parent_school_id");
+
+                    b.Navigation("School");
+                });
+
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.ClassRoom", b =>
                 {
                     b.Navigation("Students");
@@ -892,6 +1108,12 @@ namespace schoolapp.Infrastructure.Migrations
             modelBuilder.Entity("schoolapp.Domain.Entities.People.Teacher", b =>
                 {
                     b.Navigation("ClassRooms");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.School", b =>
+                {
+                    b.Navigation("ExtraSettings")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

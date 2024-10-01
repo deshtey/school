@@ -1,13 +1,13 @@
 ﻿using schoolapp.Domain.Entities.ClassGrades;
 
-namespace Classroomapp.Application.Contracts
+namespace ClassRoomapp.Application.Contracts
 {
-    public interface IClassroomService
+    public interface IClassRoomService
     {
-        Task<IEnumerable<ClassRoom>?> GetClassrooms(int schoolId);
-        Task<ClassRoom?> GetClassroom(int id);
-        Task<ClassRoom?> PutClassroom(int id, ClassRoom Classroom, CancellationToken cancellationToken);
-        Task<bool?> PostClassroom(ClassRoom Classroom, CancellationToken cancellationToken);
-        Task<bool> DeleteClassroom(int id, CancellationToken cancellationToken);
+        Task<IEnumerable<ClassRoom>?> GetClassRooms(int schoolId);
+        Task<ClassRoom?> GetClassRoom(int id);
+        Task<ClassRoom?> PutClassRoom(int id, ClassRoom ClassRoom, CancellationToken cancellationToken);
+        Task<bool?> PostClassRoom(ClassRoom ClassRoom, CancellationToken cancellationToken);
+        Task<bool> DeleteClassRoom(int id, CancellationToken cancellationToken);
     }
 }

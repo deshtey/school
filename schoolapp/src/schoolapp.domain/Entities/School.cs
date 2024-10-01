@@ -19,6 +19,7 @@ namespace schoolapp.Domain.Entities
         public string? Phone { get; set; }
         public string? Address { get; set; }
         public string? HomePage { get; set; } = string.Empty;
+        public SchoolSetting ExtraSettings { get; set; }
 
     }
 

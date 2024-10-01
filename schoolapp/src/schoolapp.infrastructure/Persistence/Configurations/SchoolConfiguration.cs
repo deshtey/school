@@ -8,10 +8,7 @@ class SchoolEntityConfiguration
 {
     public void Configure(EntityTypeBuilder<School> schoolConfiguration)
     {
-        schoolConfiguration.ToTable("schools");
-
-        //schoolConfiguration
-        //    .OwnsOne(o => o.SchoolAddress);
+        schoolConfiguration.ToTable("schools", "school");
     
         schoolConfiguration.Property(s => s.SchoolName)
             .HasColumnName("schoolname")

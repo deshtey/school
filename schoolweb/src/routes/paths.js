@@ -97,6 +97,27 @@ export const paths = {
       details: (id) => `${ROOTS.ADMIN}/classroom/${id}`,
       edit: (id) => `${ROOTS.ADMIN}/classroom/${id}/edit`,
     },
+    classroomsubject: {
+      root: `${ROOTS.ADMIN}/classroomsubject`,
+      new: `${ROOTS.ADMIN}/classroomsubject/new`,
+      list: `${ROOTS.ADMIN}/classroomsubject/list`,
+      details: (id) => `${ROOTS.ADMIN}/classroomsubject/${id}`,
+      edit: (id) => `${ROOTS.ADMIN}/classroomsubject/${id}/edit`,
+    },
+    schoolsubject: {
+      root: `${ROOTS.ADMIN}/schoolsubject`,
+      new: `${ROOTS.ADMIN}/schoolsubject/new`,
+      list: `${ROOTS.ADMIN}/schoolsubject/list`,
+      details: (id) => `${ROOTS.ADMIN}/schoolsubject/${id}`,
+      edit: (id) => `${ROOTS.ADMIN}/schoolsubject/${id}/edit`,
+    },
+    studentsubject: {
+      root: `${ROOTS.ADMIN}/studentsubject`,
+      new: `${ROOTS.ADMIN}/studentsubject/new`,
+      list: `${ROOTS.ADMIN}/studentsubject/list`,
+      details: (id) => `${ROOTS.ADMIN}/studentsubject/${id}`,
+      edit: (id) => `${ROOTS.ADMIN}/studentsubject/${id}/edit`,
+    },
     permissions: {
       root: `${ROOTS.ADMIN}/permissions`,
       new: `${ROOTS.ADMIN}/permissions/new`,
