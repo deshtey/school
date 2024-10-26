@@ -1,46 +1,58 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using schoolapp.application.Common.Interfaces;
+using schoolapp.Infrastructure.Data;
+using schoolapp.Infrastructure.Identity;
 
 namespace schoolapp.Infrastructure.Security.TokenGenerator;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {
     private readonly JwtSettings _jwtSettings;
+    private readonly AuthDbContext _dbContext;
 
-    public JwtTokenGenerator(IOptions<JwtSettings> jwtSettings)
+    public JwtTokenGenerator(IOptions<JwtSettings> jwtSettings, AuthDbContext dbContext)
     {
         _jwtSettings = jwtSettings.Value;
+        _dbContext = dbContext;
     }
 
-    public string GenerateToken(
-        string id,
-        string firstName,
-        string lastName,
-        string email
-        //List<string?> permissions,
-        //List<string?> roles
-        )
+    public async Task<string> GenerateTokenAsync(AppUser user, IEnumerable<string> userRoles)
     {
 
        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+        // Get all permissions for user's roles in one query
+        var permissions = await _dbContext.RolePermissions
+            .Include(rp => rp.Permission)
+            .Include(rp => rp.Role)
+            .Where(rp => userRoles.Contains(rp.Role.Name))
+            .Select(rp => rp.Permission.Name)
+            .Distinct()
+            .ToListAsync();
+
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Name, firstName),
-            new(JwtRegisteredClaimNames.FamilyName, lastName),
-            new(JwtRegisteredClaimNames.Email, email),
-            new(JwtRegisteredClaimNames.Sub, id),
-            new(JwtRegisteredClaimNames.Iss, "school_app")
+            //new(JwtRegisteredClaimNames.Name, appUser. firstName),
+            //new(JwtRegisteredClaimNames.FamilyName, lastName),
+            new(JwtRegisteredClaimNames.Email, user.Email),
+            new(JwtRegisteredClaimNames.Sub, user.Id),
+            new(JwtRegisteredClaimNames.Iss, "school_app"),
+            new(ClaimTypes.NameIdentifier, user.Id),
+            new(ClaimTypes.Email, user.Email),
+            // Add permissions as claims
+            new("permissions", JsonSerializer.Serialize(permissions))
+        
         };
 
-        //roles.ForEach(role => claims.Add(new(ClaimTypes.Role, role)));
-        //permissions.ForEach(permission => claims.Add(new("permissions", permission)));
-
+        // Add roles
+        claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
         var token = new JwtSecurityToken(
              _jwtSettings.Issuer,
              _jwtSettings.Audience,

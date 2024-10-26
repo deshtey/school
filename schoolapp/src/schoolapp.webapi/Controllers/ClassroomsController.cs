@@ -51,7 +51,7 @@ namespace schoolapp.webapi.Controllers
         }
 
         // DELETE api/<ClassroomsController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task Delete(int id)
         {
             await _ClassroomService.DeleteClassroom(id, cancellationToken);

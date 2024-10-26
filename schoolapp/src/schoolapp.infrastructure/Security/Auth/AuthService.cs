@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using schoolapp.application.Common.Interfaces;
 using schoolapp.application.DTOs;
 using schoolapp.Infrastructure.Identity;
+using schoolapp.Infrastructure.Security.TokenGenerator;
 
 namespace schoolapp.Infrastructure.Security.Auth;
 
@@ -57,8 +57,9 @@ public class AuthService : IAuthService
         {
             throw new UnauthorizedAccessException($"Unable to authenticate user {request.Email}");
         }
+        var userRoles = await _userManager.GetRolesAsync(user);
 
-        var token = _tokenGenerator.GenerateToken(user.Id, user.FirstName, user.LastName, user.Email);
+        var token = _tokenGenerator.GenerateToken(user, userRoles);
 
         return new UserDto
         {
