@@ -87,7 +87,24 @@ public static class DependencyInjection
 
     private static IServiceCollection AddAuthorization(this IServiceCollection services)
     {
-        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        //services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        // Usage in Program.cs:
+        services.AddPermissionBasedAuthorization((options, serviceProvider) =>
+        {
+            var dbContext = serviceProvider.GetRequiredService<AuthDbContext>();
+
+            // Get permissions from DB
+            var permissions = dbContext.Permissions
+            .Select(p => p.Name)
+                .ToList();
+
+            // Register each permission as a policy
+            foreach (var permission in permissions)
+            {
+                options.AddPolicy(permission,
+                    policy => policy.Requirements.Add(new PermissionRequirement(permission)));
+            }
+        });
         services.AddScoped<IAuthorizationHandler, PermissionHandler>();
         services.AddSingleton<IUserProvider, UserProvider>();
         services.AddScoped<IRoleService, RoleService>();
@@ -99,7 +116,7 @@ public static class DependencyInjection
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.Section));
         services.AddScoped<IAuthService, AuthService>();
 
-        services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services
             .AddDefaultIdentity<AppUser>()
             .AddRoles<IdentityRole>()

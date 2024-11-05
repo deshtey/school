@@ -4,5 +4,5 @@ namespace schoolapp.Infrastructure.Security.TokenGenerator;
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(AppUser user, List<string> roles = null);
+    Task<string> GenerateTokenAsync(AppUser user, IEnumerable<string> userRoles);
 }

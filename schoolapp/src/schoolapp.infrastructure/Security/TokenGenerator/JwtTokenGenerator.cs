@@ -2,8 +2,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using schoolapp.Infrastructure.Data;
@@ -29,13 +27,20 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         // Get all permissions for user's roles in one query
-        var permissions = await _dbContext.RolePermissions
-            .Include(rp => rp.Permission)
-            .Include(rp => rp.Role)
-            .Where(rp => userRoles.Contains(rp.Role.Name))
-            .Select(rp => rp.Permission.Name)
-            .Distinct()
-            .ToListAsync();
+        var permissions = _dbContext.UserRoles
+            .Where(ur => ur.UserId == user.Id)
+            .Join(
+                _dbContext.RolePermissions,
+                ur => ur.RoleId,
+                rp => rp.RoleId,
+                (ur, rp) => rp
+            )
+            .Join(
+                _dbContext.Permissions,
+                rp => rp.PermissionId,
+                p => p.Id,
+                (rp, p) => p.Name
+            ).ToList();
 
         var claims = new List<Claim>
         {

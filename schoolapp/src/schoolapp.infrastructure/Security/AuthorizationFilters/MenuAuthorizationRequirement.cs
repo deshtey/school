@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using schoolapp.Infrastructure.Data;
-using schoolapp.Infrastructure.Identity;
 using System.Text.Json;
 
 public class PermissionRequirement : IAuthorizationRequirement
@@ -123,35 +119,35 @@ public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
 //    }
 //}
 
-public class PermissionPolicyProvider : IAuthorizationPolicyProvider
-{
-    private readonly IServiceProvider _serviceProvider;
+//public class PermissionPolicyProvider : IAuthorizationPolicyProvider
+//{
+//    private readonly IServiceProvider _serviceProvider;
 
-    public PermissionPolicyProvider(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
+//    public PermissionPolicyProvider(IServiceProvider serviceProvider)
+//    {
+//        _serviceProvider = serviceProvider;
+//    }
 
-    public async Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
-    {
-        using var scope = _serviceProvider.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+//    public async Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
+//    {
+//        using var scope = _serviceProvider.CreateScope();
+//        var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
 
-        var permission = await dbContext.Permissions.FirstOrDefaultAsync(p => p.Name == policyName);
+//        var permission = await dbContext.Permissions.FirstOrDefaultAsync(p => p.Name == policyName);
     
-        if (permission != null)
-        {
-            var policy = new AuthorizationPolicyBuilder();
-            policy.AddRequirements(new PermissionRequirement(permission.Name));
-            return policy.Build();
-        }
+//        if (permission != null)
+//        {
+//            var policy = new AuthorizationPolicyBuilder();
+//            policy.AddRequirements(new PermissionRequirement(permission.Name));
+//            return policy.Build();
+//        }
 
-        return null;
-    }
+//        return null;
+//    }
 
-    public Task<AuthorizationPolicy> GetDefaultPolicyAsync() =>
-        Task.FromResult(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
+//    public Task<AuthorizationPolicy> GetDefaultPolicyAsync() =>
+//        Task.FromResult(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
 
-    public Task<AuthorizationPolicy> GetFallbackPolicyAsync() =>
-        Task.FromResult<AuthorizationPolicy>(null);
-}
+//    public Task<AuthorizationPolicy> GetFallbackPolicyAsync() =>
+//        Task.FromResult<AuthorizationPolicy>(null);
+//}

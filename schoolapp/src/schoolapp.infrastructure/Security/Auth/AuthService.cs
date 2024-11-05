@@ -59,7 +59,7 @@ public class AuthService : IAuthService
         }
         var userRoles = await _userManager.GetRolesAsync(user);
 
-        var token = _tokenGenerator.GenerateToken(user, userRoles);
+        var token = await _tokenGenerator.GenerateTokenAsync(user, userRoles);
 
         return new UserDto
         {
