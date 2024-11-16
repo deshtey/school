@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using schoolapp.Infrastructure.Identity;
-using System.Threading;
 
 namespace schoolapp.Infrastructure.Security.RoleService;
 

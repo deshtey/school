@@ -1,6 +1,4 @@
-﻿using schoolapp.Domain.Entities.Other;
-
-namespace schoolapp.Application.DTOs
+﻿namespace schoolapp.Application.DTOs
 {
     public class RolePermissionDto
     {

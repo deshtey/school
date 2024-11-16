@@ -10,7 +10,7 @@ class RolePermissionEntityConfiguration
     {
         rolepermissionConfiguration.ToTable("role_permissions", "auth");
         rolepermissionConfiguration.HasKey(r => r.Id);
-        rolepermissionConfiguration.Ignore(r => r.Role);
+       // rolepermissionConfiguration.Ignore(r => r.Role);
 
     }
 }

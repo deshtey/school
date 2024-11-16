@@ -85,17 +85,17 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddAuthorization(this IServiceCollection services)
+    public static IServiceCollection Authorization(this IServiceCollection services)
     {
-        //services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
-        // Usage in Program.cs:
-        services.AddPermissionBasedAuthorization((options, serviceProvider) =>
+        services.AddAuthorization(options =>
         {
-            var dbContext = serviceProvider.GetRequiredService<AuthDbContext>();
+            // Create a scope to access scoped services during configuration
+            using var scope = services.BuildServiceProvider().CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
 
             // Get permissions from DB
             var permissions = dbContext.Permissions
-            .Select(p => p.Name)
+                .Select(p => p.Name)
                 .ToList();
 
             // Register each permission as a policy
@@ -105,10 +105,13 @@ public static class DependencyInjection
                     policy => policy.Requirements.Add(new PermissionRequirement(permission)));
             }
         });
+
+        // Register required services
         services.AddScoped<IAuthorizationHandler, PermissionHandler>();
         services.AddSingleton<IUserProvider, UserProvider>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
+
         return services;
     }
     private static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
