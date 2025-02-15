@@ -36,19 +36,23 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
     public void UpdateEntities(DbContext? context)
     {
         if (context == null) return;
-
+        var userRes = _userProvider.GetCurrentUser();
+        if (!userRes.IsSuccess)
+        {
+            return;
+        }
         foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedByUserId = _userProvider.GetCurrentUser().Id;
-                entry.Entity.Created = dateTimeService.Now;
+                entry.Entity.CreatedByUserId = userRes.Value.Id;
+                entry.Entity.Created = DateTimeOffset.Now;
             }
 
             if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
-                entry.Entity.LastModifiedByUserId = _userProvider.GetCurrentUser().Id;
-                entry.Entity.LastModified = dateTimeService.Now;
+                entry.Entity.LastModifiedByUserId = userRes.Value.Id;
+                entry.Entity.LastModified = DateTimeOffset.Now;
             }
         }
     }

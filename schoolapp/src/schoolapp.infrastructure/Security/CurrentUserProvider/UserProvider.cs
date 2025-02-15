@@ -1,5 +1,7 @@
 ﻿using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using schoolapp.Application.Common.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -8,13 +10,14 @@ namespace schoolapp.Infrastructure.Security.CurrentUserProvider
     public class UserProvider : IUserProvider
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public UserProvider(IHttpContextAccessor httpContextAccessor)
+        private readonly ILogger<UserProvider> _logger;
+        public UserProvider(IHttpContextAccessor httpContextAccessor, ILogger<UserProvider> logger)
         {
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
-        public CurrentUser GetCurrentUser()
+        public Result<CurrentUser> GetCurrentUser()
         {
             var user = _httpContextAccessor.HttpContext.User;
 
@@ -24,13 +27,15 @@ namespace schoolapp.Infrastructure.Security.CurrentUserProvider
             }
             if (user?.Identity == null || !user.Identity.IsAuthenticated)
             {
-                throw new Exception("User is not authenticated.");
+                _logger.LogError("User is not authenticated {user}", user);
+                return Result<CurrentUser>.Failure(["User is not authenticated"]);
             }
             if (_httpContextAccessor.HttpContext.User?.IsAuthenticated() == false)
             {
                 throw new Exception();
             }
-            var _claims = _httpContextAccessor.HttpContext!.User.Claims;
+
+            _ = _httpContextAccessor.HttpContext!.User.Claims;
             string id = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             var permissions = GetClaimValues("permissions");
@@ -39,7 +44,8 @@ namespace schoolapp.Infrastructure.Security.CurrentUserProvider
 
             var email = GetSingleClaimValue(ClaimTypes.Email);
 
-            return new CurrentUser(id, firstName, "", email, permissions, roles);
+            var result = new CurrentUser(id, firstName, "", email, permissions, roles);
+            return Result<CurrentUser>.Success(result);
         }
 
         private List<string> GetClaimValues(string claimType) =>

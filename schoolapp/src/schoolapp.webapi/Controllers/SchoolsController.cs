@@ -10,7 +10,8 @@ namespace schoolapp.webapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+
+    //[Authorize]
     public class SchoolsController : ControllerBase
     {
         private readonly ISchoolService _schoolService;
@@ -22,17 +23,9 @@ namespace schoolapp.webapi.Controllers
         }
         // GET: api/<SchoolsController
         [HttpGet]
-        [Authorize(Policy = "get_schools")]
+        //[Authorize(Policy = "get_schools")]
         public async Task<IEnumerable<SchoolDto>> Get()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                Console.WriteLine("User is authenticated");
-            }
-            else
-            {
-                Console.WriteLine("User is not authenticated");
-            }
             return await _schoolService.GetSchools();
         }
 
@@ -46,7 +39,7 @@ namespace schoolapp.webapi.Controllers
 
         // POST api/<SchoolsController>
         [HttpPost]
-        [Authorize(Policy = "post_school")]
+        //[Authorize(Policy = "post_school")]
         public async Task Post([FromBody] SchoolDto school)
         {
             await _schoolService.PostSchool(school, cancellationToken);

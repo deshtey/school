@@ -1,6 +1,4 @@
-﻿using schoolapp.Domain.Entities.Base;
-
-namespace schoolapp.Domain.Entities
+﻿namespace schoolapp.Domain.Entities
 {
     public class School : BaseAuditableEntity
     {
@@ -20,7 +18,6 @@ namespace schoolapp.Domain.Entities
         public string? Address { get; set; }
         public string? HomePage { get; set; } = string.Empty;
         public SchoolSetting ExtraSettings { get; set; }
-
     }
 
     public enum SchoolTypes

@@ -32,7 +32,7 @@ public static class DependencyInjection
             .AddHttpContextAccessor()
             .AddServices()
             .AddAuthentication(configuration)
-            .AddAuthorization()
+            .AddAuthorizationServices()
             .AddPersistence(configuration);
 
         return services;
@@ -85,7 +85,7 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection Authorization(this IServiceCollection services)
+    public static IServiceCollection AddAuthorizationServices(this IServiceCollection services)
     {
         services.AddAuthorization(options =>
         {
@@ -107,8 +107,9 @@ public static class DependencyInjection
         });
 
         // Register required services
+        services.AddScoped<IUserProvider, UserProvider>();
         services.AddScoped<IAuthorizationHandler, PermissionHandler>();
-        services.AddSingleton<IUserProvider, UserProvider>();
+    
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
 

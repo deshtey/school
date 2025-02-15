@@ -7,6 +7,7 @@
         public SchoolTypes SchoolType { get; set; }
         public bool UseSingleName { get; set; }
         public bool IsGroupOfSchools { get; set; }
+        public bool UseStreams { get; set; }
         public School School { get; set; }
 
     }

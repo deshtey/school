@@ -37,13 +37,7 @@ builder.Services.AddControllers()
           options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
           options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
       });
-//options =>
-//{
-//    var policy = new AuthorizationPolicyBuilder()
-//        .RequireAuthenticatedUser()
-//        .Build();
-//    options.Filters.Add(new AuthorizeFilter(policy));
-//});
+
 // Swagger/OpenAPI setup
 builder.Services.Configure<IdentityOptions>(options =>
 {

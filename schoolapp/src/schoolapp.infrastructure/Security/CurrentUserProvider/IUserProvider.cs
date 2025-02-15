@@ -1,7 +1,9 @@
-﻿namespace schoolapp.Infrastructure.Security.CurrentUserProvider
+﻿using schoolapp.Application.Common.Models;
+
+namespace schoolapp.Infrastructure.Security.CurrentUserProvider
 {
     public interface IUserProvider
     {
-        CurrentUser GetCurrentUser();
+        Result<CurrentUser> GetCurrentUser();
     }
 }
