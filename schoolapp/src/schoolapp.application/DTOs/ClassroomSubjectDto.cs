@@ -6,6 +6,6 @@
         public int ClassRoomId { get; set; }
         public int SchoolSubjectId { get; set; }
         public bool Elective { get; set; } = false;
-        public string SubjectName { get; set; }
+        public string? SubjectName { get; set; }
     }
 }

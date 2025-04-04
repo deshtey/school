@@ -10,20 +10,20 @@ class StudentSubjectConfiguration
     {
         StudentSubjectConfig.ToTable("student_subjects", "academics");
 
-        StudentSubjectConfig.Property(s => s.SubjectName)
-            .HasColumnName("subject_name")
-            .HasMaxLength(100);
+        //StudentSubjectConfig.Property(s => s.Name)
+        //    .HasColumnName("subject_name")
+        //    .HasMaxLength(100);
 
         StudentSubjectConfig
             .HasOne(c => c.Student)
-            .WithMany()
+            .WithMany(c=>c.EnrolledSubjects)
             .HasForeignKey(c => c.StudentId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        StudentSubjectConfig
-            .HasOne(c => c.ClassRoomSubject)
-            .WithMany()
-            .HasForeignKey(c => c.ClassroomSubjectId)
-            .OnDelete(DeleteBehavior.Restrict);
+        //StudentSubjectConfig
+        //    .HasOne(c => c.SchoolSubject)
+        //    .WithMany()
+        //    .HasForeignKey(c => c.ClassroomSubjectId)
+        //    .OnDelete(DeleteBehavior.Restrict);
     }
 }

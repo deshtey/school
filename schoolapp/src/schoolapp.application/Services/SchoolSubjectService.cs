@@ -88,12 +88,8 @@ namespace schoolapp.Application.Services
             {
                 return null;
             }
-            SchoolSubject newSchoolSubject = new SchoolSubject
-            {
-                Desc = schoolsubject.Desc,
-                SubjectName = schoolsubject.SubjectName,
-                SchoolId = schoolsubject.SchoolId
-            };
+            SchoolSubject newSchoolSubject = new SchoolSubject(schoolsubject.SchoolId, schoolsubject.Code, schoolsubject.SubjectName, schoolsubject.Elective, schoolsubject.Desc);
+          
             _context.SchoolSubjects.Add(newSchoolSubject);
             await _context.SaveChangesAsync(cancellationToken);
 

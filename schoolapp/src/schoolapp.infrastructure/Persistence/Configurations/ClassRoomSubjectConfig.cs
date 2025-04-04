@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using schoolapp.Domain.Entities.Academics;
+using System.Reflection.Emit;
 
 namespace schoolapp.Infrastructure.Persistence.Configurations;
 class ClassroomSubjectConfiguration
@@ -10,20 +11,18 @@ class ClassroomSubjectConfiguration
     {
         ClassroomSubjectConfig.ToTable("classroom_subjects", "academics");
 
-        ClassroomSubjectConfig.Property(s => s.SubjectName)
-            .HasColumnName("subject_name")
-            .HasMaxLength(100);
+
+
+        ClassroomSubjectConfig.HasKey(gs => new { gs.ClassRoomId, gs.SchoolSubjectId });
 
         ClassroomSubjectConfig
-            .HasOne(c=>c.ClassRoom)
+            .HasOne(gs => gs.ClassRoom)
             .WithMany()
-            .HasForeignKey(c=>c.ClassRoomId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(gs => gs.ClassRoomId);
 
         ClassroomSubjectConfig
-            .HasOne(c => c.SchoolSubject)
-            .WithMany()
-            .HasForeignKey(c => c.SchoolSubjectId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasOne(gs => gs.SchoolSubject)
+            .WithMany(s => s.GradeSubjects)
+            .HasForeignKey(gs => gs.SchoolSubjectId);
     }
 }

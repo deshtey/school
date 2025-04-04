@@ -4,15 +4,52 @@ namespace schoolapp.Domain.Entities.ClassGrades
 {
     public class ClassRoom
     {
-        public int ClassRoomId { get; set; }
-        public int Year { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
         public int GradeId { get; set; }
-        public string ClassroomName { get; set; }
-        public int? TeacherId { get; set; }
-        public int SchoolId { get; set; }
-        public School School { get; set; }
-        public Teacher? ClassTeacher { get; set; }
         public Grade Grade { get; set; }
-        public ICollection<Student> Students { get; set; }=[];
+        public int Capacity { get; set; }
+        public int? TeacherId { get; set; }
+        public List<Student> Students { get; set; } = [];
+        public Teacher ClassTeacher { get; set; }
+
+        public ClassRoom()
+        {
+            Students = new List<Student>();
+        }
+
+        // Add a student to this classroom
+        public bool AddStudent(Student student)
+        {
+            if (Students.Count >= Capacity)
+                return false;
+
+            if (Students.Any(s => s.Id == student.Id))
+                return false;
+
+            Students.Add(student);
+            student.ClassRoom = this;
+            return true;
+        }
+
+        // Remove a student from this classroom
+        public bool RemoveStudent(Student student)
+        {
+            if (Students.Any(s => s.Id == student.Id))
+            {
+                Students.Remove(student);
+                student.ClassRoom = null;
+                return true;
+            }
+            return false;
+        }
+
+        public override string ToString() => $"{Grade.Name} - {Name}";
+
+        // Check if classroom has capacity
+        public bool HasCapacity()
+        {
+            return Students.Count < Capacity;
+        }
     }
 }

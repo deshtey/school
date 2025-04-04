@@ -26,7 +26,9 @@ public class SchoolDbContext : DbContext, ISchoolDbContext
     public DbSet<SchoolSubject> SchoolSubjects { get; set; }
     public DbSet<ClassRoomSubject> ClassRoomSubjects { get; set; }
     public DbSet<StudentSubject> StudentSubjects { get; set; }
-
+    public DbSet<AcademicYear> AcademicYears { get; set; }
+    public DbSet<AcademicTerm> AcademicTerms { get; set; }
+ 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
         if (_currentTransaction != null)

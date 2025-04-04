@@ -61,7 +61,7 @@ namespace schoolapp.Infrastructure.Migrations
                     b.ToTable("department_teacher", "school");
                 });
 
-            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.ClassRoomSubject", b =>
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.AcademicTerm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,29 +70,84 @@ namespace schoolapp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AcademicYearId")
+                        .HasColumnType("integer")
+                        .HasColumnName("academic_year_id");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("end_date");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("start_date");
+
+                    b.HasKey("Id")
+                        .HasName("pk_academic_terms");
+
+                    b.HasIndex("AcademicYearId")
+                        .HasDatabaseName("ix_academic_terms_academic_year_id");
+
+                    b.ToTable("academic_terms", "school");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.AcademicYear", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("end_date");
+
+                    b.Property<bool>("IsCurrent")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_current");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("start_date");
+
+                    b.HasKey("Id")
+                        .HasName("pk_academic_years");
+
+                    b.ToTable("academic_years", "school");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.ClassRoomSubject", b =>
+                {
                     b.Property<int>("ClassRoomId")
                         .HasColumnType("integer")
                         .HasColumnName("class_room_id");
-
-                    b.Property<bool>("Elective")
-                        .HasColumnType("boolean")
-                        .HasColumnName("elective");
 
                     b.Property<int>("SchoolSubjectId")
                         .HasColumnType("integer")
                         .HasColumnName("school_subject_id");
 
-                    b.Property<string>("SubjectName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("subject_name");
+                    b.Property<bool>("Elective")
+                        .HasColumnType("boolean")
+                        .HasColumnName("elective");
 
-                    b.HasKey("Id")
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.HasKey("ClassRoomId", "SchoolSubjectId")
                         .HasName("pk_classroom_subjects");
-
-                    b.HasIndex("ClassRoomId")
-                        .HasDatabaseName("ix_classroom_subjects_class_room_id");
 
                     b.HasIndex("SchoolSubjectId")
                         .HasDatabaseName("ix_classroom_subjects_school_subject_id");
@@ -109,10 +164,19 @@ namespace schoolapp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("code");
+
                     b.Property<string>("Desc")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("desc");
+
+                    b.Property<bool>("Elective")
+                        .HasColumnType("boolean")
+                        .HasColumnName("elective");
 
                     b.Property<int>("SchoolId")
                         .HasColumnType("integer")
@@ -124,11 +188,18 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("subject_name");
 
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("integer")
+                        .HasColumnName("teacher_id");
+
                     b.HasKey("Id")
                         .HasName("pk_school_subjects");
 
                     b.HasIndex("SchoolId")
                         .HasDatabaseName("ix_school_subjects_school_id");
+
+                    b.HasIndex("TeacherId")
+                        .HasDatabaseName("ix_school_subjects_teacher_id");
 
                     b.ToTable("school_subjects", "academics");
                 });
@@ -142,13 +213,13 @@ namespace schoolapp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClassroomSubjectId")
+                    b.Property<int>("AcademicYearId")
                         .HasColumnType("integer")
-                        .HasColumnName("classroom_subject_id");
+                        .HasColumnName("academic_year_id");
 
-                    b.Property<bool>("Elective")
-                        .HasColumnType("boolean")
-                        .HasColumnName("elective");
+                    b.Property<double?>("FinalGrade")
+                        .HasColumnType("double precision")
+                        .HasColumnName("final_grade");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("integer")
@@ -158,62 +229,52 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("subject_id");
 
-                    b.Property<string>("SubjectName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("subject_name");
-
                     b.HasKey("Id")
                         .HasName("pk_student_subjects");
 
-                    b.HasIndex("ClassroomSubjectId")
-                        .HasDatabaseName("ix_student_subjects_classroom_subject_id");
+                    b.HasIndex("AcademicYearId")
+                        .HasDatabaseName("ix_student_subjects_academic_year_id");
 
                     b.HasIndex("StudentId")
                         .HasDatabaseName("ix_student_subjects_student_id");
+
+                    b.HasIndex("SubjectId")
+                        .HasDatabaseName("ix_student_subjects_subject_id");
 
                     b.ToTable("student_subjects", "academics");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.ClassRoom", b =>
                 {
-                    b.Property<int>("ClassRoomId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("class_room_id");
+                        .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ClassRoomId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ClassroomName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("classroom_name");
+                    b.Property<int>("Capacity")
+                        .HasColumnType("integer")
+                        .HasColumnName("capacity");
 
                     b.Property<int>("GradeId")
                         .HasColumnType("integer")
                         .HasColumnName("grade_id");
 
-                    b.Property<int>("SchoolId")
-                        .HasColumnType("integer")
-                        .HasColumnName("school_id");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.Property<int?>("TeacherId")
                         .HasColumnType("integer")
                         .HasColumnName("teacher_id");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("integer")
-                        .HasColumnName("year");
-
-                    b.HasKey("ClassRoomId")
+                    b.HasKey("Id")
                         .HasName("pk_class_rooms");
 
                     b.HasIndex("GradeId")
                         .HasDatabaseName("ix_class_rooms_grade_id");
-
-                    b.HasIndex("SchoolId")
-                        .HasDatabaseName("ix_class_rooms_school_id");
 
                     b.HasIndex("TeacherId")
                         .HasDatabaseName("ix_class_rooms_teacher_id");
@@ -234,6 +295,14 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("desc");
+
+                    b.Property<double>("MinimumGradePerCompulsorySubject")
+                        .HasColumnType("double precision")
+                        .HasColumnName("minimum_grade_per_compulsory_subject");
+
+                    b.Property<double>("MinimumOverallGradeForPromotion")
+                        .HasColumnType("double precision")
+                        .HasColumnName("minimum_overall_grade_for_promotion");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -281,7 +350,7 @@ namespace schoolapp.Infrastructure.Migrations
                     b.ToTable("departments", "school");
                 });
 
-            modelBuilder.Entity("schoolapp.Domain.Entities.People.Parent", b =>
+            modelBuilder.Entity("schoolapp.Domain.Entities.Exams.Assessment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -290,9 +359,44 @@ namespace schoolapp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean")
-                        .HasColumnName("active");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date");
+
+                    b.Property<double>("Grade")
+                        .HasColumnType("double precision")
+                        .HasColumnName("grade");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<int>("StudentSubjectId")
+                        .HasColumnType("integer")
+                        .HasColumnName("student_subject_id");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("double precision")
+                        .HasColumnName("weight");
+
+                    b.HasKey("Id")
+                        .HasName("pk_assessment");
+
+                    b.HasIndex("StudentSubjectId")
+                        .HasDatabaseName("ix_assessment_student_subject_id");
+
+                    b.ToTable("assessment", "school");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.People.Parent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
                         .HasColumnType("text")
@@ -365,8 +469,8 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("school_id");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("status");
 
                     b.Property<string>("Street")
@@ -395,10 +499,6 @@ namespace schoolapp.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean")
-                        .HasColumnName("active");
-
                     b.Property<string>("City")
                         .HasColumnType("text")
                         .HasColumnName("city");
@@ -420,6 +520,10 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("created_by_user_id");
 
+                    b.Property<int>("CurrentGradeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("current_grade_id");
+
                     b.Property<DateTime?>("DOB")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("dob");
@@ -427,6 +531,10 @@ namespace schoolapp.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text")
                         .HasColumnName("email");
+
+                    b.Property<int>("EnrollmentYearId")
+                        .HasColumnType("integer")
+                        .HasColumnName("enrollment_year_id");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -479,8 +587,8 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("school_id");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("status");
 
                     b.Property<string>("Street")
@@ -492,6 +600,12 @@ namespace schoolapp.Infrastructure.Migrations
 
                     b.HasIndex("ClassRoomId")
                         .HasDatabaseName("ix_students_class_room_id");
+
+                    b.HasIndex("CurrentGradeId")
+                        .HasDatabaseName("ix_students_current_grade_id");
+
+                    b.HasIndex("EnrollmentYearId")
+                        .HasDatabaseName("ix_students_enrollment_year_id");
 
                     b.HasIndex("SchoolId")
                         .HasDatabaseName("ix_students_school_id");
@@ -526,10 +640,6 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean")
-                        .HasColumnName("active");
 
                     b.Property<string>("City")
                         .HasColumnType("text")
@@ -614,8 +724,8 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("staff_number");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("status");
 
                     b.Property<string>("Street")
@@ -639,10 +749,6 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean")
-                        .HasColumnName("active");
 
                     b.Property<string>("City")
                         .HasColumnType("text")
@@ -719,8 +825,8 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("school_id");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("status");
 
                     b.Property<string>("Street")
@@ -748,10 +854,6 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnName("school_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SchoolId"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean")
-                        .HasColumnName("active");
 
                     b.Property<string>("Address")
                         .HasColumnType("text")
@@ -823,6 +925,10 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("school_type");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
                     b.Property<string>("Street")
                         .HasColumnType("text")
                         .HasColumnName("street");
@@ -862,6 +968,10 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("use_single_name");
 
+                    b.Property<bool>("UseStreams")
+                        .HasColumnType("boolean")
+                        .HasColumnName("use_streams");
+
                     b.HasKey("Id")
                         .HasName("pk_school_settings");
 
@@ -870,6 +980,57 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasDatabaseName("ix_school_settings_parent_school_id");
 
                     b.ToTable("school_settings", "school");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.StudentAcademics.AcademicRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AcademicYearId")
+                        .HasColumnType("integer")
+                        .HasColumnName("academic_year_id");
+
+                    b.Property<int>("ClassRoomId")
+                        .HasColumnType("integer")
+                        .HasColumnName("class_room_id");
+
+                    b.Property<DateTime>("CompletionDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("completion_date");
+
+                    b.Property<int>("GradeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("grade_id");
+
+                    b.Property<double>("OverallGrade")
+                        .HasColumnType("double precision")
+                        .HasColumnName("overall_grade");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("student_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_academic_record");
+
+                    b.HasIndex("AcademicYearId")
+                        .HasDatabaseName("ix_academic_record_academic_year_id");
+
+                    b.HasIndex("ClassRoomId")
+                        .HasDatabaseName("ix_academic_record_class_room_id");
+
+                    b.HasIndex("GradeId")
+                        .HasDatabaseName("ix_academic_record_grade_id");
+
+                    b.HasIndex("StudentId")
+                        .HasDatabaseName("ix_academic_record_student_id");
+
+                    b.ToTable("academic_record", "school");
                 });
 
             modelBuilder.Entity("DepartmentSupportStaff", b =>
@@ -906,6 +1067,18 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasConstraintName("fk_department_teacher_teachers_teachers_id");
                 });
 
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.AcademicTerm", b =>
+                {
+                    b.HasOne("schoolapp.Domain.Entities.Academics.AcademicYear", "AcademicYear")
+                        .WithMany("Terms")
+                        .HasForeignKey("AcademicYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_academic_terms_academic_years_academic_year_id");
+
+                    b.Navigation("AcademicYear");
+                });
+
             modelBuilder.Entity("schoolapp.Domain.Entities.Academics.ClassRoomSubject", b =>
                 {
                     b.HasOne("schoolapp.Domain.Entities.ClassGrades.ClassRoom", "ClassRoom")
@@ -916,9 +1089,9 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasConstraintName("fk_classroom_subjects_class_rooms_class_room_id");
 
                     b.HasOne("schoolapp.Domain.Entities.Academics.SchoolSubject", "SchoolSubject")
-                        .WithMany()
+                        .WithMany("GradeSubjects")
                         .HasForeignKey("SchoolSubjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_classroom_subjects_school_subjects_school_subject_id");
 
@@ -936,28 +1109,42 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_school_subjects_schools_school_id");
 
+                    b.HasOne("schoolapp.Domain.Entities.People.Teacher", null)
+                        .WithMany("SubjectsQualified")
+                        .HasForeignKey("TeacherId")
+                        .HasConstraintName("fk_school_subjects_teachers_teacher_id");
+
                     b.Navigation("School");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.Academics.StudentSubject", b =>
                 {
-                    b.HasOne("schoolapp.Domain.Entities.Academics.ClassRoomSubject", "ClassRoomSubject")
+                    b.HasOne("schoolapp.Domain.Entities.Academics.AcademicYear", "AcademicYear")
                         .WithMany()
-                        .HasForeignKey("ClassroomSubjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("AcademicYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_student_subjects_class_room_subjects_classroom_subject_id");
+                        .HasConstraintName("fk_student_subjects_academic_years_academic_year_id");
 
                     b.HasOne("schoolapp.Domain.Entities.People.Student", "Student")
-                        .WithMany()
+                        .WithMany("EnrolledSubjects")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_student_subjects_students_student_id");
 
-                    b.Navigation("ClassRoomSubject");
+                    b.HasOne("schoolapp.Domain.Entities.Academics.SchoolSubject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_student_subjects_school_subjects_subject_id");
+
+                    b.Navigation("AcademicYear");
 
                     b.Navigation("Student");
+
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.ClassRoom", b =>
@@ -969,23 +1156,14 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_class_rooms_grades_grade_id");
 
-                    b.HasOne("schoolapp.Domain.Entities.School", "School")
-                        .WithMany()
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_class_rooms_schools_school_id");
-
                     b.HasOne("schoolapp.Domain.Entities.People.Teacher", "ClassTeacher")
-                        .WithMany("ClassRooms")
+                        .WithMany("ClassesResponsibleFor")
                         .HasForeignKey("TeacherId")
                         .HasConstraintName("fk_class_rooms_teachers_teacher_id");
 
                     b.Navigation("ClassTeacher");
 
                     b.Navigation("Grade");
-
-                    b.Navigation("School");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.Grade", b =>
@@ -998,6 +1176,18 @@ namespace schoolapp.Infrastructure.Migrations
                         .HasConstraintName("fk_grades_schools_school_id");
 
                     b.Navigation("School");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.Exams.Assessment", b =>
+                {
+                    b.HasOne("schoolapp.Domain.Entities.Academics.StudentSubject", "StudentSubject")
+                        .WithMany("Assessments")
+                        .HasForeignKey("StudentSubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_assessment_student_subjects_student_subject_id");
+
+                    b.Navigation("StudentSubject");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.Parent", b =>
@@ -1014,11 +1204,25 @@ namespace schoolapp.Infrastructure.Migrations
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.Student", b =>
                 {
-                    b.HasOne("schoolapp.Domain.Entities.ClassGrades.ClassRoom", "StudentClass")
+                    b.HasOne("schoolapp.Domain.Entities.ClassGrades.ClassRoom", "ClassRoom")
                         .WithMany("Students")
                         .HasForeignKey("ClassRoomId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("fk_students_class_rooms_class_room_id");
+
+                    b.HasOne("schoolapp.Domain.Entities.ClassGrades.Grade", "CurrentGrade")
+                        .WithMany()
+                        .HasForeignKey("CurrentGradeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_students_grades_current_grade_id");
+
+                    b.HasOne("schoolapp.Domain.Entities.Academics.AcademicYear", "EnrollmentYear")
+                        .WithMany()
+                        .HasForeignKey("EnrollmentYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_students_academic_years_enrollment_year_id");
 
                     b.HasOne("schoolapp.Domain.Entities.School", "School")
                         .WithMany()
@@ -1027,9 +1231,13 @@ namespace schoolapp.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_students_schools_school_id");
 
-                    b.Navigation("School");
+                    b.Navigation("ClassRoom");
 
-                    b.Navigation("StudentClass");
+                    b.Navigation("CurrentGrade");
+
+                    b.Navigation("EnrollmentYear");
+
+                    b.Navigation("School");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.StudentParent", b =>
@@ -1085,6 +1293,60 @@ namespace schoolapp.Infrastructure.Migrations
                     b.Navigation("School");
                 });
 
+            modelBuilder.Entity("schoolapp.Domain.Entities.StudentAcademics.AcademicRecord", b =>
+                {
+                    b.HasOne("schoolapp.Domain.Entities.Academics.AcademicYear", "AcademicYear")
+                        .WithMany()
+                        .HasForeignKey("AcademicYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_academic_record_academic_years_academic_year_id");
+
+                    b.HasOne("schoolapp.Domain.Entities.ClassGrades.ClassRoom", "ClassRoom")
+                        .WithMany()
+                        .HasForeignKey("ClassRoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_academic_record_class_rooms_class_room_id");
+
+                    b.HasOne("schoolapp.Domain.Entities.ClassGrades.Grade", "Grade")
+                        .WithMany()
+                        .HasForeignKey("GradeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_academic_record_grades_grade_id");
+
+                    b.HasOne("schoolapp.Domain.Entities.People.Student", "Student")
+                        .WithMany("AcademicHistory")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_academic_record_students_student_id");
+
+                    b.Navigation("AcademicYear");
+
+                    b.Navigation("ClassRoom");
+
+                    b.Navigation("Grade");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.AcademicYear", b =>
+                {
+                    b.Navigation("Terms");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.SchoolSubject", b =>
+                {
+                    b.Navigation("GradeSubjects");
+                });
+
+            modelBuilder.Entity("schoolapp.Domain.Entities.Academics.StudentSubject", b =>
+                {
+                    b.Navigation("Assessments");
+                });
+
             modelBuilder.Entity("schoolapp.Domain.Entities.ClassGrades.ClassRoom", b =>
                 {
                     b.Navigation("Students");
@@ -1102,12 +1364,18 @@ namespace schoolapp.Infrastructure.Migrations
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.Student", b =>
                 {
+                    b.Navigation("AcademicHistory");
+
+                    b.Navigation("EnrolledSubjects");
+
                     b.Navigation("StudentParents");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.People.Teacher", b =>
                 {
-                    b.Navigation("ClassRooms");
+                    b.Navigation("ClassesResponsibleFor");
+
+                    b.Navigation("SubjectsQualified");
                 });
 
             modelBuilder.Entity("schoolapp.Domain.Entities.School", b =>

@@ -22,15 +22,14 @@ namespace studentapp.Application.Services
             {
                 return null;
             }
-            return await _context.StudentSubjects.Where(s => s.StudentId == studentId)
+            return await _context.StudentSubjects.Where(s => s.Student.Id == studentId)
                 .Select(t => new StudentSubjectDto
                 {
                     Id = t.Id,
-                    SubjectName= t.SubjectName,
-                    Elective = t.Elective,
-                    StudentId = t.StudentId,
-                    ClassroomSubjectId = t.ClassroomSubjectId,
-                    SubjectId = t.SubjectId,
+                    SubjectName= t.Subject.SubjectName,
+                    Elective = t.Subject.Elective,
+                    StudentId = t.Student.Id,
+                    SubjectId = t.Subject.Id,
 
                 })
                 .ToListAsync();
@@ -46,11 +45,10 @@ namespace studentapp.Application.Services
                 .Select(t => new StudentSubjectDto
                 {
                     Id = t.Id,
-                    SubjectName= t.SubjectName,
-                    Elective = t.Elective,
-                    StudentId = t.StudentId,
-                    ClassroomSubjectId= t.ClassroomSubjectId,
-                    SubjectId= t.SubjectId,
+                    SubjectName= t.Subject.SubjectName,
+                    Elective = t.Subject.Elective,
+                    StudentId = t.Student.Id,
+                    SubjectId= t.Subject.Id,
                 }).FirstOrDefaultAsync();
 
             if (StudentSubject == null)
@@ -95,15 +93,9 @@ namespace studentapp.Application.Services
             {
                 return null;
             }
-            StudentSubject newStudentSubject = new StudentSubject
-            {
-                Elective = StudentSubject.Elective,
-                StudentId = StudentSubject.StudentId,
-                SubjectName = StudentSubject.SubjectName,
-                ClassroomSubjectId = StudentSubject.ClassroomSubjectId,
-                
-            };
-            _context.StudentSubjects.Add(newStudentSubject);
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.Id == StudentSubject.StudentId, cancellationToken);
+            var subject = await _context.SchoolSubjects.FirstOrDefaultAsync(s => s.Id == StudentSubject.SubjectId, cancellationToken);
+            student.EnrollInSubject(subject, student.EnrollmentYear);           
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;
@@ -126,7 +118,6 @@ namespace studentapp.Application.Services
 
             return true;
         }
-
 
     }
 }

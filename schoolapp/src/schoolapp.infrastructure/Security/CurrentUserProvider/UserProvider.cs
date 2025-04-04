@@ -19,33 +19,41 @@ namespace schoolapp.Infrastructure.Security.CurrentUserProvider
 
         public Result<CurrentUser> GetCurrentUser()
         {
-            var user = _httpContextAccessor.HttpContext.User;
+            try
+            {
+                var user = _httpContextAccessor.HttpContext.User;
 
-            if (_httpContextAccessor.HttpContext == null)
-            {
-                throw new Exception();
+                if (_httpContextAccessor.HttpContext == null)
+                {
+                    throw new Exception();
+                }
+                if (user?.Identity == null || !user.Identity.IsAuthenticated)
+                {
+                    _logger.LogError("User is not authenticated {user}", user);
+                    return Result<CurrentUser>.Failure(["User is not authenticated"]);
+                }
+                if (_httpContextAccessor.HttpContext.User?.IsAuthenticated() == false)
+                {
+                    throw new Exception();
+                }
+
+                _ = _httpContextAccessor.HttpContext!.User.Claims;
+                string id = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                string email = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
+                var permissions = GetClaimValues("permissions");
+                var roles = GetClaimValues(ClaimTypes.Role);
+                var firstName = "";//GetSingleClaimValue(JwtRegisteredClaimNames.Name);
+
+                // email = GetSingleClaimValue(ClaimTypes.Email);
+
+                var result = new CurrentUser(id, firstName, "", email, permissions, roles);
+                return Result<CurrentUser>.Success(result);
             }
-            if (user?.Identity == null || !user.Identity.IsAuthenticated)
+            catch (Exception ex)
             {
-                _logger.LogError("User is not authenticated {user}", user);
+                _logger.LogError("User is not authenticated {user}", ex);
                 return Result<CurrentUser>.Failure(["User is not authenticated"]);
             }
-            if (_httpContextAccessor.HttpContext.User?.IsAuthenticated() == false)
-            {
-                throw new Exception();
-            }
-
-            _ = _httpContextAccessor.HttpContext!.User.Claims;
-            string id = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            var permissions = GetClaimValues("permissions");
-            var roles = GetClaimValues(ClaimTypes.Role);
-            var firstName = GetSingleClaimValue(JwtRegisteredClaimNames.Name);
-
-            var email = GetSingleClaimValue(ClaimTypes.Email);
-
-            var result = new CurrentUser(id, firstName, "", email, permissions, roles);
-            return Result<CurrentUser>.Success(result);
         }
 
         private List<string> GetClaimValues(string claimType) =>
@@ -55,7 +63,7 @@ namespace schoolapp.Infrastructure.Security.CurrentUserProvider
                 .ToList();
 
         private string GetSingleClaimValue(string claimType) =>
-            _httpContextAccessor.HttpContext!.User.Claims 
+            _httpContextAccessor.HttpContext!.User.Claims
                 .Single(claim => claim.Type == claimType)
                 .Value;
     }

@@ -31,7 +31,7 @@ namespace schoolapp.Application.Services
                     Name = g.Name,
                     Desc = g.Desc,
                     SchoolId = g.SchoolId,
-                    Classrooms = g.ClassRooms.Select(c => new ClassRoomDto { ClassRoomId = c.ClassRoomId, ClassroomName = c.ClassroomName, Year = c.Year }).ToList(),
+                    Classrooms = g.ClassRooms.Select(c => new ClassRoomDto { ClassRoomId = c.Id, ClassroomName = c.Name }).ToList(),
                 })
                 .ToListAsync();
         }
@@ -49,7 +49,7 @@ namespace schoolapp.Application.Services
                     Name = g.Name,
                     Desc = g.Desc,
                     SchoolId = g.SchoolId,
-                    Classrooms = g.ClassRooms.Select(c => new ClassRoomDto { GradeId=c.GradeId, ClassRoomId = c.ClassRoomId, ClassroomName = c.ClassroomName, Year = c.Year }).ToList(),
+                    Classrooms = g.ClassRooms.Select(c => new ClassRoomDto { GradeId=c.Grade.Id, ClassRoomId = c.Id, ClassroomName = c.Name}).ToList(),
 
                 }).FirstOrDefaultAsync(g => g.Id == id);
 
@@ -69,17 +69,14 @@ namespace schoolapp.Application.Services
           
                 .Select(g => new ClassRoomDto
                 {
-                    TeacherId = g.TeacherId,
-                    ClassRoomId = g.ClassRoomId,
-                    ClassroomName = g.ClassroomName,
-                    GradeId = g.GradeId,
-                    Year = g.Year,
-                    SchoolId = g.SchoolId,
+                    ClassRoomId = g.Id,
+                    ClassroomName = g.Name,
+                    GradeId = g.Grade.Id,
                     ClassTeacherName = g.ClassTeacher != null ? g.ClassTeacher.GetFullName() : "No teacher assigned",
                     Students = g.Students.Select(s => new StudentDto
                     {
                         Id  = s.Id,
-                        Status = s.Status,
+                        Status = s.Status.ToString(),
                         Gender = s.Gender,
                         RegNumber = s.RegNumber,                        
                         ImageUrl = s.Image,
@@ -97,19 +94,23 @@ namespace schoolapp.Application.Services
             {
                 return null;
             }
-            var classRooms = await _context.ClassRooms
-                .Select(c => new ClassRoomDto
-                {
-                    SchoolId=c.SchoolId,
-                    ClassRoomId = c.ClassRoomId,
-                    ClassroomName = c.ClassroomName,
-                    GradeId = c.GradeId,
-                    TeacherId = c.TeacherId,
-                    Year = c.Year   
-                })
-                .Where(c => c.SchoolId == SchoolId)
-                .ToListAsync();
-            return classRooms;
+            try
+            {
+                var classRooms = await _context.ClassRooms
+                    .Where(c => c.Grade.SchoolId == SchoolId)
+                    .Select(c => new ClassRoomDto
+                    {
+                        ClassRoomId = c.Id,
+                        ClassroomName = c.Name,
+                        GradeId = c.Grade.Id,
+                    })
+                    .ToListAsync();
+                return classRooms;
+            }catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting class rooms");
+                return null;
+            }
         }
         public async Task<List<ClassRoomDto>?> GetGradeClassRooms(int GradeId)
         {
@@ -117,7 +118,7 @@ namespace schoolapp.Application.Services
             {
                 return null;
             }
-            var classRooms = await _context.ClassRooms.Select(c => new ClassRoomDto { SchoolId = c.SchoolId, ClassRoomId = c.ClassRoomId, ClassroomName = c.ClassroomName, GradeId = c.GradeId, TeacherId = c.TeacherId, Year = c.Year }).Where(c=>c.GradeId == GradeId).ToListAsync();      
+            var classRooms = await _context.ClassRooms.Select(c => new ClassRoomDto { ClassRoomId = c.Id, ClassroomName = c.Name, GradeId = c.Grade.Id }).Where(c=>c.GradeId == GradeId).ToListAsync();      
             return classRooms;
         }
         public async Task<GradeDto?> PutGrade(int id, GradeDto grade, CancellationToken cancellationToken)
@@ -175,10 +176,8 @@ namespace schoolapp.Application.Services
             }
             var newclassroom = new ClassRoom
             {
-                ClassroomName = classRoom.ClassroomName,
+                Name = classRoom.ClassroomName,
                 GradeId = classRoom.GradeId,
-                SchoolId = classRoom.SchoolId,
-                Year = classRoom.Year              
             };
             _context.ClassRooms.Add(newclassroom);
             await _context.SaveChangesAsync(cancellationToken);

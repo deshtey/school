@@ -10,7 +10,7 @@ class ClassRoomEntityConfiguration
     {
         classRoomConfiguration.ToTable("classrooms", "academics");
 
-        classRoomConfiguration.Property(s => s.ClassroomName)
+        classRoomConfiguration.Property(s => s.Name)
             .HasColumnName("classroomname")
             .HasMaxLength(20);
 
@@ -18,12 +18,12 @@ class ClassRoomEntityConfiguration
             .HasOne(c=>c.ClassTeacher)
             .WithMany()
             .HasForeignKey(c=>c.TeacherId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.SetNull);
 
         classRoomConfiguration
             .HasOne(c => c.Grade)
             .WithMany(c => c.ClassRooms)
-            .HasForeignKey(c => c.GradeId)
+            .HasForeignKey(c => c.Grade.Id)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

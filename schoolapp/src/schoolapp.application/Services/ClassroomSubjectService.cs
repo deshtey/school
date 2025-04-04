@@ -26,12 +26,10 @@ namespace schoolapp.Application.Services
                 .Select(t => new ClassRoomSubjectDto
                 {
                     Id = t.Id,
-                    SubjectName = t.SubjectName,
+                    SubjectName = t.SchoolSubject.SubjectName,
                     SchoolSubjectId = t.SchoolSubjectId,
                     ClassRoomId = t.ClassRoomId,
-                    Elective  = t.Elective,
-
-                    
+                    Elective  = t.SchoolSubject.Elective                  
                 })
                 .ToListAsync();
         }
@@ -46,10 +44,10 @@ namespace schoolapp.Application.Services
                 .Select(t => new ClassRoomSubjectDto
                 {
                     Id = t.Id,
-                    SubjectName = t.SubjectName,
+                    SubjectName = t.SchoolSubject.SubjectName,
                     SchoolSubjectId = t.SchoolSubjectId,
                     ClassRoomId= t.ClassRoomId,
-                    Elective= t.Elective,
+                    Elective= t.SchoolSubject.Elective,
                 }).FirstOrDefaultAsync();
 
             if (ClassRoomSubject == null)
@@ -94,14 +92,8 @@ namespace schoolapp.Application.Services
             {
                 return null;
             }
-            ClassRoomSubject newClassRoomSubject = new ClassRoomSubject
-            {
-                SubjectName = ClassRoomsubject.SubjectName,
-                ClassRoomId = ClassRoomsubject.ClassRoomId,
-                Elective = ClassRoomsubject.Elective,
-                SchoolSubjectId = ClassRoomsubject.SchoolSubjectId               
-                
-            };
+            ClassRoomSubject newClassRoomSubject = new ClassRoomSubject(ClassRoomsubject.ClassRoomId, ClassRoomsubject.SchoolSubjectId, ClassRoomsubject.Elective);       
+          
             _context.ClassRoomSubjects.Add(newClassRoomSubject);
             await _context.SaveChangesAsync(cancellationToken);
 

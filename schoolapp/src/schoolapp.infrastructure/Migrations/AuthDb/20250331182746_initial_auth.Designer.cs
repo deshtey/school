@@ -12,8 +12,8 @@ using schoolapp.Infrastructure.Data;
 namespace schoolapp.Infrastructure.Migrations.AuthDb
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20240915165355_rolepermissions")]
-    partial class rolepermissions
+    [Migration("20250331182746_initial_auth")]
+    partial class initial_auth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -256,10 +256,18 @@ namespace schoolapp.Infrastructure.Migrations.AuthDb
                         .HasColumnType("integer")
                         .HasColumnName("access_failed_count");
 
+                    b.Property<string>("Avatar")
+                        .HasColumnType("text")
+                        .HasColumnName("avatar");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text")
                         .HasColumnName("concurrency_stamp");
+
+                    b.Property<string>("CountryCode")
+                        .HasColumnType("text")
+                        .HasColumnName("country_code");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)

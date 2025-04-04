@@ -35,7 +35,7 @@ namespace schoolapp.Application.Services
                     Gender = t.Gender,
                     Phone   = t.Phone,
                     SchoolId    = t.SchoolId,
-                    Status  = t.Status,
+                    Status  = t.Status.ToString(),
                     RegNo = t.RegNo,
                    // Departments = t.Departments.Select(d=>new DepartmentDto{Id=d.Id,DepartmentName=d.DepartmentName}).ToList(),
                    // ClassRooms = t.ClassRooms.Select(c=>new ClassRoomDto{ClassRoomId=c.ClassRoomId,ClassroomName=c.ClassroomName}).ToList(),
@@ -66,10 +66,10 @@ namespace schoolapp.Application.Services
                     Gender = t.Gender,
                     Phone = t.Phone,
                     SchoolId = t.SchoolId,
-                    Status = t.Status,
+                    Status = t.Status.ToString(),
                     RegNo = t.RegNo,
                     Departments = t.Departments.Select(d => new DepartmentDto { Id = d.Id, DepartmentName = d.DepartmentName }).ToList(),
-                    ClassRooms = t.ClassRooms.Select(c => new ClassRoomDto { ClassRoomId = c.ClassRoomId, ClassroomName = c.ClassroomName }).ToList(),
+                    //ClassRooms = t.ClassRooms.Select(c => new ClassRoomDto { ClassRoomId = c.ClassRoomId, ClassroomName = c.ClassroomName }).ToList(),
 
                 })
                 .FirstOrDefaultAsync();
@@ -121,7 +121,6 @@ namespace schoolapp.Application.Services
                 OtherNames = teacher.OtherName,
                 Salutation = teacher.Salutation,
                 DOB = teacher.DOB,
-                Active = true,
                 Email   = teacher.Email,
                 Gender = teacher.Gender,    
                 RegNo = teacher.RegNo,

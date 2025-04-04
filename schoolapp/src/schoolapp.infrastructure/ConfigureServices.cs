@@ -1,4 +1,4 @@
-﻿#define UseSqlServer
+﻿
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -57,30 +57,15 @@ public static class DependencyInjection
         services.AddDbContext<SchoolDbContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-
-#if !UseSqlServer
-                options.UseSqlServer(connectionString);
-
-#else
             options.UseNpgsql(postgresConnectionString).UseSnakeCaseNamingConvention();
-
-#endif
         });
 
         services.AddDbContext<AuthDbContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-
-#if !UseSqlServer
-                options.UseSqlServer(connectionString);
-
-#else
             options.UseNpgsql(postgresConnectionString).UseSnakeCaseNamingConvention();
-
-#endif
         });
         services.AddScoped<ISchoolDbContext, SchoolDbContext>();
-
         services.AddScoped<IAuthDbContext, AuthDbContext>();
         return services;
     }

@@ -25,7 +25,7 @@ namespace schoolapp.Application.Services
                 .Select(s => new StudentDto
                 {
                     Id = s.Id,
-                    Status = s.Status,
+                    Status = s.Status.ToString(),
                     FullName = s.GetFullName(),
                     FirstName = s.FirstName,
                     LastName = s.LastName,
@@ -87,7 +87,7 @@ namespace schoolapp.Application.Services
                     SchoolId = s.SchoolId,
                     StudentDto = new StudentDto
                     {
-                        Status = s.Status,
+                        Status = s.Status.ToString(),
                         FullName = s.GetFullName(),
                         FirstName = s.FirstName,
                         LastName = s.LastName,
@@ -98,7 +98,7 @@ namespace schoolapp.Application.Services
                         Gender = s.Gender,
                         Phone = s.Phone,
                         RegNumber = s.RegNumber ,
-                        StudentClass=s.StudentClass.ClassroomName
+                        StudentClass=s.ClassRoom.Name
                     },
                     ParentsDto = s.Parents.Select(p => new ParentDto
                     {
@@ -124,7 +124,6 @@ namespace schoolapp.Application.Services
             int schoolId = studentparentDto.SchoolId;
             Student _student = new()
             {
-                Active = true,
                 SchoolId = schoolId,
                 FirstName = studentparentDto.StudentDto.FirstName,
                 LastName = studentparentDto.StudentDto.LastName,
@@ -148,7 +147,6 @@ namespace schoolapp.Application.Services
                 {
                     parent = new Parent
                     {
-                        Active = true,
                         Email = _parent.Email,
                         Gender = _parent.Gender,
                         Phone = _parent.Phone,
@@ -220,6 +218,46 @@ namespace schoolapp.Application.Services
 
             return true;
         }
+        //public bool PromoteToNextGrade(SchoolContext context, AcademicYear currentYear, AcademicYear nextYear)
+        //{
+        //    if (!IsEligibleForPromotion(currentYear))
+        //        return false;
+
+        //    Grade nextGrade = CurrentGrade.GetNextGrade(context);
+        //    if (nextGrade == null)
+        //        return false;
+
+        //    // Create academic record for the completed grade
+        //    AcademicHistory.Add(new AcademicRecord
+        //    {
+        //        Student = this,
+        //        Grade = CurrentGrade,
+        //        ClassRoom = ClassRoom,
+        //        AcademicYear = currentYear,
+        //        OverallGrade = CalculateOverallGrade(currentYear),
+        //        CompletionDate = currentYear.EndDate
+        //    });
+
+        //    // Update student's current grade
+        //    CurrentGrade = nextGrade;
+
+        //    // Remove from current classroom
+        //    if (ClassRoom != null)
+        //    {
+        //        ClassRoom.RemoveStudent(this);
+        //    }
+
+        //    // Student needs to be assigned to a new classroom in the next grade
+        //    // This will be handled by the school administration separately
+
+        //    // Enroll student in all compulsory subjects for the new grade
+        //    foreach (var subject in nextGrade.CompulsorySubjects)
+        //    {
+        //        EnrollInSubject(subject, nextYear);
+        //    }
+
+        //    return true;
+        //}
 
         Task<StudentParentDto?> IStudentService.PutStudent(int id, StudentParentDto Student, CancellationToken cancellationToken)
         {

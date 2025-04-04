@@ -6,5 +6,5 @@ public abstract class BaseAuditableEntity
     public string CreatedByUserId { get; set; }
     public DateTimeOffset? LastModified { get; set; } = DateTimeOffset.UtcNow;
     public string? LastModifiedByUserId { get; set; }
-    public bool Active { get; set; } = true;
+    public EntityStatus Status { get; set; } = EntityStatus.Active;
 }
