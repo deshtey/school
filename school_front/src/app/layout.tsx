@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -17,10 +16,7 @@ const geistMono = localFont({
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "EverCherish - Honoring Memories",
-  description: "A peaceful place to celebrate the lives of our beloved companions",
-};
+
 
 export default function RootLayout({
   children,
