@@ -1,5 +1,5 @@
+"use client";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { 
   BookOpen, 
   Calendar, 
@@ -14,6 +14,7 @@ import {
   FileSpreadsheet
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -31,7 +32,7 @@ interface NavItemProps {
 const NavItem = ({ icon: Icon, label, to, isOpen, isActive = false }: NavItemProps) => {
   return (
     <Link 
-      to={to} 
+      href={to} 
       className={cn(
         "nav-item", 
         isActive && "active",
@@ -77,12 +78,12 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     >
       <div className="flex h-16 items-center justify-between border-b px-4">
         {isOpen ? (
-          <Link to="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <GraduationCap className="h-8 w-8 text-school-purple" />
             <span className="text-xl font-bold">EduManager</span>
           </Link>
         ) : (
-          <Link to="/" className="mx-auto">
+          <Link href="/" className="mx-auto">
             <GraduationCap className="h-8 w-8 text-school-purple" />
           </Link>
         )}

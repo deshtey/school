@@ -1,6 +1,5 @@
 // app/page.tsx
 
-import Link from "next/link";
 import IndexLayout from "./IndexLayout";
 export default function Home() {
   return (
