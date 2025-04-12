@@ -1,11 +1,10 @@
 "use client";
 import Sidebar from "@/components/layout/Sidebar";
 import Topbar from "@/components/layout/Topbar";
-import Header from "@/layouts/header";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-export default function IndexLayout({ children }: { children: React.ReactNode }) {
+export default function MainLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (

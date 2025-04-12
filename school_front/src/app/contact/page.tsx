@@ -1,5 +1,5 @@
 import React from "react";
-import IndexLayout from "../IndexLayout";
+import MainLayout from "../mainLayout";
 import { Img } from "@/components/Img/Index";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -8,7 +8,7 @@ import ContactForm from "./ContactForm";
 const Contact: React.FC = () => {
 
   return (
-    <IndexLayout>
+    <MainLayout>
       <div className="bg-gradient-to-b from-purple-100  to-white  py-10 lg:px-16 sm:px-6 md:px-8 w-full">
       <h1 className="text-4xl font-bold mb-3">
             <span className="text-gray-800">Contact Us </span>
@@ -50,7 +50,7 @@ const Contact: React.FC = () => {
           {/* <div className="absolute top-0 left-0 w-32 h-32 bg-purple-200 rounded-full opacity-50 transform -translate-x-16 -translate-y-16"></div>
           <div className="absolute bottom-0 right-0 w-40 h-40 bg-purple-200 rounded-full opacity-50 transform translate-x-16 translate-y-16"></div> */}
         </div>
-    </IndexLayout>
+    </MainLayout>
   );
 };
 

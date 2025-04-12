@@ -1,9 +1,11 @@
 // app/page.tsx
 
-import IndexLayout from "./IndexLayout";
+import MainLayout from "./mainLayout";
+
+
 export default function Home() {
   return (
-    <IndexLayout>
+    <MainLayout>
  
         {/* What Our Users Say About Us, Testimonials */}
 
@@ -69,6 +71,6 @@ export default function Home() {
           <div className="absolute bottom-0 right-0 w-40 h-40 bg-purple-200 rounded-full opacity-50 transform translate-x-16 translate-y-16"></div> */}
         </div>
    
-    </IndexLayout>
+    </MainLayout>
   );
 }

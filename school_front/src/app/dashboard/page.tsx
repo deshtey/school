@@ -2,11 +2,11 @@ import { Users, BookOpen, GraduationCap, Calendar } from "lucide-react";
 import StatCard from "@/components/dashboard/StatCard";
 import RecentActivity from "@/components/dashboard/RecentActivity";
 import UpcomingEvents from "@/components/dashboard/UpcomingEvents";
-import IndexLayout from "../IndexLayout";
+import MainLayout from "../mainLayout";
 
 const Dashboard = () => {
   return (
-    <IndexLayout>
+    <MainLayout>
     <div className="animate-fade-in space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
@@ -45,7 +45,7 @@ const Dashboard = () => {
         <UpcomingEvents />
       </div>
     </div>
-    </IndexLayout>
+    </MainLayout>
   );
 };
 
