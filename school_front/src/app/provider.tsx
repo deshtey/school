@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { store } from "@/lib/features/store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ThemeProvider } from "next-themes";
 import ToastContainer from "@/components/ui/toast-container";
@@ -20,11 +19,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <ToastProvider>
         <ToastContainer />
 
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        {/* <LocalizationProvider dateAdapter={datefns}> */}
           <Provider store={store}>
             <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
           </Provider>
-        </LocalizationProvider>
+        {/* </LocalizationProvider> */}
       </ToastProvider>
     </ThemeProvider>
   );

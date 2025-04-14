@@ -25,9 +25,7 @@ export function SplashScreen({ portal = true, sx, ...other }) {
           ...sx,
         }}
         {...other}
-      >
-        <AnimateLogo1 />
-      </Box>
+      ></Box>
     </Box>
   );
 

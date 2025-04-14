@@ -1,10 +1,10 @@
 "use client";
-import Sidebar from "@/components/layout/Sidebar";
+import Sidebar from "@/components/layout/SidebarAdmin";
 import Topbar from "@/components/layout/Topbar";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-export default function MainLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (

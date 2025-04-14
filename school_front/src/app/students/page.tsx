@@ -2,13 +2,13 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { StudentFormDemo } from "@/components/students/studentcreate";
-import MainLayout from "../mainLayout";
+import Layout from "../dashboard/layout";
 const NewMemorial: React.FC = () => {
 
   return (
-    <MainLayout>
+    <Layout>
       <StudentFormDemo />
-    </MainLayout>
+    </Layout>
   );
 };
 

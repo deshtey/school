@@ -115,7 +115,7 @@ export const EntityForm = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{isEditing ? `Edit ${entityType}` : `Add New ${entityType}`}</DialogTitle>
           <DialogDescription>

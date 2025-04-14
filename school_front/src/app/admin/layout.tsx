@@ -1,28 +1,28 @@
+"use client";
+import { AuthGuard } from "@/auth/guard/auth-guard";
+import Sidebar from "@/components/layout/SidebarAdmin";
+import Topbar from "@/components/layout/Topbar";
+import { CONFIG } from "@/config-global";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
 
-import { Sidebar } from "@/components/Sidebar";
-import { DashboardHeader } from "@/components/DashboardHeader";
-import { Button } from "@/components/ui/button";
-
-const Layout = ({ children }: { children: React.ReactNode }) => {
+export default function Layout({ children }: { children: React.ReactNode }) {
+  if (CONFIG.auth.skip) {
+      // return <AdminLayout>{children}</AdminLayout>;
+      return <div>{children}</div>;
+  }
+ const [sidebarOpen, setSidebarOpen] = useState(true);
   return (
-    <div className="min-h-screen flex bg-background text-foreground">
-      <Sidebar />
-      <main className="flex-1">
-        <DashboardHeader />
-        <div className="p-6">
-          <div className="grid gap-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold">Schools</h1>
-                <p className="text-muted-foreground">Manage your schools and their details</p>
-              </div>
-              <Button>New school</Button>
-            </div>
-          </div>
-        </div>
-      </main>
+    <AuthGuard>
+    <div className="min-h-screen min-w-full bg-background dark:bg-dark-900">
+      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+      <div className={cn("transition-all duration-300 bg-pink-50", sidebarOpen ? "ml-64" : "ml-20")}>
+        <Topbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <main className="container mx-auto  mt-20 xl:p-2 xxl:p-4">
+          {children}
+        </main>
+      </div>
     </div>
+    </AuthGuard>
   );
-};
-
-export default Layout ;
+}

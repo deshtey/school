@@ -1,3 +1,4 @@
+
 import { Bell, ChevronLeft, ChevronRight, Search, Settings, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }: TopbarProps) => {
   return (
     <header className="fixed left-0 right-0 top-0 z-10 flex h-16 items-center border-b bg-white px-4 md:px-6">
       <div className={sidebarOpen ? "ml-64" : "ml-20"}>
-        <Button
+        {/* <Button
           variant="ghost"
           size="icon"
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -31,7 +32,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }: TopbarProps) => {
           ) : (
             <ChevronRight className="h-5 w-5" />
           )}
-        </Button>
+        </Button> */}
       </div>
       
       <div className="ml-4 hidden md:block">

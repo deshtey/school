@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { UserPlus, Edit } from "lucide-react";
 import { EntityForm, FieldConfig } from "../forms/entityform";
+import StudentParentForm from "../forms/studentParentForm";
 
 // Example student form fields
 const studentFields: FieldConfig[] = [
@@ -142,7 +143,7 @@ export const StudentFormDemo = ({ student, isEditing = false }: StudentFormProps
         )}
       </Button>
 
-      <EntityForm
+      {/* <EntityForm
         entityType="Student"
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
@@ -150,6 +151,15 @@ export const StudentFormDemo = ({ student, isEditing = false }: StudentFormProps
         defaultValues={student || emptyStudentValues}
         fields={studentFields}
         isEditing={isEditing}
+      /> */}
+      <StudentParentForm
+                isOpen={isOpen}
+
+         onClose={() => setIsOpen(false)}
+         onSubmit={handleSubmit}
+         defaultValues={student || emptyStudentValues}
+         fields={studentFields}
+         isEditing={isEditing}
       />
     </>
   );

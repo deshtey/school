@@ -1,10 +1,10 @@
 import React from "react";
-import MainLayout from "../mainLayout";
+import Layout from "../dashboard/layout";
 import Link from "next/link";
 
 const Plans: React.FC = () => {
   return (
-    <MainLayout>
+    <Layout>
       <div className="bg-gradient-to-b from-purple-100  to-white  py-10 lg:px-16 sm:px-6 md:px-8 w-full">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-bold text-gray-800">Plans for everyone</h2>
@@ -345,7 +345,7 @@ const Plans: React.FC = () => {
           {/* <div className="absolute top-0 left-0 w-32 h-32 bg-purple-200 rounded-full opacity-50 transform -translate-x-16 -translate-y-16"></div>
           <div className="absolute bottom-0 right-0 w-40 h-40 bg-purple-200 rounded-full opacity-50 transform translate-x-16 translate-y-16"></div> */}
         </div>
-    </MainLayout>
+    </Layout>
   );
 };
 

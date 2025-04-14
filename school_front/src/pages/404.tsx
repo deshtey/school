@@ -3,9 +3,9 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import MainLayout from "../mainLayout";
 
 const NotFound = () => {
+  console.log("dsfsd")
   const location = useLocation();
 
   useEffect(() => {
@@ -16,7 +16,6 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <MainLayout>
       <div className="flex min-h-[80vh] flex-col items-center justify-center text-center">
         <h1 className="mb-4 text-9xl font-bold text-school-purple">404</h1>
         <h2 className="mb-6 text-2xl font-medium">Page Not Found</h2>
@@ -28,7 +27,6 @@ const NotFound = () => {
           <Link to="/">Return to Dashboard</Link>
         </Button>
       </div>
-    </MainLayout>
   );
 };
 
