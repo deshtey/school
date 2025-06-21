@@ -10,13 +10,13 @@ namespace schoolapp.Domain.Entities.People
         public List<StudentParent> StudentParents { get; set; } = [];
         public School School { get; set; }
 
-        public Parent(string firstName, string lastName, int schoolId, Gender gender) : base(firstName, lastName, schoolId, gender)
+        public Parent(string firstName, string lastName, string phone,  int schoolId, Gender gender) : base(firstName, lastName, schoolId, gender)
         {
-            
+            Phone = phone?.Trim();
         }
-        public static Parent? Create(string firstName, string lastName, int schoolId, Gender gender)
+        public static Parent? Create(string firstName, string lastName, string phone,  int schoolId, Gender gender)
         {
-            return new Parent(firstName, lastName, schoolId, gender);
+            return new Parent(firstName, lastName, phone,  schoolId, gender);
         }
     }
 }

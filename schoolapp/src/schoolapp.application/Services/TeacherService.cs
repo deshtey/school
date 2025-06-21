@@ -28,7 +28,7 @@ namespace schoolapp.Application.Services
                 .Select(t=>new TeacherDto
                 {
                     Id = t.Id,
-                    FullName = t.GetFullName(),
+                    FullName = t.FullName,
                     Salutation = t.Salutation,
                     ImageUrl = t.Image,
                     Email = t.Email,
@@ -55,11 +55,11 @@ namespace schoolapp.Application.Services
                 .Select(t => new TeacherDto
                 {
                     Id = t.Id,
-                    FullName = t.GetFullName(),
+                    FullName = t.FullName,
                     FirstName = t.FirstName,
                     LastName = t.LastName,
                     OtherName = t.OtherNames,
-                    DOB = t.DOB,
+                    DOB = t.DateOfBirth,
                     ImageUrl = t.Image,
                     Salutation  = t.Salutation,
                     Email = t.Email,
@@ -107,27 +107,21 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<bool?> PostTeacher(TeacherDto teacher, CancellationToken cancellationToken)
+        public async Task<bool?> PostTeacher(TeacherDto teacherDto, CancellationToken cancellationToken)
         {
             if (_context.Teachers == null)
             {
                 return null;
             }
-            var newTeacher = new Teacher
-            {
-                SchoolId   = teacher.SchoolId,
-                FirstName = teacher.FirstName,
-                LastName = teacher.LastName,
-                OtherNames = teacher.OtherName,
-                Salutation = teacher.Salutation,
-                DOB = teacher.DOB,
-                Email   = teacher.Email,
-                Gender = teacher.Gender,    
-                RegNo = teacher.RegNo,
-               Image = teacher.ImageUrl,
-               Phone = teacher.Phone   
+            var newTeacher = new Teacher(teacherDto.FirstName, teacherDto.LastName, teacherDto.SchoolId, teacherDto.Gender.Value);
+            newTeacher.OtherNames = teacherDto.OtherName;
+            newTeacher.Salutation = teacherDto.Salutation;
+            newTeacher.DateOfBirth = teacherDto.DOB;
+            newTeacher.Email = teacherDto.Email;
+            newTeacher.RegNo = teacherDto.RegNo;
+            newTeacher.Image = teacherDto.ImageUrl;
+            newTeacher.Phone = teacherDto.Phone;  
 
-            };
             _context.Teachers.Add(newTeacher);
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -152,5 +152,20 @@ namespace schoolapp.Application.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<Parent?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Parent?> GetByNationalIdAsync(string nationalId, int schoolId, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Parent?> GetByEmailAsync(string email, int schoolId, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

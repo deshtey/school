@@ -8,7 +8,7 @@ namespace schoolapp.Application.Contracts
         Task<IEnumerable<StudentDto>?> GetStudents(int schoolId);
         Task<StudentParentDto?> GetStudent(int id, int schoolId);
         Task<StudentParentDto?> PutStudent(int id, StudentParentDto Student, CancellationToken cancellationToken);
-        Task<Student?> PostStudent(StudentParentDto _studentParentDto, CancellationToken cancellationToken);
+        Task<Student?> CreateStudentAsync(StudentParentDto _studentParentDto, CancellationToken cancellationToken);
         Task<bool> DeleteStudent(int id, CancellationToken cancellationToken);
     }
 }

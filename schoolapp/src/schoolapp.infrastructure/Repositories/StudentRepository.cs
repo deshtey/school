@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using schoolapp.Application.Common.Models;
 using schoolapp.Application.DTOs;
 using schoolapp.Application.RepositoryInterfaces;
 using schoolapp.Domain.Entities;
@@ -100,6 +101,45 @@ namespace schoolapp.Infrastructure.Repositories
             })
            .ToListAsync();
         }
-        
+
+
+        public async Task<Result<Student>> UpdateStudentAsync( StudentDto studentDto, CancellationToken cancellationToken)
+        {
+         
+            // Update the existing student with the values from the DTO
+            //existingStudent.Status = Enum.Parse<StudentStatus>(studentDto.Status, true);
+            //existingStudent.FirstName = studentDto.FirstName;
+            //existingStudent.LastName = studentDto.LastName;
+            //existingStudent.OtherNames = studentDto.OtherName;
+            //existingStudent.DateOfBirth = studentDto.DOB;
+            //existingStudent.Email = studentDto.Email;
+            //existingStudent.Gender = studentDto.Gender;
+                
+            //_context.Students.Entry(existingStudent).CurrentValues.SetValues(student);
+
+            //await _context.SaveChangesAsync(cancellationToken);
+
+            //return existingStudent;
+            throw new NotImplementedException("UpdateStudent method is not implemented yet.");
+        }
+
+        public async Task<Result<bool>> SoftDeleteStudent(int studentId, CancellationToken cancellationToken)
+        {
+            if (_context.Students == null)
+            {
+                return Result<bool>.Failure(["Contact sys Admin"]);
+            }
+            var student = await _context.Students.FindAsync(studentId, cancellationToken);
+            if (student == null)
+            {
+                return Result<bool>.Success(true);
+            }
+
+            _context.Students.Remove(student);
+            await _context.SaveChangesAsync(cancellationToken);
+            return Result<bool>.Success(true);
+        }
+
+
     }
 }

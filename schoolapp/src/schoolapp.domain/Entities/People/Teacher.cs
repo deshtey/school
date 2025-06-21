@@ -9,12 +9,10 @@ namespace schoolapp.Domain.Entities.People
     {
         public string? TeacherId { get; set; }
         public string? RegNo { get; set; }
-        public int SchoolId { get; set; }
-        public School School { get; set; }
         public List<Department> Departments { get; set; }
         public List<SchoolSubject> SubjectsQualified { get; set; } = [];
         public List<ClassRoom> ClassesResponsibleFor { get; set; } = new List<ClassRoom>();
-        public Teacher()
+        public Teacher(string firstName, string lastname, int SchoolId, Gender gender) : base(firstName, lastname, SchoolId, gender)
         {
             SubjectsQualified = new List<SchoolSubject>();
             ClassesResponsibleFor = new List<ClassRoom>();

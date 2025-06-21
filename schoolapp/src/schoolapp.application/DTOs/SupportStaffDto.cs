@@ -20,5 +20,6 @@ namespace schoolapp.Application.DTOs
         public string? Salutation { get; internal set; }
 
         public List<DepartmentDto>? Departments { get; set; }
+        public object RegNo { get; internal set; }
     }
 }

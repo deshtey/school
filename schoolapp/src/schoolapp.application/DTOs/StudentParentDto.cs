@@ -30,7 +30,6 @@ namespace schoolapp.Application.DTOs
         public string? Email { get; set; }
         public string? ImageUrl { get; set; }
         public int EnrollmentYearId { get; internal set; }
-        public Grade InitialGradeId { get; internal set; }
         public DateTime? DateOfBirth { get; internal set; }
     }
     public class ParentDto
@@ -44,6 +43,7 @@ namespace schoolapp.Application.DTOs
         public string? Status { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
+        public string? NationalId { get; set; }
         public ParentType ParentType { get; set; }
     }
 }

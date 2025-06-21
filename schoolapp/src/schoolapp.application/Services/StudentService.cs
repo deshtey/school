@@ -1,12 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using schoolapp.Application.Common.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using schoolapp.Application.Common.Models;
 using schoolapp.Application.Contracts;
 using schoolapp.Application.DTOs;
 using schoolapp.Application.RepositoryInterfaces;
-using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.People;
-using schoolapp.Domain.Enums;
 using System.Net.Mail;
 
 namespace schoolapp.Application.Services
@@ -36,18 +33,18 @@ namespace schoolapp.Application.Services
             if (enrollmentYear == null)
                 throw new ArgumentNullException($"Academic year with ID {request} not found");
 
-            var initialGrade = await _academicRepository.GetGradeByIdAsync(request.InitialGradeId, cancellationToken);
-            if (initialGrade == null)
-                throw new ArgumentNullException($"Grade with ID {request.InitialGradeId} not found");
+            var initialGrade = await _academicRepository.GetClassroomByIdAsync((int)studentDto.ClassroomId, cancellationToken);
+            //if (initialGrade == null)
+            //    throw new ArgumentNullException($"Grade with ID {request.InitialGradeId} not found");
 
             // Create student using builder
             var studentBuilder = new StudentBuilder()
-                .WithBasicInfo(request.FirstName, request.LastName, request.SchoolId, request.RegNumber)
+                .WithBasicInfo(studentDto.FirstName, studentDto.LastName, request.SchoolId, studentDto.RegNumber)
                 .WithAcademicInfo(enrollmentYear, initialGrade)
-                .WithPersonalInfo(request.Gender, request.DateOfBirth, request.Email, request.Phone);
+                .WithPersonalInfo(studentDto.Gender, studentDto.DateOfBirth, studentDto.Email, studentDto.Phone);
 
             // Handle parents
-            var parents = await ProcessParentsAsync(request.Parents, request.SchoolId, cancellationToken);
+            var parents = await ProcessParentsAsync(request.ParentsDto, request.SchoolId, cancellationToken);
 
             foreach (var (parent, parentType) in parents)
             {
@@ -57,9 +54,9 @@ namespace schoolapp.Application.Services
             var student = studentBuilder.Build();
 
             // Set other names if provided
-            if (!string.IsNullOrWhiteSpace(request.OtherNames))
+            if (!string.IsNullOrWhiteSpace(studentDto.OtherName))
             {
-                student.OtherNames = request.OtherNames.Trim();
+                student.OtherNames = studentDto.OtherName.Trim();
             }
 
             // Persist to database
@@ -96,7 +93,7 @@ namespace schoolapp.Application.Services
         }
 
         private async Task<List<(Parent parent, ParentType parentType)>> ProcessParentsAsync(
-            List<CreateStudentParentRequest> parentRequests,
+            List<ParentDto> parentRequests,
             int schoolId,
             CancellationToken cancellationToken)
         {
@@ -107,11 +104,11 @@ namespace schoolapp.Application.Services
                 Parent parent;
 
                 // If existing parent ID is provided, use that
-                if (parentRequest.ExistingParentId.HasValue)
+                if (parentRequest.Id.HasValue)
                 {
-                    parent = await _parentRepository.GetByIdAsync(parentRequest.ExistingParentId.Value, cancellationToken);
+                    parent = await _parentRepository.GetByIdAsync(parentRequest.Id.Value, cancellationToken);
                     if (parent == null)
-                        throw new ArgumentNullException($"Parent with ID {parentRequest.ExistingParentId.Value} not found");
+                        throw new ArgumentNullException($"Parent with ID {parentRequest.Id.Value} not found");
                 }
                 else
                 {
@@ -124,14 +121,12 @@ namespace schoolapp.Application.Services
                         parent = Parent.Create(
                             parentRequest.FirstName,
                             parentRequest.LastName,
+                            parentRequest.Phone,
                             schoolId,
-                            parentRequest.Gender);
+                            parentRequest.Gender.Value);
 
                         if (!string.IsNullOrWhiteSpace(parentRequest.Email))
                             parent.Email = parentRequest.Email.Trim().ToLower();
-
-                        if (!string.IsNullOrWhiteSpace(parentRequest.Phone))
-                            parent.Phone = parentRequest.Phone.Trim();
 
                         if (!string.IsNullOrWhiteSpace(parentRequest.NationalId))
                             parent.NationalId = parentRequest.NationalId.Trim();
@@ -147,14 +142,21 @@ namespace schoolapp.Application.Services
         }
 
         private async Task<Parent?> FindExistingParentAsync(
-            CreateStudentParentRequest parentRequest,
+            ParentDto parentRequest,
             int schoolId,
             CancellationToken cancellationToken)
         {
-            // Try to find by National ID first
-            if (!string.IsNullOrWhiteSpace(parentRequest.NationalId))
+            //// Try to find by National ID first
+            //if (!string.IsNullOrWhiteSpace(parentRequest.NationalId))
+            //{
+            //    var existingParent = await _parentRepository.GetByNationalIdAsync(parentRequest.NationalId, schoolId, cancellationToken);
+            //    if (existingParent != null)
+            //        return existingParent;
+            //}
+            // Try to find by Phone No First
+            if (!string.IsNullOrWhiteSpace(parentRequest.Phone))
             {
-                var existingParent = await _parentRepository.GetByNationalIdAsync(parentRequest.NationalId, schoolId, cancellationToken);
+                var existingParent = await _parentRepository.GetByPhoneAsync(parentRequest.Phone, schoolId, cancellationToken);
                 if (existingParent != null)
                     return existingParent;
             }
@@ -239,29 +241,9 @@ namespace schoolapp.Application.Services
                 throw;
             }
         }
-        public async Task<Student?> PostStudent(StudentParentDto studentparentDto, CancellationToken cancellationToken)
-        {
-      
-        var schoolId = studentparentDto.SchoolId;
-            var Parent1 = studentparentDto.ParentsDto.FirstOrDefault();
-            var Parent2 = studentparentDto.ParentsDto.LastOrDefault();
-            
-            var studentDto = studentparentDto.StudentDto;
-            var student = new StudentBuilder()
-            .WithBasicInfo(studentDto.FirstName, studentDto.LastName, schoolId, studentDto.RegNumber)
-            .WithAcademicInfo(studentDto.EnrollmentYearId, studentDto.InitialGradeId)
-            .WithPersonalInfo(studentDto.Gender, studentDto.DateOfBirth, studentDto.Email, studentDto.Phone)
-            //.WithParent(Parent1, Parent1.ParentType)
-            //.WithParent(Parent2, Parent1.ParentType)
-            .Build();
-
-            //using var transaction = _context.BeginTransactionAsync();
 
 
-            
-        }
-
-        public async Task<Student?> PutStudent(int id, StudentParentDto student, CancellationToken cancellationToken)
+        public async Task<Result<Student>> PutStudent(int id, StudentParentDto student, CancellationToken cancellationToken)
         {
             if (student == null || id != student.Id)
             {
@@ -270,40 +252,26 @@ namespace schoolapp.Application.Services
 
             try
             {
-                var existingStudent = await _context.Students.FindAsync(new object[] { id }, cancellationToken);
+                var existingStudent = await _studentRepository.GetByIdAsync(id, cancellationToken);
 
                 if (existingStudent == null)
                 {
-                    return null; // Student with the given ID not found.
+                    return null; 
                 }
+                var updatedStudent = await _studentRepository.UpdateStudent(student.StudentDto, cancellationToken);
+                return Result<Student>.Success( updatedStudent);
 
-                _context.Students.Entry(existingStudent).CurrentValues.SetValues(student);
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return existingStudent;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error updating student");
-                return null;
+                return Result<Student>.Failure(["Error updating student: " + ex.Message]);
             }
         }
 
         public async Task<bool> DeleteStudent(int id, CancellationToken cancellationToken)
         {
-            if (_context.Students == null)
-            {
-                return false;
-            }
-            var student = await _context.Students.FindAsync(id);
-            if (student == null)
-            {
-                return true;
-            }
 
-            _context.Students.Remove(student);
-            await _context.SaveChangesAsync(cancellationToken);
 
             return true;
         }

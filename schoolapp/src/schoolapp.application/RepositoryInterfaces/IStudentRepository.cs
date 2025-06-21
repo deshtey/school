@@ -12,5 +12,6 @@ namespace schoolapp.Application.RepositoryInterfaces
         Task AddAsync(Student student, CancellationToken cancellationToken = default);
         Task SaveChangesAsync(CancellationToken cancellationToken = default);
         Task<IEnumerable<StudentDto>> GetStudentsBySchoolId(int schoolId);
+        Task<Student> UpdateStudent(StudentDto studentDto, CancellationToken cancellationToken);
     }
 }

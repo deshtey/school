@@ -7,5 +7,7 @@ namespace schoolapp.Application.RepositoryInterfaces
     {
         Task<AcademicYear?> GetAcademicYearByIdAsync(int id, CancellationToken cancellationToken = default);
         Task<Grade?> GetGradeByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<Grade?> GetClassroomByIdAsync(int id, CancellationToken cancellationToken = default);
+
     }
 }

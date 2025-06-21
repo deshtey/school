@@ -26,7 +26,7 @@ namespace schoolapp.Application.Services
                 .Include(t => t.Departments)
                 .Select(t => new SupportStaffDto
                 {
-                    FullName = t.GetFullName(),
+                    FullName = t.FullName,
                     Email = t.Email,
                     Gender = t.Gender,
                     Phone = t.Phone,
@@ -50,11 +50,11 @@ namespace schoolapp.Application.Services
                 .Include(t => t.Departments)
                 .Select(t => new SupportStaffDto
                 {
-                    FullName = t.GetFullName(),
+                    FullName = t.FullName,
                     FirstName = t.FirstName,
                     LastName = t.LastName,
                     OtherName = t.OtherNames,
-                    DOB = t.DOB,
+                    DOB = t.DateOfBirth,
                     Image = t.Image,
                     Salutation = t.Salutation,
                     Email = t.Email,
@@ -101,26 +101,20 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<bool?> PostSupportStaff(SupportStaffDto SupportStaff, CancellationToken cancellationToken)
+        public async Task<bool?> PostSupportStaff(SupportStaffDto supportstaffDto, CancellationToken cancellationToken)
         {
             if (_context.SupportStaffs == null)
             {
                 return null;
             }
-            var newSupportStaff = new SupportStaff
-            {
-                SchoolId = SupportStaff.SchoolId,
-                FirstName = SupportStaff.FirstName,
-                LastName = SupportStaff.LastName,
-                OtherNames = SupportStaff.OtherName,
-                Salutation = SupportStaff.Salutation,               
-                DOB = SupportStaff.DOB,
-                Email = SupportStaff.Email,
-                Gender = SupportStaff.Gender,
-                Image = SupportStaff.Image,
-                Phone = SupportStaff.Phone
-
-            };
+            var newSupportStaff = new SupportStaff(supportstaffDto.FirstName, supportstaffDto.LastName, supportstaffDto.SchoolId, supportstaffDto.Gender.Value);
+            newSupportStaff.OtherNames = supportstaffDto.OtherName;
+            newSupportStaff.Salutation = supportstaffDto.Salutation;
+            newSupportStaff.DateOfBirth = supportstaffDto.DOB;
+            newSupportStaff.Email = supportstaffDto.Email;
+            newSupportStaff.RegNo = supportstaffDto.RegNo;
+            newSupportStaff.Image = supportstaffDto.Image;
+            newSupportStaff.Phone = supportstaffDto.Phone;
             _context.SupportStaffs.Add(newSupportStaff);
             await _context.SaveChangesAsync(cancellationToken);
 
