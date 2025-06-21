@@ -4,10 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace schoolapp.Infrastructure.Migrations.AuthDb
+namespace schoolapp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class rolepermissions : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,6 +38,8 @@ namespace schoolapp.Infrastructure.Migrations.AuthDb
                     id = table.Column<string>(type: "text", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: true),
+                    avatar = table.Column<string>(type: "text", nullable: true),
+                    country_code = table.Column<string>(type: "text", nullable: true),
                     other_name = table.Column<string>(type: "text", nullable: true),
                     user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     normalized_user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),

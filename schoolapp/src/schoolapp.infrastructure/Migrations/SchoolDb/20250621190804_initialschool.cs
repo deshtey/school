@@ -4,10 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace schoolapp.Infrastructure.Migrations
+namespace schoolapp.Infrastructure.Migrations.SchoolDb
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class initialschool : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -59,8 +59,9 @@ namespace schoolapp.Infrastructure.Migrations
                 schema: "school",
                 columns: table => new
                 {
-                    school_id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    school_id = table.Column<int>(type: "integer", nullable: false),
                     schoolname = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     school_type = table.Column<int>(type: "integer", nullable: false),
                     location = table.Column<string>(type: "text", nullable: false),
@@ -79,11 +80,11 @@ namespace schoolapp.Infrastructure.Migrations
                     created_by_user_id = table.Column<string>(type: "text", nullable: false),
                     last_modified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     last_modified_by_user_id = table.Column<string>(type: "text", nullable: true),
-                    active = table.Column<bool>(type: "boolean", nullable: false)
+                    status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_schools", x => x.school_id);
+                    table.PrimaryKey("pk_schools", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -131,7 +132,7 @@ namespace schoolapp.Infrastructure.Migrations
                         column: x => x.school_id,
                         principalSchema: "school",
                         principalTable: "schools",
-                        principalColumn: "school_id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -148,21 +149,17 @@ namespace schoolapp.Infrastructure.Migrations
                     created_by_user_id = table.Column<string>(type: "text", nullable: false),
                     last_modified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     last_modified_by_user_id = table.Column<string>(type: "text", nullable: true),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     other_names = table.Column<string>(type: "text", nullable: true),
                     national_id = table.Column<string>(type: "text", nullable: true),
                     salutation = table.Column<string>(type: "text", nullable: true),
                     image = table.Column<string>(type: "text", nullable: true),
-                    gender = table.Column<int>(type: "integer", nullable: true),
-                    dob = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    status = table.Column<string>(type: "text", nullable: true),
+                    gender = table.Column<int>(type: "integer", nullable: false),
+                    date_of_birth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     phone = table.Column<string>(type: "text", nullable: true),
-                    email = table.Column<string>(type: "text", nullable: true),
-                    street = table.Column<string>(type: "text", nullable: true),
-                    city = table.Column<string>(type: "text", nullable: true),
-                    country = table.Column<string>(type: "text", nullable: true)
+                    email = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -172,7 +169,7 @@ namespace schoolapp.Infrastructure.Migrations
                         column: x => x.school_id,
                         principalSchema: "school",
                         principalTable: "schools",
-                        principalColumn: "school_id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -197,7 +194,7 @@ namespace schoolapp.Infrastructure.Migrations
                         column: x => x.parent_school_id,
                         principalSchema: "school",
                         principalTable: "schools",
-                        principalColumn: "school_id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -212,25 +209,22 @@ namespace schoolapp.Infrastructure.Migrations
                     school_id = table.Column<int>(type: "integer", nullable: false),
                     designation = table.Column<string>(type: "text", nullable: true),
                     department_id = table.Column<int>(type: "integer", nullable: true),
+                    reg_no = table.Column<string>(type: "text", nullable: false),
                     created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     created_by_user_id = table.Column<string>(type: "text", nullable: false),
                     last_modified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     last_modified_by_user_id = table.Column<string>(type: "text", nullable: true),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     other_names = table.Column<string>(type: "text", nullable: true),
                     national_id = table.Column<string>(type: "text", nullable: true),
                     salutation = table.Column<string>(type: "text", nullable: true),
                     image = table.Column<string>(type: "text", nullable: true),
-                    gender = table.Column<int>(type: "integer", nullable: true),
-                    dob = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    status = table.Column<string>(type: "text", nullable: true),
+                    gender = table.Column<int>(type: "integer", nullable: false),
+                    date_of_birth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     phone = table.Column<string>(type: "text", nullable: true),
-                    email = table.Column<string>(type: "text", nullable: true),
-                    street = table.Column<string>(type: "text", nullable: true),
-                    city = table.Column<string>(type: "text", nullable: true),
-                    country = table.Column<string>(type: "text", nullable: true)
+                    email = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -240,7 +234,7 @@ namespace schoolapp.Infrastructure.Migrations
                         column: x => x.school_id,
                         principalSchema: "school",
                         principalTable: "schools",
-                        principalColumn: "school_id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -253,26 +247,22 @@ namespace schoolapp.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     teacher_id = table.Column<string>(type: "text", nullable: true),
                     reg_no = table.Column<string>(type: "text", nullable: true),
-                    school_id = table.Column<int>(type: "integer", nullable: false),
                     created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     created_by_user_id = table.Column<string>(type: "text", nullable: false),
                     last_modified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     last_modified_by_user_id = table.Column<string>(type: "text", nullable: true),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     other_names = table.Column<string>(type: "text", nullable: true),
                     national_id = table.Column<string>(type: "text", nullable: true),
                     salutation = table.Column<string>(type: "text", nullable: true),
                     image = table.Column<string>(type: "text", nullable: true),
-                    gender = table.Column<int>(type: "integer", nullable: true),
-                    dob = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    status = table.Column<string>(type: "text", nullable: true),
+                    gender = table.Column<int>(type: "integer", nullable: false),
+                    date_of_birth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     phone = table.Column<string>(type: "text", nullable: true),
                     email = table.Column<string>(type: "text", nullable: true),
-                    street = table.Column<string>(type: "text", nullable: true),
-                    city = table.Column<string>(type: "text", nullable: true),
-                    country = table.Column<string>(type: "text", nullable: true)
+                    school_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -282,7 +272,7 @@ namespace schoolapp.Infrastructure.Migrations
                         column: x => x.school_id,
                         principalSchema: "school",
                         principalTable: "schools",
-                        principalColumn: "school_id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -323,7 +313,7 @@ namespace schoolapp.Infrastructure.Migrations
                     name = table.Column<string>(type: "text", nullable: false),
                     grade_id = table.Column<int>(type: "integer", nullable: false),
                     capacity = table.Column<int>(type: "integer", nullable: false),
-                    teacher_id = table.Column<int>(type: "integer", nullable: false)
+                    teacher_id = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -340,8 +330,7 @@ namespace schoolapp.Infrastructure.Migrations
                         column: x => x.teacher_id,
                         principalSchema: "school",
                         principalTable: "teachers",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -381,8 +370,10 @@ namespace schoolapp.Infrastructure.Migrations
                     code = table.Column<string>(type: "text", nullable: false),
                     school_id = table.Column<int>(type: "integer", nullable: false),
                     subject_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    elective = table.Column<bool>(type: "boolean", nullable: false),
                     desc = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    elective = table.Column<bool>(type: "boolean", nullable: false),
+                    credit_hours = table.Column<int>(type: "integer", nullable: true),
+                    name = table.Column<string>(type: "text", nullable: false),
                     teacher_id = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -393,7 +384,7 @@ namespace schoolapp.Infrastructure.Migrations
                         column: x => x.school_id,
                         principalSchema: "school",
                         principalTable: "schools",
-                        principalColumn: "school_id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "fk_school_subjects_teachers_teacher_id",
@@ -412,27 +403,26 @@ namespace schoolapp.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     reg_number = table.Column<string>(type: "text", nullable: false),
                     class_room_id = table.Column<int>(type: "integer", nullable: true),
-                    current_grade_id = table.Column<int>(type: "integer", nullable: false),
-                    enrollment_year_id = table.Column<int>(type: "integer", nullable: false),
+                    current_grade_id = table.Column<int>(type: "integer", nullable: true),
+                    enrollment_year_id = table.Column<int>(type: "integer", nullable: true),
+                    status = table.Column<int>(type: "integer", nullable: false),
+                    graduation_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    withdrawal_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    withdrawal_reason = table.Column<string>(type: "text", nullable: true),
                     created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     created_by_user_id = table.Column<string>(type: "text", nullable: false),
                     last_modified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     last_modified_by_user_id = table.Column<string>(type: "text", nullable: true),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     other_names = table.Column<string>(type: "text", nullable: true),
                     national_id = table.Column<string>(type: "text", nullable: true),
                     salutation = table.Column<string>(type: "text", nullable: true),
                     image = table.Column<string>(type: "text", nullable: true),
-                    gender = table.Column<int>(type: "integer", nullable: true),
-                    dob = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    status = table.Column<string>(type: "text", nullable: true),
+                    gender = table.Column<int>(type: "integer", nullable: false),
+                    date_of_birth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     phone = table.Column<string>(type: "text", nullable: true),
                     email = table.Column<string>(type: "text", nullable: true),
-                    street = table.Column<string>(type: "text", nullable: true),
-                    city = table.Column<string>(type: "text", nullable: true),
-                    country = table.Column<string>(type: "text", nullable: true),
                     school_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -443,8 +433,7 @@ namespace schoolapp.Infrastructure.Migrations
                         column: x => x.enrollment_year_id,
                         principalSchema: "school",
                         principalTable: "academic_years",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "fk_students_class_rooms_class_room_id",
                         column: x => x.class_room_id,
@@ -457,14 +446,13 @@ namespace schoolapp.Infrastructure.Migrations
                         column: x => x.current_grade_id,
                         principalSchema: "school",
                         principalTable: "grades",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "fk_students_schools_school_id",
                         column: x => x.school_id,
                         principalSchema: "school",
                         principalTable: "schools",
-                        principalColumn: "school_id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -509,7 +497,10 @@ namespace schoolapp.Infrastructure.Migrations
                     class_room_id = table.Column<int>(type: "integer", nullable: false),
                     academic_year_id = table.Column<int>(type: "integer", nullable: false),
                     overall_grade = table.Column<double>(type: "double precision", nullable: false),
-                    completion_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    completion_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    previous_grade_id = table.Column<int>(type: "integer", nullable: true),
+                    new_grade_id = table.Column<int>(type: "integer", nullable: false),
+                    promotion_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -536,6 +527,19 @@ namespace schoolapp.Infrastructure.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "fk_academic_record_grades_new_grade_id",
+                        column: x => x.new_grade_id,
+                        principalSchema: "school",
+                        principalTable: "grades",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_academic_record_grades_previous_grade_id",
+                        column: x => x.previous_grade_id,
+                        principalSchema: "school",
+                        principalTable: "grades",
+                        principalColumn: "id");
+                    table.ForeignKey(
                         name: "fk_academic_record_students_student_id",
                         column: x => x.student_id,
                         principalSchema: "people",
@@ -550,7 +554,9 @@ namespace schoolapp.Infrastructure.Migrations
                 columns: table => new
                 {
                     student_id = table.Column<int>(type: "integer", nullable: false),
-                    parent_id = table.Column<int>(type: "integer", nullable: false)
+                    parent_id = table.Column<int>(type: "integer", nullable: false),
+                    parent_type = table.Column<int>(type: "integer", nullable: false),
+                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -580,8 +586,12 @@ namespace schoolapp.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     student_id = table.Column<int>(type: "integer", nullable: false),
                     subject_id = table.Column<int>(type: "integer", nullable: false),
+                    elective = table.Column<bool>(type: "boolean", nullable: false),
                     academic_year_id = table.Column<int>(type: "integer", nullable: false),
-                    final_grade = table.Column<double>(type: "double precision", nullable: true)
+                    final_grade = table.Column<double>(type: "double precision", nullable: true),
+                    enrollment_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    withdrawal_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    withdrawal_reason = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -651,6 +661,18 @@ namespace schoolapp.Infrastructure.Migrations
                 schema: "school",
                 table: "academic_record",
                 column: "grade_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_academic_record_new_grade_id",
+                schema: "school",
+                table: "academic_record",
+                column: "new_grade_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_academic_record_previous_grade_id",
+                schema: "school",
+                table: "academic_record",
+                column: "previous_grade_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_academic_record_student_id",

@@ -8,7 +8,7 @@ using schoolapp.Infrastructure.Data;
 
 #nullable disable
 
-namespace schoolapp.Infrastructure.Migrations.AuthDb
+namespace schoolapp.Infrastructure.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
     partial class AuthDbContextModelSnapshot : ModelSnapshot

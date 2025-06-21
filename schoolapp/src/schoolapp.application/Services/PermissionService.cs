@@ -38,7 +38,7 @@ namespace schoolapp.Application.Services
         //        .Select(t=>new Permission
         //        {
         //            Id = t.Id,
-        //            FullName = t.GetFullName(),
+        //            FullName = t.FullName,
         //            Salutation = t.Salutation,
         //            ImageUrl = t.Image,
         //            Email = t.Email,

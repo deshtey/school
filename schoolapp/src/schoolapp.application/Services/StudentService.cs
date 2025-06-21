@@ -258,8 +258,9 @@ namespace schoolapp.Application.Services
                 {
                     return null; 
                 }
-                var updatedStudent = await _studentRepository.UpdateStudent(student.StudentDto, cancellationToken);
-                return Result<Student>.Success( updatedStudent);
+                var res = await _studentRepository.UpdateStudentAsync(student.StudentDto, cancellationToken);
+                if(res.IsSuccess)   return Result<Student>.Success( res.Value);
+                return Result<Student>.Failure(res.Errors);
 
             }
             catch (Exception ex)

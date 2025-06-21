@@ -72,7 +72,7 @@ namespace schoolapp.Application.Services
                     ClassRoomId = g.Id,
                     ClassroomName = g.Name,
                     GradeId = g.Grade.Id,
-                    ClassTeacherName = g.ClassTeacher != null ? g.ClassTeacher.GetFullName() : "No teacher assigned",
+                    ClassTeacherName = g.ClassTeacher != null ? g.ClassTeacher.FullName : "No teacher assigned",
                     Students = g.Students.Select(s => new StudentDto
                     {
                         Id  = s.Id,
@@ -80,7 +80,7 @@ namespace schoolapp.Application.Services
                         Gender = s.Gender,
                         RegNumber = s.RegNumber,                        
                         ImageUrl = s.Image,
-                        FullName = s.GetFullName(),
+                        FullName = s.FullName,
                     }).ToList()
 
                 }).AsNoTracking()

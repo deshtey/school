@@ -9,11 +9,11 @@ using schoolapp.Infrastructure.Data;
 
 #nullable disable
 
-namespace schoolapp.Infrastructure.Migrations.AuthDb
+namespace schoolapp.Infrastructure.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20250331182746_initial_auth")]
-    partial class initial_auth
+    [Migration("20250621180943_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

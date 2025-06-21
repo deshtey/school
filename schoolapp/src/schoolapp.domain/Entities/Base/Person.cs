@@ -3,7 +3,7 @@
 public abstract class Person : BaseAuditableEntity
 {
     private string? _fullName;
-
+    protected Person() { }
     protected Person(string firstName, string lastName, int schoolId, Gender gender = Gender.Unknown)
     {
         // Input validation

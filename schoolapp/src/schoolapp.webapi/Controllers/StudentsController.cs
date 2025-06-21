@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Studentapp.webapi.Controllers
+namespace schoolapp.webapi.Controllers
 {
-    [Authorize]   
+    
     [Route("api/[controller]")]
     [ApiController]
     public class StudentsController : ControllerBase
@@ -40,7 +40,7 @@ namespace Studentapp.webapi.Controllers
         {
             //TODO This should be a transaction
 
-            var student =  await _StudentService.PostStudent(studentParentDto, cancellationToken);
+            var student =  await _StudentService.CreateStudentAsync(studentParentDto, cancellationToken);
            //await _parentService.PostParents(studentParentDto.ParentsDto, cancellationToken);
         }
 

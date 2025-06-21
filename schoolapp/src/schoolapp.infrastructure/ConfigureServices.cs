@@ -9,9 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using schoolapp.application.Common.Interfaces;
 using schoolapp.Application.Common.Interfaces;
+using schoolapp.Application.RepositoryInterfaces;
 using schoolapp.Infrastructure.Data;
 using schoolapp.Infrastructure.Identity;
 using schoolapp.Infrastructure.Persistence.Interceptors;
+using schoolapp.Infrastructure.Repositories;
 using schoolapp.Infrastructure.Security.Auth;
 using schoolapp.Infrastructure.Security.CurrentUserProvider;
 using schoolapp.Infrastructure.Security.RolePermissionService;
@@ -104,7 +106,11 @@ public static class DependencyInjection
     {
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.Section));
         services.AddScoped<IAuthService, AuthService>();
-
+        services.AddScoped<IStudentRepository, StudentRepository>();
+        services.AddScoped<IParentRepository, ParentRepository>();
+        //services.AddScoped<ITeacherRepository, TeacherRepository>();
+        //services.AddScoped<IClassRepository, ClassRepository>();
+        services.AddScoped<IAcademicRepository, AcademicRepository>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services
             .AddDefaultIdentity<AppUser>()

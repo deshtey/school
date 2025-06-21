@@ -4,6 +4,8 @@
     {
         public int? SchoolId { get; set; }
         public string SchoolName { get; set; }
+        public SchoolTypes SchoolType { get; set; } = SchoolTypes.Primary;
+
         public string Location { get; set; }
         public string? LogoUrl { get; set; }
         public string? Street { get; set; }
@@ -18,5 +20,9 @@
         public bool Active { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public string? HomePage { get; set; } = string.Empty;
+        public bool UseSingleName { get; set; } = false;
+        public bool IsGroupOfSchools { get; set; } = false;
+        public bool UseStreams { get; set; } = true;
+
     }
 }

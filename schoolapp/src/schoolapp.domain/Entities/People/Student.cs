@@ -2,6 +2,7 @@
 using schoolapp.Domain.Entities.Base;
 using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.StudentAcademics;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace schoolapp.Domain.Entities.People
 {
@@ -19,7 +20,6 @@ namespace schoolapp.Domain.Entities.People
             EnrolledSubjects = new List<StudentSubject>();
             AcademicHistory = new List<AcademicRecord>();
         }
-
         public string RegNumber { get; init; }
         public int? ClassRoomId { get; set; }
         public virtual ClassRoom? ClassRoom { get; set; }

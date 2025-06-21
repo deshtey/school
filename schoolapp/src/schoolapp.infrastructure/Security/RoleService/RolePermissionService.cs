@@ -5,6 +5,7 @@ using schoolapp.Domain.Entities.Other;
 using schoolapp.Infrastructure.Data;
 using schoolapp.Infrastructure.Security.RolePermissionService;
 
+namespace schoolapp.Infrastructure.Security.RolePermissionService;
 public class RolePermissionService : IRolePermissionService
 {
     private readonly AuthDbContext _context;

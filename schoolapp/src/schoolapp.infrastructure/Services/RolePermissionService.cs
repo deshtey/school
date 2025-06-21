@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using schoolapp.Application.DTOs;
 using schoolapp.Domain.Entities.Other;
 using schoolapp.Infrastructure.Data;
-using schoolapp.Infrastructure.Migrations.AuthDb;
 using schoolapp.Infrastructure.Security.RolePermissionService;
 
 public class RolePermissionService : IRolePermissionService

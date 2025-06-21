@@ -42,5 +42,10 @@ namespace schoolapp.Infrastructure.Repositories
                 .Where(p => ids.Contains(p.Id))
                 .ToListAsync(cancellationToken);
         }
+
+        public Task<Parent?> GetByPhoneAsync(string phone, int schoolId, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

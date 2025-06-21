@@ -16,6 +16,6 @@ namespace schoolapp.Domain.Entities.People
         public int? DepartmentId { get; set; }
         public School School { get; set; }
         public List<Department>? Departments { get; set; }
-        public object RegNo { get; set; }
+        public string RegNo { get; set; }
     }
 }

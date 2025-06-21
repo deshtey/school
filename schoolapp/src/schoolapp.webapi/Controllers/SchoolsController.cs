@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using schoolapp.Application.Contracts;
 using schoolapp.Application.DTOs;
@@ -40,9 +41,20 @@ namespace schoolapp.webapi.Controllers
         // POST api/<SchoolsController>
         [HttpPost]
         //[Authorize(Policy = "post_school")]
-        public async Task Post([FromBody] SchoolDto school)
+        public async Task<IActionResult> Post([FromBody] SchoolDto request)
         {
-            await _schoolService.PostSchool(school, cancellationToken);
+            if (string.IsNullOrWhiteSpace(request.SchoolName))
+                return BadRequest("School name is required");
+
+            if (string.IsNullOrWhiteSpace(request.Email))
+                return BadRequest("Email is required");
+
+            if (string.IsNullOrWhiteSpace(request.Location))
+                return BadRequest("Location is required");
+            var res = await _schoolService.CreateSchool(request, cancellationToken);
+            if(res.IsSuccess == false) return CreatedAtAction("GetSchool", new { id = res.Value.Id }, res.Value);
+
+            return StatusCode(500, res.Value);
         }
 
         // PUT api/<SchoolsController>/5
