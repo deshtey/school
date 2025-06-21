@@ -64,6 +64,7 @@ type StudentParentFormProps = {
 };
 
 const StudentParentForm : React.FC<StudentParentFormProps> = ({ isOpen, onClose, onSubmit, defaultValues: student, isEditing = false })=> {
+  debugger
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const defaultValues: StudentFormValues = {
@@ -135,12 +136,12 @@ const StudentParentForm : React.FC<StudentParentFormProps> = ({ isOpen, onClose,
       ]
     },
     { name: "dob", label: "Date of Birth", type: "date", placeholder: "Select date of birth" },
-    { name: "address", label: "Address", type: "textarea", placeholder: "Enter address" },
+    { name: "address", label: "Address", type: "text", placeholder: "Enter address" },
   ];
 
   return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-          <DialogContent className="sm:max-w-lg">
+          <DialogContent className="sm:max-w-xl overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{isEditing ? `Edit student` : `Add New student`}</DialogTitle>
               <DialogDescription>
@@ -156,7 +157,7 @@ const StudentParentForm : React.FC<StudentParentFormProps> = ({ isOpen, onClose,
             <CardTitle>Student Information</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {studentFields.map((field) => (
                 <FormField
                   key={field.name}
@@ -190,7 +191,7 @@ const StudentParentForm : React.FC<StudentParentFormProps> = ({ isOpen, onClose,
                     onChange={formField.onChange}
                     //   {...formField }
                       placeholder={field.placeholder}
-                      rows={4}
+                      rows={1}
                     />
                   ) : (
                     <Input
@@ -231,7 +232,7 @@ const StudentParentForm : React.FC<StudentParentFormProps> = ({ isOpen, onClose,
         </div>
 
         {fields.map((parent, index) => (
-          <Card key={parent.id}>
+          <Card key={parent.id} >
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-lg">Parent {index + 1}</CardTitle>
               {fields.length > 1 && (
@@ -247,7 +248,7 @@ const StudentParentForm : React.FC<StudentParentFormProps> = ({ isOpen, onClose,
               )}
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                 <FormField
                   control={form.control}
                   name={`parentsDto.${index}.firstName`}

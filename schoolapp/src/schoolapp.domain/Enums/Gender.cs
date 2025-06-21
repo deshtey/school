@@ -2,6 +2,7 @@
 {
     public enum Gender
     {
+        Unknown = 'u',
         PreferNotToSay = 'n',
         Male = 'm',
         Female= 'f',

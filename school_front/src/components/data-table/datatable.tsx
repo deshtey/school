@@ -61,7 +61,7 @@ export function DataTable<T extends Record<string, any>>({
 
   const handleRowClick = (id: string | number) => {
     if (detailsPath) {
-        router.push(`${detailsPath}/${id}`);
+        //router.push(`${detailsPath}/${id}`);
     }
   };
 

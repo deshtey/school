@@ -1,4 +1,6 @@
-﻿using schoolapp.Domain.Entities.People;
+﻿using schoolapp.Domain.Entities.Academics;
+using schoolapp.Domain.Entities.ClassGrades;
+using schoolapp.Domain.Entities.People;
 using schoolapp.Domain.Enums;
 using System.Text.Json.Serialization;
 
@@ -21,12 +23,15 @@ namespace schoolapp.Application.DTOs
         public string LastName { get; set; }
         public string? OtherName { get; set; }
         public string? FullName { get; set; }
-        public Gender? Gender { get; set; }
+        public Gender Gender { get; set; } = Gender.Unknown;
         public DateTime? DOB { get; set; }
         public string? Status { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
         public string? ImageUrl { get; set; }
+        public int EnrollmentYearId { get; internal set; }
+        public Grade InitialGradeId { get; internal set; }
+        public DateTime? DateOfBirth { get; internal set; }
     }
     public class ParentDto
     {
@@ -39,5 +44,6 @@ namespace schoolapp.Application.DTOs
         public string? Status { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
+        public ParentType ParentType { get; set; }
     }
 }

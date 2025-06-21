@@ -14,9 +14,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
  const [sidebarOpen, setSidebarOpen] = useState(true);
   return (
     <AuthGuard>
-    <div className="min-h-screen min-w-full bg-background dark:bg-dark-900">
+    <div className=" min-w-full bg-background dark:bg-dark-900">
       <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
-      <div className={cn("transition-all duration-300 bg-pink-50", sidebarOpen ? "ml-64" : "ml-20")}>
+      <div className={cn("transition-all duration-300 ", sidebarOpen ? "ml-64" : "ml-20")}>
         <Topbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main className="container mx-auto  mt-20 xl:p-2 xxl:p-4">
           {children}

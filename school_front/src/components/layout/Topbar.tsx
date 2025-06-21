@@ -1,5 +1,5 @@
 
-import { Bell, ChevronLeft, ChevronRight, Search, Settings, User } from "lucide-react";
+import { Bell, ChevronLeft, ChevronRight, Moon, Search, Settings, Sun, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +11,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useState } from "react";
+import { useToast } from "../ui/toast-content";
 
 interface TopbarProps {
   sidebarOpen: boolean;
@@ -18,8 +20,18 @@ interface TopbarProps {
 }
 
 const Topbar = ({ sidebarOpen, setSidebarOpen }: TopbarProps) => {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const { addToast  } = useToast();
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    document.documentElement.classList.toggle('dark');
+    addToast ( `Switched to ${newTheme} mode`, "success", 2000);
+  };
+
   return (
-    <header className="fixed left-0 right-0 top-0 z-10 flex h-16 items-center border-b bg-white px-4 md:px-6">
+    <header className="fixed left-0 right-0 top-0 z-10 flex h-16 items-center border-b bg-white dark:bg-gray-900 px-4 md:px-6">
       <div className={sidebarOpen ? "ml-64" : "ml-20"}>
         {/* <Button
           variant="ghost"
@@ -72,6 +84,10 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }: TopbarProps) => {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer flex items-center gap-2">
+                    {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+                    <span>Toggle {theme === 'light' ? 'Dark' : 'Light'} Mode</span>
+                  </DropdownMenuItem>
             <DropdownMenuItem>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>

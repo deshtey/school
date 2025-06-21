@@ -12,5 +12,8 @@ namespace schoolapp.Domain.Entities.StudentAcademics
         public AcademicYear AcademicYear { get; set; }
         public double OverallGrade { get; set; }
         public DateTime CompletionDate { get; set; }
+        public Grade? PreviousGrade { get; internal set; }
+        public Grade NewGrade { get; internal set; }
+        public DateTime PromotionDate { get; internal set; }
     }
 }

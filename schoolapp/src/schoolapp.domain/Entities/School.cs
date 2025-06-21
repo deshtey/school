@@ -2,6 +2,7 @@
 {
     public class School : BaseAuditableEntity
     {
+  
         public int SchoolId { get; set; }
         public string SchoolName { get; set; }
         public SchoolTypes SchoolType { get; set; }

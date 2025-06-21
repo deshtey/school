@@ -8,6 +8,8 @@ import { Column, DataTable } from "@/components/data-table/datatable";
 import { StudentFormDemo } from "@/components/students/studentcreate";
 import Layout from "../layout";
 import { LoadingIndicator } from "@/components/ui/loading-indicator";
+import StudentParentForm from "@/components/forms/studentParentForm";
+import { studentFields } from "@/lib/interfaces/student";
 
 interface Student {
   id: number;
@@ -70,7 +72,8 @@ const MOCK_STUDENTS: Student[] = [
 const StudentsTable = () => {
   const [students, setStudents] = useState<Student[]>(MOCK_STUDENTS);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   // Simulating a loading state
   const simulateLoading = () => {
     setIsLoading(true);
@@ -79,9 +82,19 @@ const StudentsTable = () => {
 
   const handleDelete = (id: number) => {
     // In a real app, you would call an API
-    setStudents(students.filter(student => student.id !== id));
+    setStudents(students.filter((student) => student.id !== id));
   };
-
+  const handleEdit = (student: Student) => {
+    setEditingStudent(student);
+    setIsEditFormOpen(true);
+  };
+  const handleSubmit = (data: any) => {
+    // Here you would typically save the data to your backend
+    console.log("Student data submitted:", data);
+    
+    // For demo purposes, we're just logging and returning a resolved promise
+    return Promise.resolve();
+  };
   const columns: Column<Student>[] = [
     {
       header: "ID",
@@ -117,11 +130,11 @@ const StudentsTable = () => {
       header: "Status",
       accessorKey: "status",
       cell: (row) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          row.status === 'active' 
-            ? 'bg-green-100 text-green-800' 
-            : 'bg-red-100 text-red-800'
-        }`}>
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium ${
+            row.status === "active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          }`}
+        >
           {row.status.charAt(0).toUpperCase() + row.status.slice(1)}
         </span>
       ),
@@ -131,17 +144,26 @@ const StudentsTable = () => {
       header: "Actions",
       accessorKey: "id",
       cell: (row) => (
-        <div className="flex space-x-2">
-          <StudentFormDemo student={row} isEditing={true} />
-          <Button 
-            variant="ghost" 
-            size="icon"
+        <div className='flex space-x-2'>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEdit(row);
+            }}
+            className='flex items-center gap-2'
+          >
+            <Edit className='h-4 w-4' />
+            Edit Student
+          </Button>
+          <Button
+            variant='ghost'
+            size='icon'
             onClick={(e) => {
               e.stopPropagation();
               handleDelete(row.id);
             }}
           >
-            <Trash2 className="h-4 w-4 text-red-500" />
+            <Trash2 className='h-4 w-4 text-red-500' />
           </Button>
         </div>
       ),
@@ -149,30 +171,33 @@ const StudentsTable = () => {
   ];
 
   return (
- 
-      <div>
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Students</h1>
-          <div className="flex items-center gap-4">
-            <Button onClick={simulateLoading} variant="outline">
-              Simulate Loading
-            </Button>
-            <StudentFormDemo />
-          </div>
+    <div>
+      <div className='mb-6 flex items-center justify-between'>
+        <h1 className='text-2xl font-bold text-gray-900'>Students</h1>
+        <div className='flex items-center gap-4'>
+          <Button onClick={simulateLoading} variant='outline'>
+            Simulate Loading
+          </Button>
+          <StudentFormDemo />
         </div>
-
-        {isLoading ? (
-          <LoadingIndicator text="Loading students..." />
-        ) : (
-          <DataTable 
-            data={students} 
-            columns={columns}
-            detailsPath="/student"
-            idField="id"
-          />
-        )}
       </div>
- 
+
+      {isEditFormOpen && editingStudent ? (
+      <StudentParentForm
+      isOpen={isEditFormOpen}
+
+onClose={() => setIsEditFormOpen(false)}
+onSubmit={handleSubmit}
+defaultValues={editingStudent}
+fields={studentFields}
+isEditing={true}
+/>
+      )  :    isLoading ? (
+        <LoadingIndicator text='Loading students...' />
+      ) : (
+        <DataTable data={students} columns={columns} detailsPath='/student' idField='id' />
+      )}
+    </div>
   );
 };
 

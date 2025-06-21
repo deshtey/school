@@ -14,6 +14,9 @@ namespace schoolapp.Domain.Entities.Academics
         public AcademicYear AcademicYear { get; set; }
         public double? FinalGrade { get; set; }
         public List<Assessment> Assessments { get; set; } = new List<Assessment>();
+        public DateTime? EnrollmentDate { get; internal set; }
+        public DateTime? WithdrawalDate { get; set; }
+        public string WithdrawalReason { get;  set; }
 
         // Calculate final grade based on assessments
         public void CalculateFinalGrade()

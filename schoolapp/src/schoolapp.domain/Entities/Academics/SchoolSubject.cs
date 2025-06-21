@@ -13,6 +13,8 @@ namespace schoolapp.Domain.Entities.Academics
 
         public School School { get; set; }
         public ICollection<ClassRoomSubject> GradeSubjects { get; set; } = new List<ClassRoomSubject>();
+        public int? CreditHours { get; internal set; }
+        public object Name { get; internal set; }
 
         public SchoolSubject() { }
         public SchoolSubject(int schoolId, string code, string name, bool Elective, string desc)

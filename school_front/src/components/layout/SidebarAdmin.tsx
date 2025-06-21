@@ -73,7 +73,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   return (
     <aside 
       className={cn(
-        "fixed left-0 top-0 z-20 h-full border-r bg-white transition-all duration-300",
+        "fixed left-0 top-0 z-20 h-full border-r bg-white dark:bg-gray-900 transition-all duration-300",
         isOpen ? "w-64" : "w-20"
       )}
     >
