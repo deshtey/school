@@ -16,59 +16,49 @@ namespace schoolapp.Application.Services
             _logger = logger;
             _schoolRepository = schoolRepository;
         }
-        public async Task<IEnumerable<SchoolDto>?> GetSchools(CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<SchoolDto>>> GetSchools(CancellationToken cancellationToken)
         {
             try
             {
-                var schools = await _schoolRepository.GetAllSchoolsAsync(cancellationToken);
+                var schoolsQuery = await _schoolRepository.GetSchoolsAsync(cancellationToken);
+                var schools = await schoolsQuery.Select(s => new SchoolDto
+                {
+                    SchoolId = s.SchoolId,
+                    SchoolName = s.SchoolName,
+                    Country = s.Country,
+                    City = s.City,
+                    PostalCode = s.PostalCode,
+                    Address = s.Address,
+                    HomePage = s.HomePage,
+                    Location = s.Location,
+                    Phone = s.Phone,
+                    Region = s.Region,
+                    Street = s.Street,
+                    ZipCode = s.ZipCode,
+                    CreatedAt = s.Created
+                })
+                .ToListAsync( cancellationToken);
+                return Result<IEnumerable<SchoolDto>>.Success(schools);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError(ex, "Error fetching schools");
+                return Result<IEnumerable<SchoolDto>>.Failure(["Error fetching schools: " + ex.Message]);
             }
-    
-            //return await _context.Schools.Select(s => new SchoolDto
-            //{
-            //    SchoolId = s.SchoolId,
-            //    SchoolName = s.SchoolName,
-            //    Country = s.Country,
-            //    City = s.City,
-            //    PostalCode = s.PostalCode,
-            //    Address = s.Address,
-            //    HomePage = s.HomePage,
-            //    Location = s.Location,
-            //    Phone = s.Phone,
-            //    Region = s.Region,
-            //    Street = s.Street,
-            //    ZipCode = s.ZipCode,
-            //    CreatedAt = s.Created
-            //})
-            //.ToListAsync();
         }
 
-        public async Task<School?> GetSchool(int schoolId, CancellationToken cancellationToken)
+        public async Task<Result<SchoolDto>> GetSchool(int schoolId, CancellationToken cancellationToken)
         {
             try
             {
                 var school = await _schoolRepository.GetByIdAsync(schoolId, cancellationToken);
+                return Result<SchoolDto>.Success(SchoolDto.ToSchoolDto(school));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError(ex, "Error fetching school");
+                return Result<SchoolDto>.Failure(["Error fetching school: " + ex.Message]);
             }
-            //if (_context.Schools == null)
-            //{
-            //    return null;
-            //}
-            //var School = await _context.Schools.FindAsync(id);
-
-            //if (School == null)
-            //{
-            //    return null;
-            //}
-            //return School;
         }
 
         public async Task<Result<SchoolDto>> PutSchool(int id, SchoolDto request, CancellationToken cancellationToken)
@@ -92,8 +82,7 @@ namespace schoolapp.Application.Services
                 if (!string.IsNullOrWhiteSpace(request.SchoolName))
                     builder.WithName(request.SchoolName);
 
-                if (request.SchoolType.HasValue)
-                    builder.WithType(request.SchoolType.Value);
+               builder.OfType(request.SchoolType);
 
                 if (!string.IsNullOrWhiteSpace(request.Location))
                     builder.WithLocation(request.Location);
@@ -118,33 +107,32 @@ namespace schoolapp.Application.Services
                     );
                 }
 
-                if (!string.IsNullOrWhiteSpace(request.Logo))
-                    builder.WithLogo(request.Logo);
+                if (!string.IsNullOrWhiteSpace(request.LogoUrl))
+                    builder.WithLogo(request.LogoUrl);
 
                 // Update settings if provided
-                if (request.Settings != null)
-                {
+             
                     builder.WithSettings(settings => settings
-                        .UseSingleName(request.Settings.UseSingleName)
-                        .AsGroupOfSchools(request.Settings.IsGroupOfSchools)
-                        .WithStreams(request.Settings.UseStreams)
+                        .UseSingleName(request.UseSingleName)
+                        .AsGroupOfSchools(request.IsGroupOfSchools)
+                        .WithStreams(request.UseStreams)
                     );
-                }
+                
 
                 var updatedSchool = builder.Build();
-                updatedSchool.SchoolId = id; // Preserve the ID
+                updatedSchool.SchoolId = id; 
 
                 // Update in database
                 var result = await _schoolRepository.UpdateAsync(updatedSchool);
 
                 _logger.LogInformation("Updated school with ID: {SchoolId}", id);
 
-                return Ok(result);
+                return Result<SchoolDto>.Success(SchoolDto.ToSchoolDto(result.Value));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError(ex, "Error updating school");
+                return Result<SchoolDto>.Failure(["Error updating school: " + ex.Message]);
             }
         }
 
@@ -207,27 +195,28 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<bool> DeleteSchool(int id, CancellationToken cancellationToken)
+        public async Task<Result<bool>> DeleteSchool(int id, CancellationToken cancellationToken)
         {
-            if (_context.Schools == null)
+            try
             {
-                return false;
+                var school = await _schoolRepository.GetByIdAsync(id, cancellationToken);
+                if (school == null) {
+                    return Result<bool>.Failure(["School not found"]);
+                }
+                var res = await _schoolRepository.DeleteAsync(id, cancellationToken);
+                if (res.IsSuccess)
+                {
+                    return Result<bool>.Success(res.Value);
+                }
+                return Result<bool>.Failure(res.Errors);
             }
-            var School = await _context.Schools.FindAsync(id);
-            if (School == null)
+            catch (Exception ex)
             {
-                return true;
-            }
-
-            _context.Schools.Remove(School);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return true;
+                _logger.LogError(ex, "Error deleting school");
+                return Result<bool>.Failure(["Error deleting school: " + ex.Message]);
+            }       
         }
-        private bool SchoolExists(int id)
-        {
-            return (_context.Schools?.Any(e => e.SchoolId == id)).GetValueOrDefault();
-        }
+
         private SchoolBuilder CreateBuilderFromExisting(School existing)
         {
             var builder = School.CreateBuilder()
@@ -279,4 +268,4 @@ namespace schoolapp.Application.Services
 
 }
 
-}
+

@@ -111,6 +111,7 @@ public static class DependencyInjection
         //services.AddScoped<ITeacherRepository, TeacherRepository>();
         //services.AddScoped<IClassRepository, ClassRepository>();
         services.AddScoped<IAcademicRepository, AcademicRepository>();
+        services.AddScoped<ISchoolRepository, SchoolRepository>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services
             .AddDefaultIdentity<AppUser>()

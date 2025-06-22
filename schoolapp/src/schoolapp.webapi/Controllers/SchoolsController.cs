@@ -25,17 +25,21 @@ namespace schoolapp.webapi.Controllers
         // GET: api/<SchoolsController
         [HttpGet]
         //[Authorize(Policy = "get_schools")]
-        public async Task<IEnumerable<SchoolDto>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _schoolService.GetSchools();
+            var res=  await _schoolService.GetSchools(cancellationToken);
+            if(res.IsSuccess) return Ok(res.Value);
+            return StatusCode(500, res.Value);
         }
 
         // GET api/<SchoolsController>/5
         [HttpGet("{id}")]
         [Authorize(Policy = "get_school")]
-        public async Task<School> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return await _schoolService.GetSchool(id);
+            var result = await _schoolService.GetSchool(id, cancellationToken);
+            if(result.IsSuccess == false) return Ok(result.Value);
+            return StatusCode(500, (result.Value));
         }
 
         // POST api/<SchoolsController>
@@ -43,6 +47,7 @@ namespace schoolapp.webapi.Controllers
         //[Authorize(Policy = "post_school")]
         public async Task<IActionResult> Post([FromBody] SchoolDto request)
         {
+
             if (string.IsNullOrWhiteSpace(request.SchoolName))
                 return BadRequest("School name is required");
 
@@ -51,8 +56,8 @@ namespace schoolapp.webapi.Controllers
 
             if (string.IsNullOrWhiteSpace(request.Location))
                 return BadRequest("Location is required");
-            var res = await _schoolService.CreateSchool(request, cancellationToken);
-            if(res.IsSuccess == false) return CreatedAtAction("GetSchool", new { id = res.Value.Id }, res.Value);
+            var res = await _schoolService.PostSchool(request, cancellationToken);
+            if(res.IsSuccess) return CreatedAtAction("GetSchool", new { id = res.Value.Id }, res.Value);
 
             return StatusCode(500, res.Value);
         }

@@ -6,11 +6,10 @@ namespace schoolapp.Application.Contracts
 {
     public interface ISchoolService
     {
-        Task<IEnumerable<SchoolDto>?> GetSchools();
-        Task<School?> GetSchool(int id);
-        Task<School?> PutSchool(int id, SchoolDto School, CancellationToken cancellationToken);
-        Task<bool?> PostSchool(SchoolDto _school, CancellationToken cancellationToken);
-        Task<bool> DeleteSchool(int id, CancellationToken cancellationToken);
-        Task<Result<School>> CreateSchool(SchoolDto request, CancellationToken cancellationToken);
+        Task<Result<bool>> DeleteSchool(int id, CancellationToken cancellationToken);
+        Task<Result<SchoolDto>> GetSchool(int schoolId, CancellationToken cancellationToken);
+        Task<Result<IEnumerable<SchoolDto>>> GetSchools(CancellationToken cancellationToken);
+        Task<Result<School>> PostSchool(SchoolDto _school, CancellationToken cancellationToken);
+        Task<Result<SchoolDto>> PutSchool(int id, SchoolDto request, CancellationToken cancellationToken);
     }
 }
