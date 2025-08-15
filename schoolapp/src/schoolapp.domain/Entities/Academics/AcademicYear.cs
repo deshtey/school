@@ -9,6 +9,12 @@
         public DateOnly EndDate { get; set; }
         public List<AcademicTerm> Terms { get; set; }
         public bool IsCurrent { get; set; }
+        
+        // Additional academic year information
+        public string? Description { get; set; }
+        public AcademicYearStatus Status { get; set; } = AcademicYearStatus.Planning;
+        public string? PrincipalRemarks { get; set; }
+        
         protected AcademicYear() { }
 
         public AcademicYear(int schoolId, DateOnly startDate, DateOnly endDate)
@@ -114,6 +120,12 @@
 
         public override string ToString() => Name;
     }
-
-   
+    
+    public enum AcademicYearStatus
+    {
+        Planning,
+        Active,
+        Completed,
+        Cancelled
+    }
 }

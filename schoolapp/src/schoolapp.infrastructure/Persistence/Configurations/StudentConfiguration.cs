@@ -25,6 +25,43 @@ namespace schoolapp.Infrastructure.Persistence.Configurations
                 .WithMany(s => s.Students)
                 .UsingEntity<StudentParent>(
                     s => s.ToTable("student_parent"));
+                    
+            // Configure new properties
+            studentConfiguration.Property(s => s.EmergencyContactName)
+                .HasColumnName("emergency_contact_name")
+                .HasMaxLength(100);
+
+            studentConfiguration.Property(s => s.EmergencyContactPhone)
+                .HasColumnName("emergency_contact_phone")
+                .HasMaxLength(20);
+
+            studentConfiguration.Property(s => s.EmergencyContactRelationship)
+                .HasColumnName("emergency_contact_relationship")
+                .HasMaxLength(50);
+
+            studentConfiguration.Property(s => s.MedicalConditions)
+                .HasColumnName("medical_conditions")
+                .HasMaxLength(500);
+
+            studentConfiguration.Property(s => s.Allergies)
+                .HasColumnName("allergies")
+                .HasMaxLength(500);
+
+            studentConfiguration.Property(s => s.BloodGroup)
+                .HasColumnName("blood_group")
+                .HasMaxLength(10);
+
+            studentConfiguration.Property(s => s.Religion)
+                .HasColumnName("religion")
+                .HasMaxLength(50);
+
+            studentConfiguration.Property(s => s.Nationality)
+                .HasColumnName("nationality")
+                .HasMaxLength(50);
+
+            studentConfiguration.Property(s => s.PreviousSchool)
+                .HasColumnName("previous_school")
+                .HasMaxLength(200);
         }
     }
 }

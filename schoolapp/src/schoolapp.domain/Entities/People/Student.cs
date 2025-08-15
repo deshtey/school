@@ -28,6 +28,24 @@ namespace schoolapp.Domain.Entities.People
         public virtual List<StudentSubject> EnrolledSubjects { get; private set; }
         public virtual List<AcademicRecord> AcademicHistory { get; private set; }
 
+        // Emergency contact information
+        public string? EmergencyContactName { get; set; }
+        public string? EmergencyContactPhone { get; set; }
+        public string? EmergencyContactRelationship { get; set; }
+
+        // Medical information
+        public string? MedicalConditions { get; set; }
+        public string? Allergies { get; set; }
+        public string? BloodGroup { get; set; }
+
+        // Personal information
+        public string? Religion { get; set; }
+        public string? Nationality { get; set; }
+
+        // Academic information
+        public DateTime? AdmissionDate { get; set; }
+        public string? PreviousSchool { get; set; }
+
         // Student status
         public StudentStatus StudentStatus { get; set; } = StudentStatus.Active;
         public DateTime? GraduationDate { get; set; }
@@ -285,6 +303,17 @@ namespace schoolapp.Domain.Entities.People
         private string _email;
         private string _phone;
         private List<(Parent parent, ParentType type)> _parents = new();
+        private string? _emergencyContactName;
+        private string? _emergencyContactPhone;
+        private string? _emergencyContactRelationship;
+        private string? _medicalConditions;
+        private string? _allergies;
+        private string? _bloodGroup;
+        private string? _religion;
+        private string? _nationality;
+        private DateTime? _admissionDate;
+        private string? _previousSchool;
+
         public StudentBuilder WithBasicInfo(string firstName, string lastName, int schoolId, string regNumber)
         {
             _firstName = firstName;
@@ -316,6 +345,42 @@ namespace schoolapp.Domain.Entities.People
             return this;
         }
 
+        public StudentBuilder WithEmergencyContact(string? emergencyContactName, string? emergencyContactPhone, string? emergencyContactRelationship)
+        {
+            _emergencyContactName = emergencyContactName;
+            _emergencyContactPhone = emergencyContactPhone;
+            _emergencyContactRelationship = emergencyContactRelationship;
+            return this;
+        }
+
+        public StudentBuilder WithMedicalInfo(string? medicalConditions, string? allergies, string? bloodGroup)
+        {
+            _medicalConditions = medicalConditions;
+            _allergies = allergies;
+            _bloodGroup = bloodGroup;
+            return this;
+        }
+
+        public StudentBuilder WithPersonalInfo(Gender gender, DateTime? dateOfBirth = null, string email = null, string phone = null, string? religion = null, string? nationality = null)
+        {
+            _gender = gender;
+            _dateOfBirth = dateOfBirth;
+            _email = email;
+            _phone = phone;
+            _religion = religion;
+            _nationality = nationality;
+            return this;
+        }
+
+        public StudentBuilder WithAcademicInfo(AcademicYear enrollmentYear, ClassRoom initialClass, DateTime? admissionDate = null, string? previousSchool = null)
+        {
+            _enrollmentYear = enrollmentYear;
+            _initialClass = initialClass;
+            _admissionDate = admissionDate;
+            _previousSchool = previousSchool;
+            return this;
+        }
+
         public Student Build()
         {
             var student = Student.Create(_firstName, _lastName, _schoolId, _regNumber, _enrollmentYear, _initialClass, _gender);
@@ -328,6 +393,40 @@ namespace schoolapp.Domain.Entities.People
 
             if (!string.IsNullOrWhiteSpace(_phone))
                 student.Phone = _phone;
+
+            // Set emergency contact information
+            if (!string.IsNullOrWhiteSpace(_emergencyContactName))
+                student.EmergencyContactName = _emergencyContactName;
+            
+            if (!string.IsNullOrWhiteSpace(_emergencyContactPhone))
+                student.EmergencyContactPhone = _emergencyContactPhone;
+            
+            if (!string.IsNullOrWhiteSpace(_emergencyContactRelationship))
+                student.EmergencyContactRelationship = _emergencyContactRelationship;
+
+            // Set medical information
+            if (!string.IsNullOrWhiteSpace(_medicalConditions))
+                student.MedicalConditions = _medicalConditions;
+            
+            if (!string.IsNullOrWhiteSpace(_allergies))
+                student.Allergies = _allergies;
+            
+            if (!string.IsNullOrWhiteSpace(_bloodGroup))
+                student.BloodGroup = _bloodGroup;
+
+            // Set personal information
+            if (!string.IsNullOrWhiteSpace(_religion))
+                student.Religion = _religion;
+            
+            if (!string.IsNullOrWhiteSpace(_nationality))
+                student.Nationality = _nationality;
+
+            // Set academic information
+            if (_admissionDate.HasValue)
+                student.AdmissionDate = _admissionDate;
+            
+            if (!string.IsNullOrWhiteSpace(_previousSchool))
+                student.PreviousSchool = _previousSchool;
 
             foreach (var (parent, parentType) in _parents)
             {

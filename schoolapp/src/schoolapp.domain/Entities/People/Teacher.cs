@@ -19,8 +19,21 @@ namespace schoolapp.Domain.Entities.People
         public string? RegNo { get; set; }
         public List<Department> Departments { get; set; }
         public List<SchoolSubject> SubjectsQualified { get; set; } = [];
-        public List<ClassRoom> ClassesResponsibleFor { get; set; } = new List<ClassRoom>();
 
+        // Professional information
+        public string? Qualifications { get; set; }
+        public string? Certifications { get; set; }
+        public DateTime? EmploymentStartDate { get; set; }
+        public DateTime? EmploymentEndDate { get; set; }
+        public string? SpecializationAreas { get; set; }
+        public int YearsOfExperience { get; set; }
+
+        // Financial information
+        public decimal? Salary { get; set; }
+        public string? BankAccountNumber { get; set; }
+        public string? BankName { get; set; }
+
+        public List<ClassRoom> ClassesResponsibleFor { get; set; } = new List<ClassRoom>();
 
         public void AssignAsClassTeacher(ClassRoom classroom)
         {

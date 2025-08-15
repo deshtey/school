@@ -15,6 +15,16 @@
     public string? Phone { get; set; }
     public string? Address { get; set; }
     public string? HomePage { get; set; } = string.Empty;
+    
+    // Additional school information
+    public string? Motto { get; set; }
+    public string? VisionStatement { get; set; }
+    public string? MissionStatement { get; set; }
+    public string? AccreditationInfo { get; set; }
+    public string? BankAccountNumber { get; set; }
+    public string? BankName { get; set; }
+    public string? RegistrationNumber { get; set; }
+    
     public SchoolSetting ExtraSettings { get; set; }
 
     public static SchoolBuilder CreateBuilder() => new SchoolBuilder();
@@ -81,6 +91,20 @@ public class SchoolBuilder
         _school.Logo = logo;
         return this;
     }
+    
+    public SchoolBuilder WithAdditionalInfo(string? motto = null, string? visionStatement = null, 
+        string? missionStatement = null, string? accreditationInfo = null, 
+        string? bankAccountNumber = null, string? bankName = null, string? registrationNumber = null)
+    {
+        _school.Motto = motto;
+        _school.VisionStatement = visionStatement;
+        _school.MissionStatement = missionStatement;
+        _school.AccreditationInfo = accreditationInfo;
+        _school.BankAccountNumber = bankAccountNumber;
+        _school.BankName = bankName;
+        _school.RegistrationNumber = registrationNumber;
+        return this;
+    }
 
     public SchoolBuilder WithSettings(Action<SchoolSettingBuilder> configureSettings)
     {
@@ -137,6 +161,7 @@ public class SchoolSettingBuilder
 
     internal SchoolSetting Build() => _setting;
 }
+
 public class SchoolSetting
 {
     public int Id { get; set; }

@@ -12,6 +12,12 @@ namespace schoolapp.Domain.Entities.ClassGrades
         public int? TeacherId { get; set; }
         public List<Student> Students { get; set; } = [];
         public Teacher ClassTeacher { get; set; }
+        
+        // Additional classroom information
+        public string? Stream { get; set; }
+        public string? Building { get; set; }
+        public string? Description { get; set; }
+        public ClassRoomStatus Status { get; set; } = ClassRoomStatus.Active;
 
         public ClassRoom()
         {
@@ -51,5 +57,12 @@ namespace schoolapp.Domain.Entities.ClassGrades
         {
             return Students.Count < Capacity;
         }
+    }
+    
+    public enum ClassRoomStatus
+    {
+        Active,
+        Inactive,
+        Closed
     }
 }

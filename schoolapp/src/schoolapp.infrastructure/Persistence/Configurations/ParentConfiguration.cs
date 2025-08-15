@@ -29,6 +29,26 @@ class ParentEntityConfiguration
         parentConfiguration.Property(s => s.Phone)
          .HasColumnName("phone")
          .HasMaxLength(20);
+         
+        // Configure new properties
+        parentConfiguration.Property(s => s.Occupation)
+            .HasColumnName("occupation")
+            .HasMaxLength(100);
+
+        parentConfiguration.Property(s => s.Workplace)
+            .HasColumnName("workplace")
+            .HasMaxLength(200);
+
+        parentConfiguration.Property(s => s.RelationshipToStudent)
+            .HasColumnName("relationship_to_student");
+
+        parentConfiguration.Property(s => s.AlternatePhone)
+            .HasColumnName("alternate_phone")
+            .HasMaxLength(20);
+
+        parentConfiguration.Property(s => s.AlternateEmail)
+            .HasColumnName("alternate_email")
+            .HasMaxLength(100);
  
     }
 }
