@@ -1,6 +1,6 @@
 ﻿namespace schoolapp.Domain.Enums
 {
-    public enum EntityStatus
+    public enum EntityStatus : short
     {
         Deleted = -1,
         Inactive = 0,

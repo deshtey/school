@@ -2,6 +2,7 @@
 using schoolapp.Application.RepositoryInterfaces;
 using schoolapp.Domain.Entities.People;
 using schoolapp.Infrastructure.Data;
+using static Duende.IdentityServer.Models.IdentityResources;
 
 namespace schoolapp.Infrastructure.Repositories
 {
@@ -43,9 +44,10 @@ namespace schoolapp.Infrastructure.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public Task<Parent?> GetByPhoneAsync(string phone, int schoolId, CancellationToken cancellationToken = default)
+        public async Task<Parent?> GetByPhoneAsync(string phone, int schoolId, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await _context.Parents
+         .FirstOrDefaultAsync(p => p.Phone == phone && p.SchoolId == schoolId, cancellationToken);
         }
     }
 }

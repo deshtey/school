@@ -17,7 +17,7 @@ namespace schoolapp.Infrastructure.Persistence.Configurations
             studentConfiguration
                 .HasOne(s=>s.ClassRoom)
                 .WithMany(o=>o.Students)
-                .HasForeignKey(o => o.ClassRoomId)
+                .HasForeignKey(s=>s.ClassRoomId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             studentConfiguration

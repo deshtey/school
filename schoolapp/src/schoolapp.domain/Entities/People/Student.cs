@@ -2,7 +2,6 @@
 using schoolapp.Domain.Entities.Base;
 using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.StudentAcademics;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace schoolapp.Domain.Entities.People
 {
@@ -25,13 +24,12 @@ namespace schoolapp.Domain.Entities.People
         public virtual ClassRoom? ClassRoom { get; set; }
         public virtual List<Parent> Parents { get; private set; }
         public virtual List<StudentParent> StudentParents { get; private set; }
-        public virtual Grade? CurrentGrade { get; set; }
         public virtual AcademicYear? EnrollmentYear { get; set; }
         public virtual List<StudentSubject> EnrolledSubjects { get; private set; }
         public virtual List<AcademicRecord> AcademicHistory { get; private set; }
 
         // Student status
-        public StudentStatus Status { get; set; } = StudentStatus.Active;
+        public StudentStatus StudentStatus { get; set; } = StudentStatus.Active;
         public DateTime? GraduationDate { get; set; }
         public DateTime? WithdrawalDate { get; set; }
         public string? WithdrawalReason { get; set; }
@@ -43,14 +41,15 @@ namespace schoolapp.Domain.Entities.People
             int schoolId,
             string regNumber,
             AcademicYear enrollmentYear,
-            Grade initialGrade,
+            ClassRoom initialClass,
             Gender gender = Gender.Unknown)
         {
             var student = new Student(firstName, lastName, schoolId, regNumber, gender)
             {
                 EnrollmentYear = enrollmentYear ?? throw new ArgumentNullException(nameof(enrollmentYear)),
-                CurrentGrade = initialGrade ?? throw new ArgumentNullException(nameof(initialGrade)),
-                Status = StudentStatus.Active
+                ClassRoom = initialClass ?? throw new ArgumentNullException(nameof(initialClass)),
+                ClassRoomId = initialClass.Id,
+                StudentStatus = StudentStatus.Active
             };
 
             return student;
@@ -65,7 +64,7 @@ namespace schoolapp.Domain.Entities.People
             if (academicYear == null)
                 throw new ArgumentNullException(nameof(academicYear));
 
-            if (Status != StudentStatus.Active)
+            if (StudentStatus != StudentStatus.Active)
                 throw new InvalidOperationException("Cannot enroll inactive student in subjects");
 
             if (IsAlreadyEnrolled(subject.Id, academicYear.Id))
@@ -149,10 +148,10 @@ namespace schoolapp.Domain.Entities.People
             if (academicYear == null)
                 throw new ArgumentNullException(nameof(academicYear));
 
-            if (CurrentGrade == null)
+            if (ClassRoom == null)
                 return false;
 
-            if (Status != StudentStatus.Active)
+            if (StudentStatus != StudentStatus.Active)
                 return false;
 
             var currentSubjects = GetCurrentSubjects(academicYear)
@@ -164,7 +163,7 @@ namespace schoolapp.Domain.Entities.People
 
             // Check minimum overall grade
             double overallGrade = CalculateOverallGrade(academicYear);
-            if (overallGrade < CurrentGrade.MinimumOverallGradeForPromotion)
+            if (overallGrade < ClassRoom.Grade.MinimumOverallGradeForPromotion)
                 return false;
 
             // Additional validation logic can be added here
@@ -174,10 +173,10 @@ namespace schoolapp.Domain.Entities.People
         }
 
         // Promote student to next grade
-        public void PromoteToGrade(Grade newGrade, AcademicYear newAcademicYear)
+        public void PromoteToGrade(ClassRoom newClass, AcademicYear newAcademicYear)
         {
-            if (newGrade == null)
-                throw new ArgumentNullException(nameof(newGrade));
+            if (newClass == null)
+                throw new ArgumentNullException(nameof(newClass));
 
             if (newAcademicYear == null)
                 throw new ArgumentNullException(nameof(newAcademicYear));
@@ -190,33 +189,33 @@ namespace schoolapp.Domain.Entities.People
             {
                 Student = this,
                 AcademicYear = newAcademicYear,
-                PreviousGrade = CurrentGrade,
-                NewGrade = newGrade,
+                PreviousGrade = ClassRoom.Grade,
+                NewGrade = newClass.Grade,
                 PromotionDate = DateTime.UtcNow,
                 OverallGrade = CalculateOverallGrade(newAcademicYear)
             };
 
             AcademicHistory.Add(academicRecord);
-            CurrentGrade = newGrade;
+            ClassRoom = newClass;
         }
 
         // Graduate student
         public void Graduate(DateTime graduationDate)
         {
-            if (Status != StudentStatus.Active)
+            if (StudentStatus != StudentStatus.Active)
                 throw new InvalidOperationException("Only active students can graduate");
 
-            Status = StudentStatus.Graduated;
+            StudentStatus = StudentStatus.Graduated;
             GraduationDate = graduationDate;
         }
 
         // Withdraw student
         public void Withdraw(string reason, DateTime? withdrawalDate = null)
         {
-            if (Status != StudentStatus.Active)
+            if (StudentStatus != StudentStatus.Active)
                 throw new InvalidOperationException("Only active students can be withdrawn");
 
-            Status = StudentStatus.Withdrawn;
+            StudentStatus = StudentStatus.Withdrawn;
             WithdrawalDate = withdrawalDate ?? DateTime.UtcNow;
             WithdrawalReason = reason;
         }
@@ -255,21 +254,21 @@ namespace schoolapp.Domain.Entities.People
     }
 
     // Enums for better type safety
-    public enum StudentStatus
+    public enum StudentStatus : short
     {
-        Active,
-        Graduated,
-        Withdrawn,
-        Suspended,
-        Transferred
+        Active=1,
+        Graduated=2,
+        Withdrawn=3,
+        Suspended=4,
+        Transferred=5
     }
 
-    public enum ParentType
+    public enum ParentType : byte
     {
-        Father,
-        Mother,
-        Guardian,
-        Emergency
+        Father=1,
+        Mother=2,
+        Guardian=3,
+        Emergency=4
     }
 
     // Builder pattern for complex student creation
@@ -280,13 +279,12 @@ namespace schoolapp.Domain.Entities.People
         private int _schoolId;
         private string _regNumber;
         private AcademicYear _enrollmentYear;
-        private Grade _initialGrade;
+        private ClassRoom _initialClass;
         private Gender _gender = Gender.Unknown;
         private DateTime? _dateOfBirth;
         private string _email;
         private string _phone;
         private List<(Parent parent, ParentType type)> _parents = new();
-
         public StudentBuilder WithBasicInfo(string firstName, string lastName, int schoolId, string regNumber)
         {
             _firstName = firstName;
@@ -296,10 +294,10 @@ namespace schoolapp.Domain.Entities.People
             return this;
         }
 
-        public StudentBuilder WithAcademicInfo(AcademicYear enrollmentYear, Grade initialGrade)
+        public StudentBuilder WithAcademicInfo(AcademicYear enrollmentYear, ClassRoom initialClass)
         {
             _enrollmentYear = enrollmentYear;
-            _initialGrade = initialGrade;
+            _initialClass = initialClass;
             return this;
         }
 
@@ -320,7 +318,7 @@ namespace schoolapp.Domain.Entities.People
 
         public Student Build()
         {
-            var student = Student.Create(_firstName, _lastName, _schoolId, _regNumber, _enrollmentYear, _initialGrade, _gender);
+            var student = Student.Create(_firstName, _lastName, _schoolId, _regNumber, _enrollmentYear, _initialClass, _gender);
 
             if (_dateOfBirth.HasValue)
                 student.DateOfBirth = _dateOfBirth;

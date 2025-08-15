@@ -33,13 +33,12 @@ namespace schoolapp.Infrastructure.Repositories
                     SchoolId = s.SchoolId,
                     StudentDto = new StudentDto
                     {
-                        Status = s.Status.ToString(),
+                        Status = s.StudentStatus.ToString(),
                         FullName = s.FullName,
                         FirstName = s.FirstName,
                         LastName = s.LastName,
                         OtherName = s.OtherNames,
                         DOB = s.DateOfBirth,
-                        ClassroomId = s.ClassRoomId,
                         Email = s.Email,
                         Gender = s.Gender,
                         Phone = s.Phone,
@@ -88,7 +87,7 @@ namespace schoolapp.Infrastructure.Repositories
             .Select(s => new StudentDto
             {
                 Id = s.Id,
-                Status = s.Status.ToString(),
+                Status = s.StudentStatus.ToString(),
                 FullName = s.FullName,
                 FirstName = s.FirstName,
                 LastName = s.LastName,

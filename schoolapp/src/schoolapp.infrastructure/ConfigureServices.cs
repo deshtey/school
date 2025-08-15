@@ -113,6 +113,7 @@ public static class DependencyInjection
         services.AddScoped<IAcademicRepository, AcademicRepository>();
         services.AddScoped<ISchoolRepository, SchoolRepository>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+
         services
             .AddDefaultIdentity<AppUser>()
             .AddRoles<IdentityRole>()

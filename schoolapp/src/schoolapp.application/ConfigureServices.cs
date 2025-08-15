@@ -22,6 +22,7 @@ public static class ConfigureServices
         services.AddScoped<IStudentSubjectService, StudentSubjectService>();
         services.AddScoped<IClassRoomSubjectService, ClassRoomSubjectService>();
         services.AddScoped<IPermissionService, PermissionService>();
+        services.AddScoped<IAcademicYearService, AcademicYearService>();
 
         return services;
     }

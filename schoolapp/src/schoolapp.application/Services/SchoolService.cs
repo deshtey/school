@@ -23,7 +23,7 @@ namespace schoolapp.Application.Services
                 var schoolsQuery = await _schoolRepository.GetSchoolsAsync(cancellationToken);
                 var schools = await schoolsQuery.Select(s => new SchoolDto
                 {
-                    SchoolId = s.SchoolId,
+                    SchoolId = s.Id,
                     SchoolName = s.SchoolName,
                     Country = s.Country,
                     City = s.City,
@@ -120,7 +120,6 @@ namespace schoolapp.Application.Services
                 
 
                 var updatedSchool = builder.Build();
-                updatedSchool.SchoolId = id; 
 
                 // Update in database
                 var result = await _schoolRepository.UpdateAsync(updatedSchool);
@@ -184,7 +183,7 @@ namespace schoolapp.Application.Services
                 // Save to database
                 var createdSchool = await _schoolRepository.CreateAsync(school, cancellationToken);
 
-                _logger.LogInformation("Created school with ID: {SchoolId}", createdSchool.SchoolId);
+                _logger.LogInformation("Created school with ID: {SchoolId}", createdSchool.Id);
 
                 return Result<School>.Success(createdSchool);
             }

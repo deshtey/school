@@ -76,7 +76,7 @@ namespace schoolapp.Application.Services
                     Students = g.Students.Select(s => new StudentDto
                     {
                         Id  = s.Id,
-                        Status = s.Status.ToString(),
+                        Status = s.StudentStatus.ToString(),
                         Gender = s.Gender,
                         RegNumber = s.RegNumber,                        
                         ImageUrl = s.Image,

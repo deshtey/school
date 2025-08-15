@@ -4,17 +4,23 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public AcademicYear AcademicYear { get; set; }
-
-        public AcademicTerm() { }
-        public AcademicTerm(string name, DateTime startDate, DateTime endDate, AcademicYear academicYear)
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+        public int AcademicYearId { get; set; }
+        public virtual AcademicYear AcademicYear { get; set; }
+        protected AcademicTerm() { }
+        public AcademicTerm(string name, DateOnly startDate, DateOnly endDate, AcademicYear academicYear)
         {
             Name = name;
             StartDate = startDate;
             EndDate = endDate;
             AcademicYear = academicYear;
         }
+    }
+    public enum AcademicTermType
+    {
+        Semester,
+        Trimester,
+        Quarter
     }
 }

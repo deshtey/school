@@ -1,29 +1,58 @@
-﻿using schoolapp.Application.RepositoryInterfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using schoolapp.Application.RepositoryInterfaces;
 using schoolapp.Domain.Entities.Academics;
 using schoolapp.Domain.Entities.ClassGrades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using schoolapp.Infrastructure.Data;
 
 namespace schoolapp.Infrastructure.Repositories
 {
     public class AcademicRepository : IAcademicRepository
     {
-        public Task<AcademicYear?> GetAcademicYearByIdAsync(int id, CancellationToken cancellationToken = default)
+        private readonly SchoolDbContext _context;
+        public AcademicRepository(SchoolDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public async Task<AcademicYear> CreateAcademicYearWithTerms(AcademicYear academicYear, CancellationToken cancellationToken = default)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                await _context.AcademicYears.AddAsync(academicYear, cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
+
+                await transaction.CommitAsync(cancellationToken);
+                return academicYear;
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+            //await _context.AcademicYears.AddAsync(academicYear, cancellationToken);
+            //await _context.SaveChangesAsync(cancellationToken);
+            //foreach (var term in academicYear.Terms)
+            //{
+            //    term.AcademicYearId = academicYear.Id;
+            //    await _context.AcademicTerms.AddAsync(term, cancellationToken);
+            //}
+            //await _context.SaveChangesAsync(cancellationToken);
+            //return academicYear;
+        }
+        public async Task<AcademicYear?> GetAcademicYearByIdAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _context.AcademicYears.Include(a => a.Terms).FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public Task<Grade?> GetClassroomByIdAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<ClassRoom?> GetClassroomByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await _context.ClassRooms.FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
         }
 
-        public Task<Grade?> GetGradeByIdAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<Grade?> GetGradeByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await _context.Grades.FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
         }
     }
 }

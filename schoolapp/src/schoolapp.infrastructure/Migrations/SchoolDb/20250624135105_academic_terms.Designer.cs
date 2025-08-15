@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using schoolapp.Infrastructure.Data;
@@ -11,9 +12,11 @@ using schoolapp.Infrastructure.Data;
 namespace schoolapp.Infrastructure.Migrations.SchoolDb
 {
     [DbContext(typeof(SchoolDbContext))]
-    partial class SchoolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250624135105_academic_terms")]
+    partial class academic_terms
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -635,6 +638,10 @@ namespace schoolapp.Infrastructure.Migrations.SchoolDb
                         .HasColumnType("integer")
                         .HasColumnName("status");
 
+                    b.Property<int>("StudentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("student_id");
+
                     b.HasKey("Id")
                         .HasName("pk_parents");
 
@@ -665,6 +672,10 @@ namespace schoolapp.Infrastructure.Migrations.SchoolDb
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("created_by_user_id");
+
+                    b.Property<int?>("CurrentClassId")
+                        .HasColumnType("integer")
+                        .HasColumnName("current_class_id");
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("timestamp with time zone")
@@ -750,6 +761,9 @@ namespace schoolapp.Infrastructure.Migrations.SchoolDb
 
                     b.HasIndex("ClassRoomId")
                         .HasDatabaseName("ix_students_class_room_id");
+
+                    b.HasIndex("CurrentClassId")
+                        .HasDatabaseName("ix_students_current_class_id");
 
                     b.HasIndex("EnrollmentYearId")
                         .HasDatabaseName("ix_students_enrollment_year_id");
@@ -1240,6 +1254,11 @@ namespace schoolapp.Infrastructure.Migrations.SchoolDb
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("fk_students_class_rooms_class_room_id");
 
+                    b.HasOne("schoolapp.Domain.Entities.ClassGrades.ClassRoom", "CurrentClass")
+                        .WithMany()
+                        .HasForeignKey("CurrentClassId")
+                        .HasConstraintName("fk_students_class_rooms_current_class_id");
+
                     b.HasOne("schoolapp.Domain.Entities.Academics.AcademicYear", "EnrollmentYear")
                         .WithMany()
                         .HasForeignKey("EnrollmentYearId")
@@ -1253,6 +1272,8 @@ namespace schoolapp.Infrastructure.Migrations.SchoolDb
                         .HasConstraintName("fk_students_schools_school_id");
 
                     b.Navigation("ClassRoom");
+
+                    b.Navigation("CurrentClass");
 
                     b.Navigation("EnrollmentYear");
 

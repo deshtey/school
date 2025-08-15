@@ -21,52 +21,60 @@ namespace schoolapp.Application.Services
             _academicRepository = academicRepository;
             _parentRepository = parentRepository;
         }
-        public async Task<Student> CreateStudentAsync(StudentParentDto request, CancellationToken cancellationToken = default)
+        public async Task<Result<Student>> CreateStudentAsync(StudentParentDto request, CancellationToken cancellationToken = default)
         {
-            // Validation
-            var studentDto = request.StudentDto;
-            var schoolId = request.SchoolId;
-            await ValidateStudentCreationAsync(studentDto , schoolId, cancellationToken);
-
-            // Get required academic entities
-            var enrollmentYear = await _academicRepository.GetAcademicYearByIdAsync(studentDto.EnrollmentYearId, cancellationToken);
-            if (enrollmentYear == null)
-                throw new ArgumentNullException($"Academic year with ID {request} not found");
-
-            var initialGrade = await _academicRepository.GetClassroomByIdAsync((int)studentDto.ClassroomId, cancellationToken);
-            //if (initialGrade == null)
-            //    throw new ArgumentNullException($"Grade with ID {request.InitialGradeId} not found");
-
-            // Create student using builder
-            var studentBuilder = new StudentBuilder()
-                .WithBasicInfo(studentDto.FirstName, studentDto.LastName, request.SchoolId, studentDto.RegNumber)
-                .WithAcademicInfo(enrollmentYear, initialGrade)
-                .WithPersonalInfo(studentDto.Gender, studentDto.DateOfBirth, studentDto.Email, studentDto.Phone);
-
-            // Handle parents
-            var parents = await ProcessParentsAsync(request.ParentsDto, request.SchoolId, cancellationToken);
-
-            foreach (var (parent, parentType) in parents)
+            try
             {
-                studentBuilder.WithParent(parent, parentType);
+                // Validation
+                var studentDto = request.StudentDto;
+                var schoolId = request.SchoolId;
+                await ValidateStudentCreationAsync(studentDto, schoolId, cancellationToken);
+
+                // Get required academic entities
+                var enrollmentYear = await _academicRepository.GetAcademicYearByIdAsync(studentDto.EnrollmentYearId, cancellationToken);
+                if (enrollmentYear == null)
+                    throw new ArgumentNullException($"Academic year with ID {request} not found");
+
+                var initialClass = await _academicRepository.GetClassroomByIdAsync((int)studentDto.ClassroomId, cancellationToken);
+                if (initialClass == null)
+                    throw new ArgumentNullException($"Classroom with ID {studentDto.ClassroomId} not found");
+
+                // Create student using builder
+                var studentBuilder = new StudentBuilder()
+                    .WithBasicInfo(studentDto.FirstName, studentDto.LastName, request.SchoolId, studentDto.RegNumber)
+                    .WithAcademicInfo(enrollmentYear, initialClass)
+                    .WithPersonalInfo(studentDto.Gender, studentDto.DateOfBirth, studentDto.Email, studentDto.Phone);
+
+                // Handle parents
+                var parents = await ProcessParentsAsync(request.ParentsDto, request.SchoolId, cancellationToken);
+
+                foreach (var (parent, parentType) in parents)
+                {
+                    studentBuilder.WithParent(parent, parentType);
+                }
+
+                var student = studentBuilder.Build();
+
+                // Set other names if provided
+                if (!string.IsNullOrWhiteSpace(studentDto.OtherName))
+                {
+                    student.OtherNames = studentDto.OtherName.Trim();
+                }
+
+                // Persist to database
+                await _studentRepository.AddAsync(student, cancellationToken);
+                await _studentRepository.SaveChangesAsync(cancellationToken);
+
+                _logger.LogInformation("Student {RegNumber} created successfully with ID {StudentId}",
+                    student.RegNumber, student.Id);
+
+                return Result<Student>.Success( student);
             }
-
-            var student = studentBuilder.Build();
-
-            // Set other names if provided
-            if (!string.IsNullOrWhiteSpace(studentDto.OtherName))
+            catch (Exception ex)
             {
-                student.OtherNames = studentDto.OtherName.Trim();
+                _logger.LogError(ex, "Error creating student");
+                return Result<Student>.Failure(["Error creating student: " + ex.Message]);
             }
-
-            // Persist to database
-            await _studentRepository.AddAsync(student, cancellationToken);
-            await _studentRepository.SaveChangesAsync(cancellationToken);
-
-            _logger.LogInformation("Student {RegNumber} created successfully with ID {StudentId}",
-                student.RegNumber, student.Id);
-
-            return student;
         }
 
         private async Task ValidateStudentCreationAsync(StudentDto request, int schoolId, CancellationToken cancellationToken)
