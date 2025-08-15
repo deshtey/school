@@ -67,6 +67,8 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 //app.UseInfrastructure();
 app.UseCors(options => options
        .AllowAnyHeader()
