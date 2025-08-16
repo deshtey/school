@@ -16,6 +16,7 @@ namespace schoolapp.Domain.Entities.Transportation
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public StudentTransportStatus Status { get; set; }
+        public string Remarks { get; set; }
     }
 
     public enum StudentTransportStatus

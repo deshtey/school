@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using schoolapp.application.Common.Interfaces;
 using schoolapp.Application.Common.Interfaces;
+using schoolapp.Application.Contracts;
 using schoolapp.Application.RepositoryInterfaces;
+using schoolapp.Application.Services;
 using schoolapp.Infrastructure.Data;
 using schoolapp.Infrastructure.Identity;
 using schoolapp.Infrastructure.Persistence.Interceptors;
@@ -46,6 +46,9 @@ public static class DependencyInjection
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IDateTimeService, DateTimeService>();
+        services.AddScoped<ISchoolService, SchoolService>();
+        services.AddScoped<IParentService, ParentService>();
+        services.AddScoped<IStudentService, StudentService>();
 
         return services;
     }

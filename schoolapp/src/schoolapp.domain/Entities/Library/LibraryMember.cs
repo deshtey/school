@@ -1,3 +1,4 @@
+using schoolapp.Domain.Entities.Base;
 using schoolapp.Domain.Entities.People;
 
 namespace schoolapp.Domain.Entities.Library

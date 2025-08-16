@@ -11,6 +11,9 @@ namespace schoolapp.Domain.Entities.Health
         public School School { get; set; }
         public string BloodGroup { get; set; }
         public string Allergies { get; set; }
+        public string Remarks { get; set; }
+        public string Prescription { get; set; }
+        public string Doctor { get; set; }
         public string MedicalConditions { get; set; }
         public string EmergencyContactName { get; set; }
         public string EmergencyContactPhone { get; set; }

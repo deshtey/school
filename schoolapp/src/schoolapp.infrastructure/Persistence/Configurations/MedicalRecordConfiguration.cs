@@ -10,10 +10,6 @@ namespace schoolapp.Infrastructure.Persistence.Configurations
         {
             medicalRecordConfiguration.ToTable("medical_records", "health");
 
-            medicalRecordConfiguration.Property(s => s.Condition)
-                .HasColumnName("condition")
-                .HasMaxLength(200);
-
             medicalRecordConfiguration.Property(s => s.Doctor)
                 .HasColumnName("doctor")
                 .HasMaxLength(100);

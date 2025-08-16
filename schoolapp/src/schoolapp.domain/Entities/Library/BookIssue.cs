@@ -16,6 +16,7 @@ namespace schoolapp.Domain.Entities.Library
         public DateTime? ReturnDate { get; set; }
         public decimal FineAmount { get; set; }
         public BookIssueStatus Status { get; set; }
+        public string Remarks { get; set; }
     }
 
     public enum BookIssueStatus

@@ -2,6 +2,8 @@ namespace schoolapp.Domain.Entities.Health
 {
     public class Medication
     {
+        public readonly object Remarks;
+
         public int Id { get; set; }
         public int MedicalRecordId { get; set; }
         public MedicalRecord MedicalRecord { get; set; }

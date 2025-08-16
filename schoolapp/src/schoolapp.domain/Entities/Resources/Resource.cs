@@ -15,6 +15,7 @@ namespace schoolapp.Domain.Entities.Resources
         public ResourceStatus Status { get; set; }
         public string Location { get; set; }
         public ICollection<ResourceAllocation> ResourceAllocations { get; set; } = new List<ResourceAllocation>();
+        public string ResourceType { get; set; }
     }
 
     public enum ResourceStatus

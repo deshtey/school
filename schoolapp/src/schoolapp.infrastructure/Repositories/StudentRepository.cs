@@ -119,6 +119,7 @@ namespace schoolapp.Infrastructure.Repositories
             //await _context.SaveChangesAsync(cancellationToken);
 
             //return existingStudent;
+            await Task.Delay(1000, cancellationToken); // Simulate async operation
             throw new NotImplementedException("UpdateStudent method is not implemented yet.");
         }
 

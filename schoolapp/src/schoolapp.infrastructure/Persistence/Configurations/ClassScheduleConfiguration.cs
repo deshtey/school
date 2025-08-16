@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using schoolapp.Domain.Entities.Timetable;
+using schoolapp.Domain.Entities.Academics;
 
 namespace schoolapp.Infrastructure.Persistence.Configurations
 {

@@ -10,4 +10,7 @@ namespace schoolapp.Infrastructure.Persistence.Configurations
         {
             roomConfiguration.ToTable("rooms", "hostel");
 
-            roomConfiguration.Property(s => s.RoomNumber)
+            roomConfiguration.Property(s => s.RoomNumber);
+        }
+    }
+}

@@ -31,13 +31,8 @@ namespace schoolapp.Application.Services
                 await ValidateStudentCreationAsync(studentDto, schoolId, cancellationToken);
 
                 // Get required academic entities
-                var enrollmentYear = await _academicRepository.GetAcademicYearByIdAsync(studentDto.EnrollmentYearId, cancellationToken);
-                if (enrollmentYear == null)
-                    throw new ArgumentNullException($"Academic year with ID {request} not found");
-
-                var initialClass = await _academicRepository.GetClassroomByIdAsync((int)studentDto.ClassroomId, cancellationToken);
-                if (initialClass == null)
-                    throw new ArgumentNullException($"Classroom with ID {studentDto.ClassroomId} not found");
+                var enrollmentYear = await _academicRepository.GetAcademicYearByIdAsync(studentDto.EnrollmentYearId, cancellationToken) ?? throw new ArgumentNullException($"Academic year with ID {request} not found");
+                var initialClass = await _academicRepository.GetClassroomByIdAsync((int)studentDto.ClassroomId, cancellationToken) ?? throw new ArgumentNullException($"Classroom with ID {studentDto.ClassroomId} not found");
 
                 // Create student using builder
                 var studentBuilder = new StudentBuilder()
