@@ -5,6 +5,7 @@ using schoolapp.Domain.Entities;
 using schoolapp.Domain.Entities.Academics;
 using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.Departments;
+using schoolapp.Domain.Entities.Exams;
 using schoolapp.Domain.Entities.People;
 using schoolapp.Infrastructure.Persistence.Configurations;
 namespace schoolapp.Infrastructure.Data;
@@ -28,7 +29,9 @@ public class SchoolDbContext : DbContext, ISchoolDbContext
     public DbSet<StudentSubject> StudentSubjects { get; set; }
     public DbSet<AcademicYear> AcademicYears { get; set; }
     public DbSet<AcademicTerm> AcademicTerms { get; set; }
- 
+    public DbSet<Exam> Exams { get; set; }
+    public DbSet<ClassRoomStudent> ClassRoomStudents { get; set; }
+
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
         if (_currentTransaction != null)
@@ -90,6 +93,8 @@ public class SchoolDbContext : DbContext, ISchoolDbContext
 
         modelBuilder.ApplyConfiguration(new SchoolEntityConfiguration());
         modelBuilder.ApplyConfiguration(new SchoolSettingConfiguration());
+        modelBuilder.ApplyConfiguration(new ClassRoomConfiguration());
+        modelBuilder.ApplyConfiguration(new ExamConfiguration());
 
         modelBuilder.ApplyConfiguration(new StudentConfiguration());
         modelBuilder.ApplyConfiguration(new SchoolSubjectConfiguration());

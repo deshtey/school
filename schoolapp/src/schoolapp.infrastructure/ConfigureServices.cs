@@ -115,6 +115,11 @@ public static class DependencyInjection
         //services.AddScoped<IClassRepository, ClassRepository>();
         services.AddScoped<IAcademicRepository, AcademicRepository>();
         services.AddScoped<ISchoolRepository, SchoolRepository>();
+        services.AddScoped<IClassroomRepository, ClassroomRepository>();
+        services.AddScoped<IClassroomStudentRepository, ClassroomStudentRepository>();
+        services.AddScoped<IExamRepository, ExamRepository>();
+        services.AddScoped<IGradeRepository, GradeRepository>();
+        services.AddScoped<IDriverRepository, DriverRepository>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
         services

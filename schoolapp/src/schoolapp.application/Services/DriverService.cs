@@ -1,0 +1,110 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using schoolapp.Application.Contracts;
+using schoolapp.Application.RepositoryInterfaces;
+using schoolapp.Domain.Entities.People;
+
+namespace schoolapp.Application.Services
+{
+    public class DriverService : IDriverService
+    {
+        private readonly IDriverRepository _driverRepository;
+        private readonly ILogger<DriverService> _logger;
+        public DriverService(ILogger<DriverService> logger, IDriverRepository driverRepository)
+        {
+            _logger = logger;
+            _driverRepository = driverRepository;
+        }
+
+        public async Task<bool> DeleteDriver(int id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var result = await _driverRepository.DeleteAsync(id, cancellationToken);
+                if (result.IsSuccess)
+                {
+                    _logger.LogInformation("Deleted driver with ID: {Id}", id);
+                    return true;
+                }
+                _logger.LogError("Failed to delete driver with ID: {Id}", id);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting driver");
+                return false;
+            }
+        }
+
+        public async Task<SupportStaff?> GetDriver(int id)
+        {
+            try
+            {
+                var driver = await _driverRepository.GetByIdAsync(id, CancellationToken.None);
+                return driver;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching driver");
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<SupportStaff>?> GetDrivers()
+        {
+            try
+            {
+                var driversQuery = await _driverRepository.GetDriversAsync(CancellationToken.None);
+                var drivers = await driversQuery.ToListAsync();
+                return drivers;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching drivers");
+                return null;
+            }
+        }
+
+        public async Task<bool?> PostDriver(SupportStaff Driver, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var created = await _driverRepository.CreateAsync(Driver, cancellationToken);
+                _logger.LogInformation("Created driver with ID: {Id}", created.Id);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating driver");
+                return false;
+            }
+        }
+
+        public async Task<SupportStaff?> PutDriver(int id, SupportStaff Driver, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var existing = await _driverRepository.GetByIdAsync(id, cancellationToken);
+                if (existing == null)
+                {
+                    _logger.LogWarning("Driver with ID: {Id} not found", id);
+                    return null;
+                }
+                Driver.Id = id;
+                var result = await _driverRepository.UpdateAsync(Driver);
+                if (result.IsSuccess)
+                {
+                    _logger.LogInformation("Updated driver with ID: {Id}", id);
+                    return result.Value;
+                }
+                _logger.LogError("Failed to update driver with ID: {Id}", id);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating driver");
+                return null;
+            }
+        }
+    }
+}

@@ -10,46 +10,60 @@ namespace schoolapp.webapi.Controllers
     [ApiController]
     public class GradesController : ControllerBase
     {
-        private readonly IGradeClassRoomService _GradeService;
+        private readonly IGradeService _gradeService;
         private readonly CancellationToken cancellationToken;
 
-        public GradesController(IGradeClassRoomService GradeService)
+        public GradesController(IGradeService gradeService)
         {
-            _GradeService = GradeService;
+            _gradeService = gradeService;
         }
         // GET: api/<GradesController
-        [HttpGet("{schoolId}")]
-        public async Task<IEnumerable<GradeDto>> Get(int schoolId)
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
-            return await _GradeService.GetSchoolClasses(schoolId);
+            var result = await _gradeService.GetGrades();
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
         // GET api/<GradesController>/5
-        [HttpGet("Grade/{id}")]
-        public async Task<GradeDto> GetGrade(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetGrade(int id)
         {
-            return await _GradeService.GetGrade(id);
+            var result = await _gradeService.GetGrade(id);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
         // POST api/<GradesController>
         [HttpPost]
-        public async Task Post([FromBody] GradeDto grade)
+        public async Task<IActionResult> Post([FromBody] GradeDto grade)
         {
-            await _GradeService.PostGrade(grade, cancellationToken);
+            if(ModelState.IsValid == false)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _gradeService.PostGrade(grade, cancellationToken);
+            if (result == true) return CreatedAtAction("GetGrade", new { id = grade.Id }, grade);
+            return BadRequest();
         }
 
         // PUT api/<GradesController>/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] GradeDto grade)
+        public async Task<IActionResult> Put(int id, [FromBody] GradeDto grade)
         {
-            await _GradeService.PutGrade(id, grade, cancellationToken);
+            var result = await _gradeService.PutGrade(id, grade, cancellationToken);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
         // DELETE api/<GradesController>/5
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _GradeService.DeleteGrade(id, cancellationToken);
+            var result = await _gradeService.DeleteGrade(id, cancellationToken);
+            if (result) return NoContent();
+            return NotFound();
         }
     }
 }

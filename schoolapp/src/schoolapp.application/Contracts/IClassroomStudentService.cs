@@ -1,13 +1,14 @@
-﻿using schoolapp.Domain.Entities.ClassGrades;
+﻿using schoolapp.Application.DTOs;
+using schoolapp.Domain.Entities.ClassGrades;
 
-namespace ClassRoomStudentapp.Application.Contracts
+namespace schoolapp.Application.Contracts
 {
-    public interface IClassRoomStudentService
+    public interface IClassroomStudentService
     {
-        //Task<IEnumerable<ClassRoomStudent>?> GetClassRoomStudents();
-        //Task<ClassRoomStudent?> GetClassRoomStudent(int id);
-        //Task<ClassRoomStudent?> PutClassRoomStudent(int id, ClassRoomStudent ClassRoomStudent, CancellationToken cancellationToken);
-        //Task<bool?> PostClassRoomStudent(ClassRoomStudent ClassRoomStudent, CancellationToken cancellationToken);
-        //Task<bool> DeleteClassRoomStudent(int id, CancellationToken cancellationToken);
+        Task<IEnumerable<ClassRoomStudentDto>?> GetClassRoomStudents();
+        Task<ClassRoomStudentDto?> GetClassRoomStudent(int classroomId, int studentId);
+        Task<ClassRoomStudentDto?> PutClassRoomStudent(int classroomId, int studentId, ClassRoomStudentDto ClassRoomStudent, CancellationToken cancellationToken);
+        Task<bool?> PostClassRoomStudent(ClassRoomStudentDto ClassRoomStudent, CancellationToken cancellationToken);
+        Task<bool> DeleteClassRoomStudent(int classroomId, int studentId, CancellationToken cancellationToken);
     }
 }

@@ -1,13 +1,14 @@
-﻿using schoolapp.Domain.Entities.ClassGrades;
+﻿using schoolapp.Application.DTOs;
+using schoolapp.Domain.Entities.ClassGrades;
 
-namespace Gradeapp.Application.Contracts
+namespace schoolapp.Application.Contracts
 {
     public interface IGradeService
     {
-        Task<IEnumerable<Grade>?> GetGrades();
-        Task<Grade?> GetGrade(int id);
-        Task<Grade?> PutGrade(int id, Grade Grade, CancellationToken cancellationToken);
-        Task<bool?> PostGrade(Grade Grade, CancellationToken cancellationToken);
+        Task<IEnumerable<GradeDto>?> GetGrades();
+        Task<GradeDto?> GetGrade(int id);
+        Task<GradeDto?> PutGrade(int id, GradeDto Grade, CancellationToken cancellationToken);
+        Task<bool?> PostGrade(GradeDto Grade, CancellationToken cancellationToken);
         Task<bool> DeleteGrade(int id, CancellationToken cancellationToken);
     }
 }

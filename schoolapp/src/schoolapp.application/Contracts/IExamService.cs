@@ -1,13 +1,14 @@
-﻿using schoolapp.Domain.Entities.Exams;
+﻿using schoolapp.Application.DTOs;
+using schoolapp.Domain.Entities.Exams;
 
-namespace Examapp.Application.Contracts
+namespace schoolapp.Application.Contracts
 {
     public interface IExamService
     {
-        Task<IEnumerable<Exam>?> GetExams();
-        Task<Exam?> GetExam(int id);
-        Task<Exam?> PutExam(int id, Exam Exam, CancellationToken cancellationToken);
-        Task<bool?> PostExam(Exam Exam, CancellationToken cancellationToken);
+        Task<IEnumerable<ExamDto>?> GetExams();
+        Task<ExamDto?> GetExam(int id);
+        Task<ExamDto?> PutExam(int id, ExamDto Exam, CancellationToken cancellationToken);
+        Task<bool?> PostExam(ExamDto Exam, CancellationToken cancellationToken);
         Task<bool> DeleteExam(int id, CancellationToken cancellationToken);
     }
 }

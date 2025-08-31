@@ -3,7 +3,6 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using schoolapp.Application.Contracts;
 using schoolapp.Application.Services;
-using studentapp.Application.Services;
 
 namespace schoolapp.Application;
 
@@ -23,6 +22,11 @@ public static class ConfigureServices
         services.AddScoped<IClassRoomSubjectService, ClassRoomSubjectService>();
         services.AddScoped<IPermissionService, PermissionService>();
         services.AddScoped<IAcademicYearService, AcademicYearService>();
+        services.AddScoped<IClassroomService, ClassroomService>();
+        services.AddScoped<IClassroomStudentService, ClassroomStudentService>();
+        services.AddScoped<IDriverService, DriverService>();
+        services.AddScoped<IExamService, ExamService>();
+        services.AddScoped<IGradeService, GradeService>();
 
         return services;
     }

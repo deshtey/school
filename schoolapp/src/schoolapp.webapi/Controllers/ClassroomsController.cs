@@ -10,51 +10,60 @@ namespace schoolapp.webapi.Controllers
     [ApiController]
     public class ClassroomsController : ControllerBase
     {
-        private readonly IGradeClassRoomService _ClassroomService;
+        private readonly IClassroomService _classroomService;
         private readonly CancellationToken cancellationToken;
 
-        public ClassroomsController(IGradeClassRoomService ClassroomService)
+        public ClassroomsController(IClassroomService classroomService)
         {
-            _ClassroomService = ClassroomService;
+            _classroomService = classroomService;
         }
         // GET: api/<ClassroomsController
         [HttpGet("{schoolId}")]
-        public async Task<IEnumerable<ClassRoomDto>> Get(int schoolId)
+        public async Task<IActionResult> Get(int schoolId)
         {
-            return await _ClassroomService.GetSchoolClassRooms(schoolId);
+            var result = await _classroomService.GetClassRooms(schoolId);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
         // GET api/<ClassroomsController>/5
         [HttpGet("Classroom/{id}")]
-        public async Task<ClassRoomDto> GetClassroom(int id)
+        public async Task<IActionResult> GetClassroom(int id)
         {
-            return await _ClassroomService.GetClassRoom(id);
+            var result = await _classroomService.GetClassRoom(id);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
         // POST api/<ClassroomsController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ClassRoomDto classroom)
-        {        
+        {
             if(ModelState.IsValid == false)
             {
                 return BadRequest(ModelState);
             }
-            await _ClassroomService.PostClassroom(classroom, cancellationToken);
-            return Ok(classroom);
+            var result = await _classroomService.PostClassRoom(classroom, cancellationToken);
+            if (result == true) return CreatedAtAction("GetClassroom", new { id = classroom.ClassRoomId }, classroom);
+            return BadRequest();
         }
 
         // PUT api/<ClassroomsController>/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] ClassRoomDto classroom)
+        public async Task<IActionResult> Put(int id, [FromBody] ClassRoomDto classroom)
         {
-            await _ClassroomService.PutClassroom(id, classroom, cancellationToken);
+            var result = await _classroomService.PutClassRoom(id, classroom, cancellationToken);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
         // DELETE api/<ClassroomsController>/5
         [HttpDelete("{id:int}")]
-        public async Task Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _ClassroomService.DeleteClassroom(id, cancellationToken);
+            var result = await _classroomService.DeleteClassRoom(id, cancellationToken);
+            if (result) return NoContent();
+            return NotFound();
         }
     }
 }
