@@ -93,8 +93,8 @@ public class SchoolDbContext : DbContext, ISchoolDbContext
 
         modelBuilder.ApplyConfiguration(new SchoolEntityConfiguration());
         modelBuilder.ApplyConfiguration(new SchoolSettingConfiguration());
-        modelBuilder.ApplyConfiguration(new ClassRoomConfiguration());
-        modelBuilder.ApplyConfiguration(new ExamConfiguration());
+       // modelBuilder.ApplyConfiguration(new ClassRoomConfiguration());
+       // modelBuilder.ApplyConfiguration(new ExamConfiguration());
 
         modelBuilder.ApplyConfiguration(new StudentConfiguration());
         modelBuilder.ApplyConfiguration(new SchoolSubjectConfiguration());

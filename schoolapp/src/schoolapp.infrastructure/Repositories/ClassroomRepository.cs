@@ -34,7 +34,7 @@ namespace schoolapp.Infrastructure.Repositories
             return classroom;
         }
 
-        public async Task<IQueryable<ClassRoom>> GetClassroomsAsync(int schoolId, CancellationToken cancellationToken)
+        public IQueryable<ClassRoom> GetClassroomsAsync(int schoolId, CancellationToken cancellationToken)
         {
             return _context.ClassRooms.Where(c => c.Status == EntityStatus.Active).AsQueryable();
         }

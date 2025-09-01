@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
 using schoolapp.Application.RepositoryInterfaces;
 using schoolapp.Domain.Entities.ClassGrades;
 
@@ -54,7 +55,7 @@ namespace schoolapp.Application.Services
         {
             try
             {
-                var classroomsQuery = await _classroomRepository.GetClassroomsAsync(schoolId, CancellationToken.None);
+                var classroomsQuery = _classroomRepository.GetClassroomsAsync(schoolId, CancellationToken.None);
                 var classrooms = await classroomsQuery.ToListAsync();
                 return classrooms;
             }
@@ -78,6 +79,11 @@ namespace schoolapp.Application.Services
                 _logger.LogError(ex, "Error creating classroom");
                 return false;
             }
+        }
+
+        public Task<bool?> PostClassRoom(ClassRoomDto ClassRoom, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<ClassRoom?> PutClassRoom(int id, ClassRoom ClassRoom, CancellationToken cancellationToken)
@@ -105,6 +111,21 @@ namespace schoolapp.Application.Services
                 _logger.LogError(ex, "Error updating classroom");
                 return null;
             }
+        }
+
+        public Task<ClassRoomDto?> PutClassRoom(int id, ClassRoomDto ClassRoom, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ClassRoomDto?> IClassroomService.GetClassRoom(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IEnumerable<ClassRoomDto>?> IClassroomService.GetClassRooms(int schoolId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

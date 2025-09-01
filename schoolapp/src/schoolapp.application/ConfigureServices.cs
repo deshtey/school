@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using schoolapp.Application.Contracts;
 using schoolapp.Application.Services;
+using studentapp.Application.Services;
 
 namespace schoolapp.Application;
 

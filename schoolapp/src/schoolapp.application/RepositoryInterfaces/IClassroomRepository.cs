@@ -6,9 +6,9 @@ namespace schoolapp.Application.RepositoryInterfaces
     public interface IClassroomRepository
     {
         Task<ClassRoom> CreateAsync(ClassRoom classroom, CancellationToken cancellationToken);
-        Task<IQueryable<ClassRoom>> GetClassroomsAsync(int schoolId, CancellationToken cancellationToken);
-        Task<ClassRoom> GetByIdAsync(int id, CancellationToken cancellationToken);
-        Task<Result<ClassRoom>> UpdateAsync(ClassRoom updatedClassroom);
         Task<Result<bool>> DeleteAsync(int id, CancellationToken cancellationToken);
+        Task<ClassRoom> GetByIdAsync(int id, CancellationToken cancellationToken);
+        IQueryable<ClassRoom> GetClassroomsAsync(int schoolId, CancellationToken cancellationToken);
+        Task<Result<ClassRoom>> UpdateAsync(ClassRoom updatedClassroom);
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
 using schoolapp.Application.RepositoryInterfaces;
 using schoolapp.Domain.Entities.People;
 
@@ -80,6 +81,11 @@ namespace schoolapp.Application.Services
             }
         }
 
+        public Task<bool?> PostDriver(SupportStaffDto Driver, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<SupportStaff?> PutDriver(int id, SupportStaff Driver, CancellationToken cancellationToken)
         {
             try
@@ -105,6 +111,21 @@ namespace schoolapp.Application.Services
                 _logger.LogError(ex, "Error updating driver");
                 return null;
             }
+        }
+
+        public Task<SupportStaffDto?> PutDriver(int id, SupportStaffDto Driver, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<SupportStaffDto?> IDriverService.GetDriver(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IEnumerable<SupportStaffDto>?> IDriverService.GetDrivers()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -34,9 +34,9 @@ namespace schoolapp.Infrastructure.Repositories
             return exam;
         }
 
-        public async Task<IQueryable<Exam>> GetExamsAsync(CancellationToken cancellationToken)
+        public async Task<IQueryable<Exam>> GetExamsAsync(int school_id, CancellationToken cancellationToken)
         {
-            return _context.Exams.Where(e => e.Status == EntityStatus.Active).AsQueryable();
+            return _context.Exams.Where(e=>e.SchoolId == school_id).AsQueryable();
         }
 
         public Task<Result<Exam>> UpdateAsync(Exam updatedExam)

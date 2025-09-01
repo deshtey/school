@@ -9,6 +9,7 @@ namespace schoolapp.Domain.Entities.People
         {
             // Additional initialization if needed
         }
+        public SupportStaff() { }
 
         public string? StaffNumber { get; set; }
         public int SchoolId { get; set; }

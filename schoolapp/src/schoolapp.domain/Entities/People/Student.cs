@@ -1,10 +1,18 @@
-﻿using schoolapp.Domain.Entities.Academics;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using schoolapp.Domain.Entities.Academics;
 using schoolapp.Domain.Entities.Base;
 using schoolapp.Domain.Entities.ClassGrades;
 using schoolapp.Domain.Entities.StudentAcademics;
+using schoolapp.Domain.Exceptions;
 
 namespace schoolapp.Domain.Entities.People
 {
+    [Index(nameof(SchoolId), nameof(StudentStatus))]
+    [Index(nameof(ClassRoomId), nameof(StudentStatus))]
+    [Index(nameof(EnrollmentYearId), nameof(StudentStatus))]
+    [Index(nameof(RegNumber), IsUnique = true)]
     public class Student : Person
     {
         private Student(string firstName, string lastName, int schoolId, string regNumber, Gender gender = Gender.Unknown)
@@ -19,31 +27,56 @@ namespace schoolapp.Domain.Entities.People
             EnrolledSubjects = new List<StudentSubject>();
             AcademicHistory = new List<AcademicRecord>();
         }
+
+        [Required]
+        [StringLength(20, MinimumLength = 3)]
+        [RegularExpression(@"^[A-Z0-9]+$", ErrorMessage = "Registration number must be uppercase alphanumeric")]
+
         public string RegNumber { get; init; }
+
         public int? ClassRoomId { get; set; }
         public virtual ClassRoom? ClassRoom { get; set; }
         public virtual List<Parent> Parents { get; private set; }
         public virtual List<StudentParent> StudentParents { get; private set; }
         public virtual AcademicYear? EnrollmentYear { get; set; }
+        public int? EnrollmentYearId { get; set; }
         public virtual List<StudentSubject> EnrolledSubjects { get; private set; }
         public virtual List<AcademicRecord> AcademicHistory { get; private set; }
 
         // Emergency contact information
+        [StringLength(100)]
         public string? EmergencyContactName { get; set; }
+
+        [Phone]
+        [StringLength(20)]
         public string? EmergencyContactPhone { get; set; }
+
+        [StringLength(50)]
         public string? EmergencyContactRelationship { get; set; }
 
         // Medical information
+        [StringLength(500)]
         public string? MedicalConditions { get; set; }
+
+        [StringLength(500)]
         public string? Allergies { get; set; }
+
+        [StringLength(10)]
+        [RegularExpression(@"^(A|B|AB|O)[+-]$", ErrorMessage = "Invalid blood group format")]
         public string? BloodGroup { get; set; }
 
         // Personal information
+        [StringLength(50)]
         public string? Religion { get; set; }
+
+        [StringLength(50)]
         public string? Nationality { get; set; }
 
         // Academic information
+        [DataType(DataType.Date)]
         public DateTime? AdmissionDate { get; set; }
+
+        [StringLength(200)]
         public string? PreviousSchool { get; set; }
 
         // Student status
@@ -76,17 +109,7 @@ namespace schoolapp.Domain.Entities.People
         // Enroll in a subject with validation
         public void EnrollInSubject(SchoolSubject subject, AcademicYear academicYear)
         {
-            if (subject == null)
-                throw new ArgumentNullException(nameof(subject));
-
-            if (academicYear == null)
-                throw new ArgumentNullException(nameof(academicYear));
-
-            if (StudentStatus != StudentStatus.Active)
-                throw new InvalidOperationException("Cannot enroll inactive student in subjects");
-
-            if (IsAlreadyEnrolled(subject.Id, academicYear.Id))
-                throw new InvalidOperationException($"Student is already enrolled in {subject.Name} for academic year {academicYear.Name}");
+            ValidateSubjectEnrollment(subject, academicYear);
 
             var studentSubject = new StudentSubject
             {
@@ -97,6 +120,30 @@ namespace schoolapp.Domain.Entities.People
             };
 
             EnrolledSubjects.Add(studentSubject);
+        }
+
+        private void ValidateSubjectEnrollment(SchoolSubject subject, AcademicYear academicYear)
+        {
+            if (subject == null)
+                throw new BusinessRuleException("Subject cannot be null");
+
+            if (academicYear == null)
+                throw new BusinessRuleException("Academic year cannot be null");
+
+            if (StudentStatus != StudentStatus.Active)
+                throw new BusinessRuleException("Cannot enroll inactive student in subjects");
+
+            if (IsAlreadyEnrolled(subject.Id, academicYear.Id))
+                throw new BusinessRuleException($"Student is already enrolled in {subject.Name} for academic year {academicYear.Name}");
+
+            if (EnrolledSubjects.Count(es => es.AcademicYear.Id == academicYear.Id) >= GetMaxSubjectsPerYear())
+                throw new BusinessRuleException("Maximum subjects per academic year exceeded");
+        }
+
+        private int GetMaxSubjectsPerYear()
+        {
+            // This could be configurable based on grade level
+            return ClassRoom?.Grade?.MaxSubjectsPerYear ?? 8;
         }
 
         // Withdraw from a subject

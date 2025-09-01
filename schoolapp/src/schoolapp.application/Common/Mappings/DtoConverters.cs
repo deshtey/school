@@ -74,7 +74,7 @@ namespace schoolapp.Application.Common.Mappings
             return new ExamDto
             {
                 Id = exam.Id,
-                Name = exam.Name,
+                Name = exam.Description,
                 // Add other mappings
             };
         }

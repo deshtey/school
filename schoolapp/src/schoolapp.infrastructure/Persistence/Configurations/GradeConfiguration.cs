@@ -17,7 +17,7 @@ class GradeEntityConfiguration
             .HasColumnName("gradename")
             .HasMaxLength(20);
 
-        gradeConfiguration.Property(s => s.Desc)
+        gradeConfiguration.Property(s => s.Description)
          .HasColumnName("desc")
          .HasMaxLength(100);
 

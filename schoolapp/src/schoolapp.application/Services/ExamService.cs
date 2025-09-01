@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
 using schoolapp.Application.RepositoryInterfaces;
 using schoolapp.Domain.Entities.Exams;
 
@@ -50,11 +51,11 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<IEnumerable<Exam>?> GetExams()
+        public async Task<IEnumerable<Exam>?> GetExams(int school_id)
         {
             try
             {
-                var examsQuery = await _examRepository.GetExamsAsync(CancellationToken.None);
+                var examsQuery = await _examRepository.GetExamsAsync(school_id, CancellationToken.None);
                 var exams = await examsQuery.ToListAsync();
                 return exams;
             }
@@ -78,6 +79,11 @@ namespace schoolapp.Application.Services
                 _logger.LogError(ex, "Error creating exam");
                 return false;
             }
+        }
+
+        public Task<bool?> PostExam(ExamDto Exam, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<Exam?> PutExam(int id, Exam Exam, CancellationToken cancellationToken)
@@ -105,6 +111,21 @@ namespace schoolapp.Application.Services
                 _logger.LogError(ex, "Error updating exam");
                 return null;
             }
+        }
+
+        public Task<ExamDto?> PutExam(int id, ExamDto Exam, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ExamDto?> IExamService.GetExam(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IEnumerable<ExamDto>?> IExamService.GetExams()
+        {
+            throw new NotImplementedException();
         }
     }
 }

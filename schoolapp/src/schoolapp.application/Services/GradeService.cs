@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
 using schoolapp.Application.RepositoryInterfaces;
 using schoolapp.Domain.Entities.ClassGrades;
 
@@ -80,6 +81,11 @@ namespace schoolapp.Application.Services
             }
         }
 
+        public Task<bool?> PostGrade(GradeDto Grade, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Grade?> PutGrade(int id, Grade Grade, CancellationToken cancellationToken)
         {
             try
@@ -105,6 +111,21 @@ namespace schoolapp.Application.Services
                 _logger.LogError(ex, "Error updating grade");
                 return null;
             }
+        }
+
+        public Task<GradeDto?> PutGrade(int id, GradeDto Grade, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<GradeDto?> IGradeService.GetGrade(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IEnumerable<GradeDto>?> IGradeService.GetGrades()
+        {
+            throw new NotImplementedException();
         }
     }
 }

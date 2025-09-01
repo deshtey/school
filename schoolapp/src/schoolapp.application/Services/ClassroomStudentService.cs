@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using schoolapp.Application.Contracts;
+using schoolapp.Application.DTOs;
 using schoolapp.Application.RepositoryInterfaces;
 using schoolapp.Domain.Entities.ClassGrades;
 
@@ -80,19 +81,25 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<ClassRoomStudent?> PutClassRoomStudent(int classroomId, int studentId, ClassRoomStudent ClassRoomStudent, CancellationToken cancellationToken)
+        public Task<bool?> PostClassRoomStudent(ClassRoomStudentDto ClassRoomStudent, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ClassRoomStudent?> PutClassRoomStudent(int classroomId, int studentId, ClassRoomStudentDto classRoomStudentDto, CancellationToken cancellationToken)
         {
             try
             {
+     
                 var existing = await _classroomStudentRepository.GetByIdAsync(classroomId, studentId, cancellationToken);
                 if (existing == null)
                 {
                     _logger.LogWarning("Classroom student with classroom ID: {ClassroomId}, student ID: {StudentId} not found", classroomId, studentId);
                     return null;
                 }
-                ClassRoomStudent.ClassRoomId = classroomId;
-                ClassRoomStudent.StudentId = studentId;
-                var result = await _classroomStudentRepository.UpdateAsync(ClassRoomStudent);
+                existing.ClassRoomId = classroomId;
+                existing.StudentId = studentId;
+                var result = await _classroomStudentRepository.UpdateAsync(existing);
                 if (result.IsSuccess)
                 {
                     _logger.LogInformation("Updated classroom student with classroom ID: {ClassroomId}, student ID: {StudentId}", classroomId, studentId);
@@ -107,5 +114,7 @@ namespace schoolapp.Application.Services
                 return null;
             }
         }
+
+ 
     }
 }

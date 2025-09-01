@@ -1,23 +1,38 @@
-﻿using schoolapp.Domain.Entities.People;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using schoolapp.Domain.Common;
+using schoolapp.Domain.Entities.People;
 
 namespace schoolapp.Domain.Entities.ClassGrades
 {
-    public class ClassRoom
+    [Index(nameof(GradeId), nameof(Name), IsUnique = true)]
+    [Index(nameof(TeacherId), nameof(Status))]
+    public class ClassRoom : BaseAuditableEntity
     {
-        public int Id { get; set; }
+        [Required]
+        [StringLength(50)]
         public string Name { get; set; }
+
+        [Required]
         public int GradeId { get; set; }
         public Grade Grade { get; set; }
-        public int Capacity { get; set; }
+
+        [Range(1, 100)]
+        public int Capacity { get; set; } = 30;
+
         public int? TeacherId { get; set; }
         public List<Student> Students { get; set; } = [];
-        public Teacher ClassTeacher { get; set; }
-        
+        public Teacher? ClassTeacher { get; set; }
+
         // Additional classroom information
+        [StringLength(20)]
         public string? Stream { get; set; }
+
+        [StringLength(50)]
         public string? Building { get; set; }
+
+        [StringLength(500)]
         public string? Description { get; set; }
-        public ClassRoomStatus Status { get; set; } = ClassRoomStatus.Active;
 
         public ClassRoom()
         {

@@ -29,7 +29,7 @@ namespace schoolapp.Application.Services
                 {
                     Id = g.Id,
                     Name = g.Name,
-                    Desc = g.Desc,
+                    Desc = g.Description,
                     SchoolId = g.SchoolId,
                     Classrooms = g.ClassRooms.Select(c => new ClassRoomDto { ClassRoomId = c.Id, ClassroomName = c.Name }).ToList(),
                 })
@@ -47,7 +47,7 @@ namespace schoolapp.Application.Services
                 {
                     Id = g.Id,
                     Name = g.Name,
-                    Desc = g.Desc,
+                    Desc = g.Description,
                     SchoolId = g.SchoolId,
                     Classrooms = g.ClassRooms.Select(c => new ClassRoomDto { GradeId=c.Grade.Id, ClassRoomId = c.Id, ClassroomName = c.Name}).ToList(),
 
@@ -159,7 +159,7 @@ namespace schoolapp.Application.Services
             var newGrade = new Grade
             {
                 Name = grade.Name,
-                Desc = grade.Desc,
+                Description = grade.Desc,
                 SchoolId = grade.SchoolId,
             };
             _context.Grades.Add(newGrade);
