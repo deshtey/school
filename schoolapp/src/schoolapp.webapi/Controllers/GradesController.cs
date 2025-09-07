@@ -17,11 +17,22 @@ namespace schoolapp.webapi.Controllers
         {
             _gradeService = gradeService;
         }
+
+        private int GetSchoolId()
+        {
+            var schoolIdClaim = User.FindFirst("school_id");
+            if (schoolIdClaim == null || !int.TryParse(schoolIdClaim.Value, out var schoolId))
+            {
+                throw new UnauthorizedAccessException("School ID not found in user claims");
+            }
+            return schoolId;
+        }
         // GET: api/<GradesController
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = await _gradeService.GetGrades();
+            var schoolId = GetSchoolId();
+            var result = await _gradeService.GetGrades(schoolId);
             if (result == null) return NotFound();
             return Ok(result);
         }
@@ -30,7 +41,8 @@ namespace schoolapp.webapi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGrade(int id)
         {
-            var result = await _gradeService.GetGrade(id);
+            var schoolId = GetSchoolId();
+            var result = await _gradeService.GetGrade(id, schoolId);
             if (result == null) return NotFound();
             return Ok(result);
         }

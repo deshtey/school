@@ -37,11 +37,11 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<SupportStaff?> GetDriver(int id)
+        public async Task<SupportStaff?> GetDriver(int id, int schoolId)
         {
             try
             {
-                var driver = await _driverRepository.GetByIdAsync(id, CancellationToken.None);
+                var driver = await _driverRepository.GetByIdAsync(id, schoolId, CancellationToken.None);
                 return driver;
             }
             catch (Exception ex)
@@ -51,11 +51,11 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<IEnumerable<SupportStaff>?> GetDrivers()
+        public async Task<IEnumerable<SupportStaff>?> GetDrivers(int schoolId)
         {
             try
             {
-                var driversQuery = await _driverRepository.GetDriversAsync(CancellationToken.None);
+                var driversQuery = await _driverRepository.GetDriversAsync(schoolId, CancellationToken.None);
                 var drivers = await driversQuery.ToListAsync();
                 return drivers;
             }

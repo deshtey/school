@@ -35,14 +35,10 @@ namespace schoolapp.Infrastructure.Repositories
 
         public async Task<ClassRoomStudent> GetByIdAsync(int classroomId, int studentId, CancellationToken cancellationToken)
         {
-            var classroomStudent = await _context.ClassRoomStudents.FirstOrDefaultAsync(cs => cs.ClassRoomId == classroomId && cs.StudentId == studentId, cancellationToken);
+            var classroomStudent = await _context.ClassRoomStudents.Include(cs => cs.Student).FirstOrDefaultAsync(cs => cs.ClassRoomId == classroomId && cs.StudentId == studentId , cancellationToken);
             return classroomStudent;
         }
 
-        public async Task<IQueryable<ClassRoomStudent>> GetClassroomStudentsAsync(CancellationToken cancellationToken)
-        {
-            return _context.ClassRoomStudents.AsQueryable();
-        }
 
         public Task<Result<ClassRoomStudent>> UpdateAsync(ClassRoomStudent updatedClassroomStudent)
         {

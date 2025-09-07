@@ -28,15 +28,15 @@ namespace schoolapp.Infrastructure.Repositories
             return Result<bool>.Success(true);
         }
 
-        public async Task<Grade> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<Grade> GetByIdAsync(int id, int schoolId, CancellationToken cancellationToken)
         {
-            var grade = await _context.Grades.FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
+            var grade = await _context.Grades.FirstOrDefaultAsync(g => g.Id == id && g.SchoolId == schoolId, cancellationToken);
             return grade;
         }
 
-        public async Task<IQueryable<Grade>> GetGradesAsync(CancellationToken cancellationToken)
+        public async Task<IQueryable<Grade>> GetGradesAsync(int schoolId, CancellationToken cancellationToken)
         {
-            return _context.Grades.Where(g => g.Status == EntityStatus.Active).AsQueryable();
+            return _context.Grades.Where(g => g.Status == EntityStatus.Active && g.SchoolId == schoolId).AsQueryable();
         }
 
         public Task<Result<Grade>> UpdateAsync(Grade updatedGrade)

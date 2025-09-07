@@ -37,11 +37,11 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<Exam?> GetExam(int id)
+        public async Task<Exam?> GetExam(int id, int schoolId)
         {
             try
             {
-                var exam = await _examRepository.GetByIdAsync(id, CancellationToken.None);
+                var exam = await _examRepository.GetByIdAsync(id, schoolId, CancellationToken.None);
                 return exam;
             }
             catch (Exception ex)

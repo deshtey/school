@@ -28,15 +28,15 @@ namespace schoolapp.Infrastructure.Repositories
             return Result<bool>.Success(true);
         }
 
-        public async Task<ClassRoom> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<ClassRoom> GetByIdAsync(int id, int schoolId, CancellationToken cancellationToken)
         {
-            var classroom = await _context.ClassRooms.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+            var classroom = await _context.ClassRooms.Include(c => c.Grade).FirstOrDefaultAsync(c => c.Id == id && c.Grade.SchoolId == schoolId, cancellationToken);
             return classroom;
         }
 
         public IQueryable<ClassRoom> GetClassroomsAsync(int schoolId, CancellationToken cancellationToken)
         {
-            return _context.ClassRooms.Where(c => c.Status == EntityStatus.Active).AsQueryable();
+            return _context.ClassRooms.Include(c => c.Grade).Where(c => c.Status == EntityStatus.Active && c.Grade.SchoolId == schoolId).AsQueryable();
         }
 
         public Task<Result<ClassRoom>> UpdateAsync(ClassRoom updatedClassroom)

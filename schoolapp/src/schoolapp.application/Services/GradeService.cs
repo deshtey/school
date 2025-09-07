@@ -37,11 +37,11 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<Grade?> GetGrade(int id)
+        public async Task<Grade?> GetGrade(int id, int schoolId)
         {
             try
             {
-                var grade = await _gradeRepository.GetByIdAsync(id, CancellationToken.None);
+                var grade = await _gradeRepository.GetByIdAsync(id, schoolId, CancellationToken.None);
                 return grade;
             }
             catch (Exception ex)
@@ -51,11 +51,11 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<IEnumerable<Grade>?> GetGrades()
+        public async Task<IEnumerable<Grade>?> GetGrades(int schoolId)
         {
             try
             {
-                var gradesQuery = await _gradeRepository.GetGradesAsync(CancellationToken.None);
+                var gradesQuery = await _gradeRepository.GetGradesAsync(schoolId, CancellationToken.None);
                 var grades = await gradesQuery.ToListAsync();
                 return grades;
             }

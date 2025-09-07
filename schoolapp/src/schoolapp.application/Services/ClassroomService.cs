@@ -37,11 +37,11 @@ namespace schoolapp.Application.Services
             }
         }
 
-        public async Task<ClassRoom?> GetClassRoom(int id)
+        public async Task<ClassRoom?> GetClassRoom(int id, int schoolId)
         {
             try
             {
-                var classroom = await _classroomRepository.GetByIdAsync(id, CancellationToken.None);
+                var classroom = await _classroomRepository.GetByIdAsync(id, schoolId, CancellationToken.None);
                 return classroom;
             }
             catch (Exception ex)
@@ -86,11 +86,11 @@ namespace schoolapp.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ClassRoom?> PutClassRoom(int id, ClassRoom ClassRoom, CancellationToken cancellationToken)
+        public async Task<ClassRoom?> PutClassRoom(int id, ClassRoom ClassRoom, int schoolId, CancellationToken cancellationToken)
         {
             try
             {
-                var existing = await _classroomRepository.GetByIdAsync(id, cancellationToken);
+                var existing = await _classroomRepository.GetByIdAsync(id, schoolId, cancellationToken);
                 if (existing == null)
                 {
                     _logger.LogWarning("Classroom with ID: {Id} not found", id);

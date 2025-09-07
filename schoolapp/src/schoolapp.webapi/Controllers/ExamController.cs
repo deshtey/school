@@ -16,11 +16,22 @@ namespace schoolapp.webapi.Controllers
             _examService = examService;
         }
 
+        private int GetSchoolId()
+        {
+            var schoolIdClaim = User.FindFirst("school_id");
+            if (schoolIdClaim == null || !int.TryParse(schoolIdClaim.Value, out var schoolId))
+            {
+                throw new UnauthorizedAccessException("School ID not found in user claims");
+            }
+            return schoolId;
+        }
+
         // GET: api/<ExamController>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = await _examService.GetExams();
+            var schoolId = GetSchoolId();
+            var result = await _examService.GetExams(schoolId);
             if (result == null) return NotFound();
             return Ok(result);
         }
@@ -29,7 +40,8 @@ namespace schoolapp.webapi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await _examService.GetExam(id);
+            var schoolId = GetSchoolId();
+            var result = await _examService.GetExam(id, schoolId);
             if (result == null) return NotFound();
             return Ok(result);
         }

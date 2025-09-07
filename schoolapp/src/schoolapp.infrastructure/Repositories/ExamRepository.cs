@@ -28,9 +28,9 @@ namespace schoolapp.Infrastructure.Repositories
             return Result<bool>.Success(true);
         }
 
-        public async Task<Exam> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<Exam> GetByIdAsync(int id, int schoolId, CancellationToken cancellationToken)
         {
-            var exam = await _context.Exams.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+            var exam = await _context.Exams.FirstOrDefaultAsync(e => e.Id == id && e.SchoolId == schoolId, cancellationToken);
             return exam;
         }
 

@@ -5,10 +5,10 @@ namespace schoolapp.Application.Contracts
 {
     public interface IClassroomService
     {
-        Task<IEnumerable<ClassRoomDto>?> GetClassRooms(int schoolId);
-        Task<ClassRoomDto?> GetClassRoom(int id);
-        Task<ClassRoomDto?> PutClassRoom(int id, ClassRoomDto ClassRoom, CancellationToken cancellationToken);
-        Task<bool?> PostClassRoom(ClassRoomDto ClassRoom, CancellationToken cancellationToken);
+        Task<IEnumerable<ClassRoom>?> GetClassRooms(int schoolId);
+        Task<ClassRoom?> GetClassRoom(int id, int schoolId);
+        Task<ClassRoom?> PutClassRoom(int id, ClassRoom ClassRoom, int schoolId, CancellationToken cancellationToken);
+        Task<bool?> PostClassRoom(ClassRoom ClassRoom, CancellationToken cancellationToken);
         Task<bool> DeleteClassRoom(int id, CancellationToken cancellationToken);
     }
 }

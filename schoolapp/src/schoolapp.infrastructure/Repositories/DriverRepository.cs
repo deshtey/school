@@ -28,15 +28,15 @@ namespace schoolapp.Infrastructure.Repositories
             return Result<bool>.Success(true);
         }
 
-        public async Task<SupportStaff> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<SupportStaff> GetByIdAsync(int id, int schoolId, CancellationToken cancellationToken)
         {
-            var driver = await _context.SupportStaffs.FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+            var driver = await _context.SupportStaffs.FirstOrDefaultAsync(s => s.Id == id && s.SchoolId == schoolId, cancellationToken);
             return driver;
         }
 
-        public async Task<IQueryable<SupportStaff>> GetDriversAsync(CancellationToken cancellationToken)
+        public async Task<IQueryable<SupportStaff>> GetDriversAsync(int schoolId, CancellationToken cancellationToken)
         {
-            return _context.SupportStaffs.Where(s => s.Status == EntityStatus.Active).AsQueryable();
+            return _context.SupportStaffs.Where(s => s.Status == EntityStatus.Active && s.SchoolId == schoolId).AsQueryable();
         }
 
         public Task<Result<SupportStaff>> UpdateAsync(SupportStaff updatedDriver)
