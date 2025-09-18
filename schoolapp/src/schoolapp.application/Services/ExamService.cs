@@ -51,6 +51,11 @@ namespace schoolapp.Application.Services
             }
         }
 
+        public Task<ExamDto?> GetExam(int id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Exam>?> GetExams(int school_id)
         {
             try
@@ -86,18 +91,18 @@ namespace schoolapp.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Exam?> PutExam(int id, Exam Exam, CancellationToken cancellationToken)
+        public async Task<Exam?> PutExam(int id, Exam exam, CancellationToken cancellationToken)
         {
             try
             {
-                var existing = await _examRepository.GetByIdAsync(id, cancellationToken);
+                var existing = await _examRepository.GetByIdAsync(id, exam.SchoolId, cancellationToken);
                 if (existing == null)
                 {
                     _logger.LogWarning("Exam with ID: {Id} not found", id);
                     return null;
                 }
-                Exam.Id = id;
-                var result = await _examRepository.UpdateAsync(Exam);
+                exam.Id = id;
+                var result = await _examRepository.UpdateAsync(exam);
                 if (result.IsSuccess)
                 {
                     _logger.LogInformation("Updated exam with ID: {Id}", id);
@@ -118,12 +123,9 @@ namespace schoolapp.Application.Services
             throw new NotImplementedException();
         }
 
-        Task<ExamDto?> IExamService.GetExam(int id)
-        {
-            throw new NotImplementedException();
-        }
 
-        Task<IEnumerable<ExamDto>?> IExamService.GetExams()
+
+        Task<IEnumerable<ExamDto>?> IExamService.GetExams(int school_id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

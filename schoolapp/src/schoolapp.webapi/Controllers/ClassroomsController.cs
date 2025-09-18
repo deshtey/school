@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using schoolapp.Application.Contracts;
 using schoolapp.Application.DTOs;
+using schoolapp.Domain.Entities.ClassGrades;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

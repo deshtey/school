@@ -86,18 +86,18 @@ namespace schoolapp.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Grade?> PutGrade(int id, Grade Grade, CancellationToken cancellationToken)
+        public async Task<Grade?> PutGrade(int id, Grade grade, CancellationToken cancellationToken)
         {
             try
             {
-                var existing = await _gradeRepository.GetByIdAsync(id, cancellationToken);
+                var existing = await _gradeRepository.GetByIdAsync(id, grade.SchoolId, cancellationToken);
                 if (existing == null)
                 {
                     _logger.LogWarning("Grade with ID: {Id} not found", id);
                     return null;
                 }
-                Grade.Id = id;
-                var result = await _gradeRepository.UpdateAsync(Grade);
+                grade.Id = id;
+                var result = await _gradeRepository.UpdateAsync(grade);
                 if (result.IsSuccess)
                 {
                     _logger.LogInformation("Updated grade with ID: {Id}", id);
@@ -123,7 +123,7 @@ namespace schoolapp.Application.Services
             throw new NotImplementedException();
         }
 
-        Task<IEnumerable<GradeDto>?> IGradeService.GetGrades()
+        Task<IEnumerable<GradeDto>?> IGradeService.GetGrades(int schoolId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

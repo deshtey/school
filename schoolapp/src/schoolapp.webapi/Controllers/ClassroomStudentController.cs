@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using schoolapp.Application.Contracts;
 using schoolapp.Application.DTOs;
+using schoolapp.Domain.Entities.ClassGrades;
 
 namespace schoolapp.webapi.Controllers
 {
@@ -42,7 +43,12 @@ namespace schoolapp.webapi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var result = await _classroomStudentService.PostClassRoomStudent(classroomStudent, cancellationToken);
+            var _classroomStudent= new ClassRoomStudent
+            {
+                ClassRoomId = classroomStudent.ClassRoomId,
+                StudentId = classroomStudent.StudentId,                
+            };
+            var result = await _classroomStudentService.PostClassRoomStudent(_classroomStudent, cancellationToken);
             if (result == true) return CreatedAtAction("Get", new { classroomId = classroomStudent.ClassRoomId, studentId = classroomStudent.StudentId }, classroomStudent);
             return BadRequest();
         }

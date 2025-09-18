@@ -117,15 +117,5 @@ namespace schoolapp.Application.Services
         {
             throw new NotImplementedException();
         }
-
-        Task<ClassRoomDto?> IClassroomService.GetClassRoom(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IEnumerable<ClassRoomDto>?> IClassroomService.GetClassRooms(int schoolId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

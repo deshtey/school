@@ -86,18 +86,18 @@ namespace schoolapp.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<SupportStaff?> PutDriver(int id, SupportStaff Driver, CancellationToken cancellationToken)
+        public async Task<SupportStaff?> PutDriver(int id, SupportStaff driver, CancellationToken cancellationToken)
         {
             try
             {
-                var existing = await _driverRepository.GetByIdAsync(id, cancellationToken);
+                var existing = await _driverRepository.GetByIdAsync(id, driver.SchoolId, cancellationToken);
                 if (existing == null)
                 {
                     _logger.LogWarning("Driver with ID: {Id} not found", id);
                     return null;
                 }
-                Driver.Id = id;
-                var result = await _driverRepository.UpdateAsync(Driver);
+                driver.Id = id;
+                var result = await _driverRepository.UpdateAsync(driver);
                 if (result.IsSuccess)
                 {
                     _logger.LogInformation("Updated driver with ID: {Id}", id);

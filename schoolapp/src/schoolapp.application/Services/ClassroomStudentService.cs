@@ -55,8 +55,7 @@ namespace schoolapp.Application.Services
         {
             try
             {
-                var classroomStudentsQuery = await _classroomStudentRepository.GetClassroomStudentsAsync(schoolId, classroomId, CancellationToken.None);
-                var classroomStudents = await classroomStudentsQuery.ToListAsync();
+                var classroomStudents = await _classroomStudentRepository.GetClassroomStudentsAsync(schoolId, classroomId, CancellationToken.None);               
                 return classroomStudents;
             }
             catch (Exception ex)
@@ -71,11 +70,16 @@ namespace schoolapp.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<bool?> PostClassRoomStudent(ClassRoomStudent ClassRoomStudent, CancellationToken cancellationToken)
+        public async Task<bool?> PostClassRoomStudent(ClassRoomStudentDto ClassRoomStudent, CancellationToken cancellationToken)
         {
             try
             {
-                var created = await _classroomStudentRepository.CreateAsync(ClassRoomStudent, cancellationToken);
+                var _classroomStudent = new ClassRoomStudent
+                {
+                    ClassRoomId = ClassRoomStudent.ClassRoomId,
+                    StudentId = ClassRoomStudent.StudentId,
+                };
+                var created = await _classroomStudentRepository.CreateAsync(_classroomStudent, cancellationToken);
                 _logger.LogInformation("Created classroom student with classroom ID: {ClassroomId}, student ID: {StudentId}", created.ClassRoomId, created.StudentId);
                 return true;
             }
@@ -86,14 +90,17 @@ namespace schoolapp.Application.Services
             }
         }
 
-
+        public Task<bool?> PostClassRoomStudent(ClassRoomStudent ClassRoomStudent, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<ClassRoomStudent?> PutClassRoomStudent(int classroomId, int studentId, ClassRoomStudentDto classRoomStudentDto, CancellationToken cancellationToken)
         {
             try
             {
      
-                var existing = await _classroomStudentRepository.GetByIdAsync(classRoomStudentDto.ClassRoomId, classRoomStudentDto.StudentId, classRoomStudentDto.SchoolId, cancellationToken);
+                var existing = await _classroomStudentRepository.GetByIdAsync(classRoomStudentDto.ClassRoomId, classRoomStudentDto.StudentId,cancellationToken);
                 if (existing == null)
                 {
                     _logger.LogWarning("Classroom student with classroom ID: {ClassroomId}, student ID: {StudentId} not found", classroomId, studentId);

@@ -39,6 +39,14 @@ namespace schoolapp.Infrastructure.Repositories
             return classroomStudent;
         }
 
+        public async Task<ICollection<ClassRoomStudent>> GetClassroomStudentsAsync(int schoolId, int classroomId, CancellationToken cancellationToken)
+        {
+            var students = await _context.ClassRoomStudents
+                .Include(cs => cs.Student)
+                .Where(cs => cs.ClassRoomId == classroomId && cs.Student.SchoolId == schoolId && cs.Status == EntityStatus.Active).ToListAsync(cancellationToken);  
+                ;
+            return students;
+        }
 
         public Task<Result<ClassRoomStudent>> UpdateAsync(ClassRoomStudent updatedClassroomStudent)
         {

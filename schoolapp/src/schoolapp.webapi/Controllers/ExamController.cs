@@ -31,7 +31,7 @@ namespace schoolapp.webapi.Controllers
         public async Task<IActionResult> Get()
         {
             var schoolId = GetSchoolId();
-            var result = await _examService.GetExams(schoolId);
+            var result = await _examService.GetExams(schoolId, cancellationToken);
             if (result == null) return NotFound();
             return Ok(result);
         }
@@ -41,7 +41,7 @@ namespace schoolapp.webapi.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var schoolId = GetSchoolId();
-            var result = await _examService.GetExam(id, schoolId);
+            var result = await _examService.GetExam(id, cancellationToken);
             if (result == null) return NotFound();
             return Ok(result);
         }

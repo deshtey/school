@@ -29,10 +29,10 @@ namespace schoolapp.webapi.Controllers
         }
         // GET: api/<GradesController
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int schoolId)
         {
-            var schoolId = GetSchoolId();
-            var result = await _gradeService.GetGrades(schoolId);
+
+            var result = await _gradeService.GetGrades(schoolId ,cancellationToken);
             if (result == null) return NotFound();
             return Ok(result);
         }
@@ -42,7 +42,7 @@ namespace schoolapp.webapi.Controllers
         public async Task<IActionResult> GetGrade(int id)
         {
             var schoolId = GetSchoolId();
-            var result = await _gradeService.GetGrade(id, schoolId);
+            var result = await _gradeService.GetGrade(id);
             if (result == null) return NotFound();
             return Ok(result);
         }

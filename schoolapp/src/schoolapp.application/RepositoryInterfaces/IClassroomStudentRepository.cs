@@ -9,6 +9,6 @@ namespace schoolapp.Application.RepositoryInterfaces
         Task<Result<bool>> DeleteAsync(int classroomId, int studentId, CancellationToken cancellationToken);
         Task<ClassRoomStudent> GetByIdAsync(int classroomId, int studentId, CancellationToken cancellationToken);
         Task<Result<ClassRoomStudent>> UpdateAsync(ClassRoomStudent updatedClassroomStudent);
-        Task<IQueryable<ClassRoomStudent>> GetClassroomStudentsAsync(int schoolId, int classroomId, CancellationToken cancellationToken);
+        Task<ICollection<ClassRoomStudent>> GetClassroomStudentsAsync(int schoolId, int classroomId, CancellationToken cancellationToken);
     }
 }

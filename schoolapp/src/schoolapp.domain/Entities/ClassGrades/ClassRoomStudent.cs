@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace schoolapp.Domain.Entities.ClassGrades
 {
-    public class ClassRoomStudent
+    public class ClassRoomStudent: BaseAuditableEntity
     {
         [Key]
         public int ClassRoomId { get; set; }
